@@ -1,0 +1,88 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { path } from '../lib/paths';
+const workflows = [
+  { name: 'AI workflows', context: 'FUTURE AI LAB / BRANDNAT', title: 'From research to useful content.', description: 'Connecting research, AI agents, and content production.', steps: ['Research', 'AI workflow', 'Content'], caption: ['Gather context', 'Connect & create', 'Ready for review'], href: path('work/applied-ai/') },
+  { name: 'Connected sensing', context: 'APPLIED RESEARCH / MSU-IIT', title: 'From the environment to data.', description: 'Low-cost PM2.5 sensing with LoRa communication.', steps: ['Environment', 'LoRa network', 'Sensor data'], caption: ['Measure PM2.5', 'Transmit readings', 'Collect & study'], href: path('work/environmental-sensing/') },
+  { name: 'Everyday tools', context: 'OPEN SOURCE / FACULTY DTR', title: 'From daily records to a report.', description: 'A practical tool for generating faculty time records.', steps: ['Time records', 'DTR generator', 'Excel report'], caption: ['Enter details', 'Build the record', 'Download & use'], href: 'https://github.com/JomVill/fdtr-generator' },
+];
+---
+<Layout>
+  <div class="home wrap">
+    <section class="home-intro" aria-labelledby="intro-title">
+      <p class="eyebrow"><span class="orange-square" aria-hidden="true"></span> AI AUTOMATION & APPLIED SYSTEMS</p>
+      <h1 id="intro-title">Making technology<br/><span>work for people.</span></h1>
+      <p>I'm Jomari. I build workflows, connect systems, and teach.</p>
+    </section>
+    <section class="instrument" aria-label="Explore selected work">
+      <div class="instrument-top"><span class="instrument-brand">JV <span>/</span> FIELDWORK</span><span class="meta">SELECTED WORK — 01 / 03</span></div>
+      <div class="display" id="workflow-display" role="tabpanel" aria-labelledby="select-0" tabindex="0">
+        <div class="display-top"><span id="workflow-context">{workflows[0].context}</span><span class="display-indicator"><i aria-hidden="true"></i> WORKFLOW STUDY</span></div>
+        <div class="signal-flow">
+          {[0, 1, 2].map((n) => <>
+            {n > 0 && <div class="signal-wire" aria-hidden="true"><span></span></div>}
+            <div class:list={['signal-node', { processor: n === 1 }]}>
+              <div class="node-symbol" aria-hidden="true">
+                {n === 0 && <svg viewBox="0 0 48 48"><rect x="12" y="9" width="24" height="30" rx="3"/><path d="M18 18h12M18 24h12M18 30h7"/></svg>}
+                {n === 1 && <svg viewBox="0 0 48 48"><rect x="12" y="12" width="24" height="24" rx="6"/><path d="M19 4v8m10-8v8M19 36v8m10-8v8M4 19h8m-8 10h8m24-10h8m-8 10h8"/><rect x="20" y="20" width="8" height="8" rx="1"/></svg>}
+                {n === 2 && <svg viewBox="0 0 48 48"><path d="M10 28v9h28v-9M24 8v21m-8-8 8 8 8-8"/></svg>}
+              </div>
+              <strong data-step={n}>{workflows[0].steps[n]}</strong><span data-caption={n}>{workflows[0].caption[n]}</span>
+            </div>
+          </>)}
+        </div>
+        <div class="display-bottom"><span id="preview-status" role="status">INPUT → PROCESS → OUTPUT</span><button id="preview-workflow" type="button"><svg aria-hidden="true" viewBox="0 0 16 16"><path d="m5 3 8 5-8 5Z" fill="currentColor"/></svg> Preview flow</button></div>
+      </div>
+      <div class="instrument-controls">
+        <div class="project-switches" role="tablist" aria-label="Choose a project">
+          {workflows.map((w, i) => <button id={`select-${i}`} class="project-switch" role="tab" aria-selected={i === 0 ? 'true' : 'false'} aria-controls="workflow-display" tabindex={i === 0 ? 0 : -1} data-index={i}><span class="key-number">0{i+1}<i aria-hidden="true"></i></span><span>{w.name}</span></button>)}
+        </div>
+        <div class="speaker" aria-hidden="true">{Array.from({length: 24}, () => <i></i>)}</div>
+      </div>
+      <div class="instrument-caption"><div><h2 id="workflow-title">{workflows[0].title}</h2><p id="workflow-description">{workflows[0].description}</p></div><a id="workflow-link" href={workflows[0].href}>View project <span aria-hidden="true">↗</span></a></div>
+      <script id="workflow-data" type="application/json" set:html={JSON.stringify(workflows).replace(/</g, '\\u003c')}/>
+    </section>
+    <div class="home-bottom"><span class="meta">BASED IN ILIGAN, PHILIPPINES</span><a class="text-link" href={path('work/')}>All work <span aria-hidden="true">↗</span></a></div>
+    <noscript><p class="noscript-note">Explore every project on the <a href={path('work/')}>work page</a>.</p></noscript>
+  </div>
+</Layout>
+<script>
+  type Workflow = {name: string; context: string; title: string; description: string; steps: string[]; caption: string[]; href: string};
+  const workflows: Workflow[] = JSON.parse(document.querySelector('#workflow-data')?.textContent || '[]');
+  const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>('.project-switch'));
+  const display = document.querySelector<HTMLElement>('#workflow-display')!;
+  const preview = document.querySelector<HTMLButtonElement>('#preview-workflow')!;
+  const status = document.querySelector<HTMLElement>('#preview-status')!;
+  let timers: ReturnType<typeof setTimeout>[] = [];
+  let selected = 0;
+  const reset = () => { timers.forEach(clearTimeout); timers = []; display.removeAttribute('data-stage'); preview.disabled = false; status.textContent = 'INPUT → PROCESS → OUTPUT'; };
+  function select(index: number) {
+    reset(); selected = index;
+    const workflow = workflows[index];
+    tabs.forEach((tab, i) => { tab.setAttribute('aria-selected', String(i === index)); tab.tabIndex = i === index ? 0 : -1; });
+    display.setAttribute('aria-labelledby', `select-${index}`);
+    for (const [id, value] of Object.entries({'workflow-context': workflow.context, 'workflow-title': workflow.title, 'workflow-description': workflow.description})) document.getElementById(id)!.textContent = value;
+    document.querySelector<HTMLAnchorElement>('#workflow-link')!.href = workflow.href;
+    document.querySelector('.instrument-top .meta')!.textContent = `SELECTED WORK — 0${index + 1} / 03`;
+    workflow.steps.forEach((text, i) => { document.querySelector(`[data-step="${i}"]`)!.textContent = text; document.querySelector(`[data-caption="${i}"]`)!.textContent = workflow.caption[i]; });
+  }
+  tabs.forEach((tab, i) => {
+    tab.addEventListener('click', () => select(i));
+    tab.addEventListener('keydown', event => {
+      let next = i;
+      if (event.key === 'ArrowRight') next = (i + 1) % tabs.length;
+      else if (event.key === 'ArrowLeft') next = (i + tabs.length - 1) % tabs.length;
+      else if (event.key === 'Home') next = 0;
+      else if (event.key === 'End') next = tabs.length - 1;
+      else return;
+      event.preventDefault(); select(next); tabs[next].focus();
+    });
+  });
+  preview.addEventListener('click', () => {
+    reset();
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) { status.textContent = workflows[selected].steps.join(' → '); display.dataset.stage = '3'; return; }
+    preview.disabled = true; display.dataset.stage = '1'; status.textContent = '01 / INPUT';
+    timers.push(setTimeout(() => { display.dataset.stage = '2'; status.textContent = '02 / PROCESS'; }, 650));
+    timers.push(setTimeout(() => { display.dataset.stage = '3'; status.textContent = '03 / OUTPUT — PREVIEW COMPLETE'; preview.disabled = false; }, 1400));
+  });
+</script>

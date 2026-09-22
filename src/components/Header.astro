@@ -1,0 +1,8 @@
+---
+import { path } from '../lib/paths';
+const links = [['Work', 'work/'], ['About', 'about/'], ['Contact', '#contact']];
+---
+<header class="site-header wrap">
+  <a class="wordmark" href={path()} aria-label="Jomari Francis Villanueva, home"><span class="monogram" aria-hidden="true">jv<span>.</span></span><span>Jomari Villanueva</span></a>
+  <nav aria-label="Main navigation">{links.map(([label, href]) => <a href={path(href)} aria-current={Astro.url.pathname === path(href) ? 'page' : undefined}>{label}</a>)}</nav>
+</header>
