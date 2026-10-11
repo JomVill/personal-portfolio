@@ -1,12 +1,119 @@
 ---
-// Placeholder until Task 5 builds the homepage.
+// Homepage, ported from the approved mockup docs/mockups/e2-automation.html.
 import Layout from '../layouts/Layout.astro';
+import Terminal from '../components/Terminal.astro';
+import LogoMarquee from '../components/LogoMarquee.astro';
+import WorkflowDiagram from '../components/WorkflowDiagram.astro';
+import { featured, getWorkflows } from '../lib/workflows';
+import { profile } from '../data/profile';
+import { path } from '../lib/paths';
+import '../styles/home.css';
+
+const all = getWorkflows();
+const feat = featured();
+const more = all.filter((w) => w.order >= 2 && w.order <= 4);
+const tag = (order: number) => `WF-${String(order).padStart(2, '0')}`;
 ---
 
 <Layout>
-  <div class="wrap">
-    <section>
+  <div class="wrap hero">
+    <div class="hero-copy">
       <h1>Hi, I’m Jom, and I automate repetitive tasks.</h1>
-    </section>
+      <p class="lede">
+        I connect your tools with Zapier, n8n, and AI so the busywork runs itself, saving you up to{' '}
+        <strong class="hl">3 hours a day</strong>.
+      </p>
+      <div class="actions">
+        <a class="key key-orange" href={path('work/')}>
+          See my workflows
+        </a>
+      </div>
+    </div>
+    <Terminal />
   </div>
+
+  <LogoMarquee />
+
+  <section id="work" class="wrap featured" aria-labelledby="feat-title">
+    <p class="eyebrow">Featured workflow · Partnerships</p>
+    <h2 id="feat-title" class="feature-title">
+      {feat.title}
+    </h2>
+    <div class="device">
+      <div class="screen flow-screen">
+        <div class="screen-top">
+          <span>{tag(feat.order)} · Main path</span>
+          <ul class="legend" aria-label="Legend">
+            <li>
+              <span class="sw sw-ai" aria-hidden="true"></span>AI step
+            </li>
+            <li>
+              <span class="sw sw-human" aria-hidden="true"></span>A person approves
+            </li>
+          </ul>
+        </div>
+        <div class="flow flow-row">
+          <WorkflowDiagram workflow={feat} variant="featured" />
+        </div>
+        <div class="flow flow-column">
+          <WorkflowDiagram workflow={feat} variant="featured" layout="column" />
+        </div>
+        <p class="screen-foot">Dashed line: after the contract is signed</p>
+      </div>
+      {feat.beats && (
+        <ol class="beats">
+          {feat.beats.map((b, i) => (
+            <li class:list={{ on: i === 1 }}>
+              <b>{b.label}</b>
+              {b.text}
+            </li>
+          ))}
+        </ol>
+      )}
+      <p class="device-foot">
+        <a class="textlink" href={path(`work/${feat.slug}/`)}>
+          See the full workflow
+        </a>
+      </p>
+    </div>
+  </section>
+
+  <section class="wrap" aria-labelledby="more-title">
+    <div class="sec-head">
+      <h2 id="more-title">More time-savers</h2>
+      <a class="textlink" href={path('work/')}>
+        See all {all.length}
+      </a>
+    </div>
+    <div class="cards">
+      {more.map((w) => (
+        <article class="card panel">
+          <span class="tag">{tag(w.order)}</span>
+          <div class="pic">
+            <WorkflowDiagram workflow={w} variant="card" decorative />
+          </div>
+          <h3>{w.title}</h3>
+          <p>{w.summary}</p>
+          <a class="textlink" href={path(`work/${w.slug}/`)}>
+            View workflow<span class="sr">: {w.title}</span>
+          </a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="wrap contact" aria-labelledby="contact-title">
+    <h2 id="contact-title">Got a task that eats your week?</h2>
+    <p>Tell me what it is. I'll say honestly if it's worth automating.</p>
+    <div class="actions">
+      <a class="key key-orange" href={`mailto:${profile.email}`}>
+        Email me
+      </a>
+      <span class="mail">{profile.email}</span>
+    </div>
+  </section>
 </Layout>
+
+<script>
+  import '../scripts/workflow-anim';
+</script>

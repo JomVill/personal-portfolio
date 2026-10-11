@@ -1,0 +1,84 @@
+---
+// "Tools I build with" marquee. Logos are inlined from the simple-icons package at build time
+// (no CDN). Tools simple-icons does not carry (OpenAI, Slack) show their name only.
+// Three copies of the list scroll; only the first is exposed to assistive tech.
+import {
+  siBuffer,
+  siClaude,
+  siClickup,
+  siClockify,
+  siGmail,
+  siGooglecalendar,
+  siGooglesheets,
+  siHubspot,
+  siN8n,
+  siQuickbooks,
+  siTrello,
+  siZapier,
+  type SimpleIcon,
+} from 'simple-icons';
+
+type Tool = { name: string; icon?: SimpleIcon; primary?: boolean };
+const tools: Tool[] = [
+  { name: 'Zapier', icon: siZapier, primary: true },
+  { name: 'n8n', icon: siN8n },
+  { name: 'OpenAI' },
+  { name: 'Claude', icon: siClaude },
+  { name: 'HubSpot', icon: siHubspot },
+  { name: 'Slack' },
+  { name: 'Gmail', icon: siGmail },
+  { name: 'QuickBooks', icon: siQuickbooks },
+  { name: 'Trello', icon: siTrello },
+  { name: 'ClickUp', icon: siClickup },
+  { name: 'Google Sheets', icon: siGooglesheets },
+  { name: 'Google Calendar', icon: siGooglecalendar },
+  { name: 'Clockify', icon: siClockify },
+  { name: 'Buffer', icon: siBuffer },
+];
+const copies = [0, 1, 2];
+---
+
+<section class="wrap tools-strip" aria-label="Tools I build with">
+  <p class="eyebrow" aria-hidden="true">
+    Tools I build with
+  </p>
+  <svg width="0" height="0" style="position: absolute" aria-hidden="true" focusable="false">
+    {tools
+      .filter((t) => t.icon)
+      .map((t) => (
+        <symbol id={`si-${t.icon!.slug}`} viewBox="0 0 24 24">
+          <path d={t.icon!.path} />
+        </symbol>
+      ))}
+  </svg>
+  <div class="marquee">
+    <div class="marquee-view">
+      <div class="track">
+        {copies.map((c) => (
+          <ul class="logos" aria-hidden={c ? 'true' : undefined}>
+            {tools.map((t) => (
+              <li class:list={{ primary: t.primary }}>
+                {t.icon && (
+                  <svg
+                    class="lg"
+                    viewBox="0 0 24 24"
+                    fill={`#${t.icon.hex}`}
+                    aria-hidden="true"
+                    focusable="false"
+                  >
+                    <use href={`#si-${t.icon.slug}`} />
+                  </svg>
+                )}
+                {t.name}
+              </li>
+            ))}
+          </ul>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import '../scripts/marquee';
+</script>

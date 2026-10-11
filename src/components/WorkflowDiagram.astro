@@ -1,6 +1,7 @@
 ---
 // Inline-SVG workflow diagram.
 //   featured: dark display, main path in one row with CEO labels (from copy.labels).
+//             layout="column" draws the same steps top to bottom at 1:1 scale for narrow screens.
 //   card:     light mini diagram, no labels; main path row if copy.mainPath is set, else node positions.
 //   full:     light, every node from its n8n position (AI sub-nodes folded into their agent), labelled.
 // Every node is a <g class="node"> with data-step={i} when on the main path, and
@@ -24,10 +25,13 @@ interface Props {
   variant: 'featured' | 'card' | 'full';
   /** Hide from assistive tech when the surrounding markup already names the workflow. */
   decorative?: boolean;
+  /** featured only: 'row' (default) scales with its box; 'column' is a fixed-size vertical list. */
+  layout?: 'row' | 'column';
   class?: string;
 }
 
-const { workflow: w, variant, decorative = false, class: className } = Astro.props;
+const { workflow: w, variant, decorative = false, layout = 'row', class: className } = Astro.props;
+const column = variant === 'featured' && layout === 'column';
 
 type Placed = {
   node: WorkflowNode;
@@ -37,6 +41,9 @@ type Placed = {
   width: number;
   step?: number;
   label?: string[];
+  /** label anchor; defaults to centred under the node */
+  lx?: number;
+  ly?: number;
 };
 type Edge = { d: string; later: boolean };
 
@@ -73,7 +80,34 @@ let placed: Placed[] = [];
 let edges: Edge[] = [];
 const rowLayout = variant === 'featured' || (variant === 'card' && !!w.mainPath?.length);
 
-if (rowLayout) {
+if (column) {
+  // One step per row, shapes centred on a shared axis, labels to the right (mockup <760px view).
+  const nodes = path.map((name) => byName.get(name)).filter((n): n is WorkflowNode => !!n);
+  const h = 38;
+  const gap = 14;
+  const cx = (h * 1.7) / 2; // half the widest (AI) node
+  const top = 4;
+  placed = nodes.map((node, i) => {
+    const cy = top + h / 2 + i * (h + gap);
+    return {
+      node,
+      cx,
+      cy,
+      h,
+      width: nodeWidth(node, h),
+      step: i,
+      label: [nodeLabel(w, node.name)],
+      lx: cx * 2 + 16,
+      ly: cy,
+    };
+  });
+  edges = placed.slice(1).map((b, i) => ({
+    d: `M${placed[i].cx.toFixed(1)} ${placed[i].cy.toFixed(1)}V${b.cy.toFixed(1)}`,
+    later: !reachable(w, placed[i].node.name, b.node.name),
+  }));
+  W = cx * 2 + 16 + Math.max(...placed.map((p) => p.label![0].length)) * 8;
+  H = top * 2 + nodes.length * h + (nodes.length - 1) * gap;
+} else if (rowLayout) {
   // One row along the main path. Edges join consecutive steps; dashed when the next
   // step is not reachable from the previous one (it starts from a separate trigger).
   const nodes = path.map((name) => byName.get(name)).filter((n): n is WorkflowNode => !!n);
@@ -167,7 +201,7 @@ const shape = (p: Placed) => {
 const kindOf = (n: WorkflowNode) => (isAiNode(n) ? 'ai' : isHumanNode(n) ? 'human' : undefined);
 
 // Deterministic ids: unique as long as a page renders each workflow+variant pair once.
-const uid = `wfd-${w.slug}-${variant}`;
+const uid = `wfd-${w.slug}-${variant}${column ? '-column' : ''}`;
 const onPath = placed
   .filter((p) => p.step !== undefined)
   .sort((a, b) => a.step! - b.step!)
@@ -181,15 +215,17 @@ const desc =
     : `Main path, ${onPath.length} steps: ${onPath.join(', ')}.` +
       (variant === 'full' ? ` ${placed.length} steps in total.` : '');
 const labelY = (p: Placed) =>
-  p.cy + (isDecisionNode(p.node) ? p.width / 2 : p.h / 2) + (variant === 'full' ? 15 : 20);
+  p.cy +
+  (isDecisionNode(p.node) && variant === 'full' ? p.width / 2 : p.h / 2) +
+  (variant === 'full' ? 15 : 20);
 const lineH = variant === 'full' ? 14 : 16;
 ---
 
 <svg
-  class:list={['wfd', `wfd--${variant}`, className]}
+  class:list={['wfd', `wfd--${variant}`, { 'wfd--column': column }, className]}
   viewBox={`0 0 ${f(W)} ${f(H)}`}
-  width={variant === 'featured' ? undefined : f(W)}
-  height={variant === 'featured' ? undefined : f(H)}
+  width={variant === 'featured' && !column ? undefined : f(W)}
+  height={variant === 'featured' && !column ? undefined : f(H)}
   data-workflow={w.slug}
   {...(decorative
     ? { 'aria-hidden': 'true', focusable: 'false' }
@@ -220,7 +256,12 @@ const lineH = variant === 'full' ? 14 : 16;
         data-kind={kind}
       >
         {'d' in s ? <path class="n" d={s.d} /> : <rect class="n" {...s} />}
-        {p.label && (
+        {p.label && p.lx !== undefined && (
+          <text x={f(p.lx)} y={f(p.ly!)} dominant-baseline="central">
+            {p.label[0]}
+          </text>
+        )}
+        {p.label && p.lx === undefined && (
           <text x={f(p.cx)} y={f(labelY(p))} text-anchor="middle">
             {p.label.map((line, i) => (
               <tspan x={f(p.cx)} dy={i ? lineH : 0}>
@@ -286,6 +327,12 @@ const lineH = variant === 'full' ? 14 : 16;
   .wfd--featured .hu text {
     fill: var(--screen-ink, #e6eddb);
     font-weight: 600;
+  }
+
+  /* featured column: drawn at 1:1 so labels keep their 13px size */
+  .wfd--column {
+    width: auto;
+    max-width: 100%;
   }
 
   /* card: fits its box (width and height), like the mockup's .wf */
