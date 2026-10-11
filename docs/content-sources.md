@@ -22,3 +22,11 @@ My.BoardHub publication metadata was verified through Crossref: https://doi.org/
 The interactive homepage uses illustrative workflow stages to explain documented work. It does not represent a live automation, confidential client architecture, or measured performance.
 
 Primary Astro deployment reference: https://docs.astro.build/en/guides/deploy/github/
+
+## v2 (2026-10-11): AI automation site
+
+| Content               | Evidence                                       | Boundary                                                                                                                                                                  |
+| --------------------- | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Eight n8n workflows   | Owner's local n8n instance (export 2026-10-11) | Only structure is committed (names, node types, positions, connections). All workflows are described as "workflows I built"; no clients, deployments, or results claimed. |
+| "Up to 3 hours a day" | Owner's statement                              | Shown with "up to"; not a measured result.                                                                                                                                |
+| JOM logo              | Owner-designed file                            | Used as supplied.                                                                                                                                                         |
