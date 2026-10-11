@@ -3,6 +3,7 @@
 import Layout from '../layouts/Layout.astro';
 import Terminal from '../components/Terminal.astro';
 import LogoMarquee from '../components/LogoMarquee.astro';
+import WorkflowCard from '../components/WorkflowCard.astro';
 import WorkflowDiagram from '../components/WorkflowDiagram.astro';
 import { featured, getWorkflows } from '../lib/workflows';
 import { profile } from '../data/profile';
@@ -87,17 +88,7 @@ const tag = (order: number) => `WF-${String(order).padStart(2, '0')}`;
     </div>
     <div class="cards">
       {more.map((w) => (
-        <article class="card panel">
-          <span class="tag">{tag(w.order)}</span>
-          <div class="pic">
-            <WorkflowDiagram workflow={w} variant="card" decorative />
-          </div>
-          <h3>{w.title}</h3>
-          <p>{w.summary}</p>
-          <a class="textlink" href={path(`work/${w.slug}/`)}>
-            View workflow<span class="sr">: {w.title}</span>
-          </a>
-        </article>
+        <WorkflowCard workflow={w} />
       ))}
     </div>
   </section>

@@ -1,17 +1,68 @@
 ---
-// Placeholder until Task 6 builds the workflow detail pages.
 import Layout from '../../layouts/Layout.astro';
-import { getWorkflows, type Workflow } from '../../lib/workflows';
+import WorkflowDiagram from '../../components/WorkflowDiagram.astro';
+import { controlLine, getWorkflows, stepList, type Workflow } from '../../lib/workflows';
+import { profile } from '../../data/profile';
+import { path } from '../../lib/paths';
+import '../../styles/work.css';
+
 export function getStaticPaths() {
   return getWorkflows().map((workflow) => ({ params: { slug: workflow.slug }, props: { workflow } }));
 }
-const { workflow } = Astro.props as { workflow: Workflow };
+const { workflow: w } = Astro.props as { workflow: Workflow };
+const steps = stepList(w);
+const control = controlLine(w);
 ---
 
-<Layout title={workflow.title}>
-  <div class="wrap">
-    <section>
-      <h1>{workflow.title}</h1>
+<Layout title={w.title}>
+  <div class="wrap detail">
+    <a class="textlink back" href={path('work/')}>
+      All workflows
+    </a>
+    <h1>{w.title}</h1>
+    <p class="lede">{w.summary}</p>
+
+    <div class="diagram-box">
+      <div class="diagram-scroll" role="region" aria-label="Workflow diagram, scroll sideways" tabindex="0">
+        <WorkflowDiagram workflow={w} variant="full" />
+      </div>
+    </div>
+
+    <div class="detail-cols">
+      <section aria-labelledby="runs-title">
+        <h2 id="runs-title">How it runs</h2>
+        <ol class="steps">
+          {steps.map((s) => (
+            <li>{s}</li>
+          ))}
+        </ol>
+      </section>
+      <div>
+        <section aria-labelledby="built-title">
+          <h2 id="built-title">Built with</h2>
+          <ul class="chips">
+            {w.tools.map((t) => (
+              <li>{t}</li>
+            ))}
+          </ul>
+        </section>
+        {control && (
+          <section aria-labelledby="control-title">
+            <h2 id="control-title">Where you stay in control</h2>
+            <p class="control">{control}</p>
+          </section>
+        )}
+      </div>
+    </div>
+
+    <section class="cta" aria-labelledby="cta-title">
+      <h2 id="cta-title">Want one like this?</h2>
+      <div class="actions">
+        <a class="key key-orange" href={`mailto:${profile.email}`}>
+          Email me
+        </a>
+        <span class="mail">{profile.email}</span>
+      </div>
     </section>
   </div>
 </Layout>

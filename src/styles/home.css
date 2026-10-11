@@ -364,62 +364,6 @@
   font-size: 15px;
 }
 
-/* ---- cards ---- */
-.cards {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
-.card {
-  display: flex;
-  flex-direction: column;
-}
-.card .tag {
-  font: 500 11px/1 var(--mono);
-  letter-spacing: 0.08em;
-  color: var(--muted);
-}
-.card .pic {
-  height: 104px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 16px 0 20px;
-}
-.card h3 {
-  font-size: 19px;
-  line-height: 1.25;
-  letter-spacing: -0.01em;
-}
-.card p {
-  margin: 8px 0 18px;
-  font-size: 15px;
-  color: var(--muted);
-}
-.card .textlink {
-  margin-top: auto;
-  font-size: 15px;
-  align-self: flex-start;
-}
-.card .wfd .n {
-  transition:
-    stroke 0.6s,
-    filter 0.6s;
-}
-.card .wfd .n.lit {
-  stroke: #e2875c;
-}
-.card .wfd [data-kind='ai'] .n.lit {
-  filter: drop-shadow(0 0 3px #ee652b80);
-}
-.card .wfd .pk {
-  fill: var(--orange);
-}
-.card .wfd .pk-halo {
-  fill: var(--orange);
-  opacity: 0.16;
-}
-
 /* ---- contact ---- */
 .contact {
   padding-block: clamp(56px, 7vw, 96px);
@@ -447,14 +391,8 @@
 }
 
 @media (max-width: 960px) {
-  .cards,
   .beats {
     grid-template-columns: 1fr 1fr;
-  }
-}
-@media (max-width: 760px) {
-  .cards {
-    grid-template-columns: 1fr;
   }
 }
 @media (max-width: 560px) {

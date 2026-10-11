@@ -1,0 +1,118 @@
+/* Work index and per-workflow pages. Card styles live in cards.css. */
+.work-head {
+  padding-block: clamp(36px, 6vw, 72px) 8px;
+}
+.work-head h1,
+.detail h1 {
+  font-size: clamp(36px, 4.6vw, 56px);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  max-width: 20ch;
+}
+.lede {
+  margin-top: 18px;
+  max-width: 38rem;
+  font-size: clamp(17px, 1.5vw, 19px);
+  color: var(--muted);
+}
+.work-grid {
+  padding-block: 32px clamp(48px, 6vw, 88px);
+}
+
+.detail {
+  padding-block: clamp(28px, 4vw, 56px) clamp(48px, 6vw, 88px);
+}
+.back {
+  display: inline-block;
+  margin-bottom: 20px;
+  font-size: 15px;
+}
+.diagram-box {
+  margin-top: 32px;
+  padding: 0;
+  background: var(--silver);
+  border: 1px solid #dadbd3;
+  border-radius: 16px;
+  overflow: hidden;
+}
+.diagram-scroll {
+  overflow-x: auto;
+  padding: 24px;
+  /* keep the full diagram at 1:1 so labels stay at least 11px */
+}
+.diagram-scroll:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: -4px;
+}
+.diagram-scroll .wfd--full {
+  max-width: none;
+  margin-inline: auto;
+}
+
+.detail-cols {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: 0 clamp(32px, 5vw, 72px);
+}
+.detail section {
+  padding-block: clamp(28px, 4vw, 44px) 0;
+}
+.detail h2 {
+  font-size: clamp(22px, 2.4vw, 28px);
+  margin-bottom: 16px;
+}
+.steps {
+  margin: 0;
+  padding-left: 2em;
+  display: grid;
+  gap: 8px;
+  font-size: 17px;
+}
+.steps li::marker {
+  font-family: var(--mono);
+  font-size: 0.8em;
+  color: var(--muted);
+}
+.chips {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.chips li {
+  padding: 6px 12px;
+  border: 1px solid #dadbd3;
+  border-radius: 999px;
+  background: var(--silver);
+  font-size: 14px;
+  font-weight: 500;
+}
+.control {
+  font-size: 17px;
+}
+.cta {
+  border-top: 1px solid #dadbd3;
+  margin-top: clamp(36px, 5vw, 56px);
+}
+.cta .actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 24px;
+}
+.cta .mail {
+  color: var(--muted);
+  font-size: 15px;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 760px) {
+  .detail-cols {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .diagram-scroll {
+    padding: 16px;
+  }
+}

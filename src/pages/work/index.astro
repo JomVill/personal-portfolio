@@ -1,12 +1,22 @@
 ---
-// Placeholder until Task 6 builds the work index.
 import Layout from '../../layouts/Layout.astro';
+import WorkflowCard from '../../components/WorkflowCard.astro';
+import { getWorkflows } from '../../lib/workflows';
+import '../../styles/work.css';
+
+const all = getWorkflows();
 ---
 
 <Layout title="Workflows">
-  <div class="wrap">
-    <section>
-      <h1>Workflows I built</h1>
-    </section>
+  <div class="wrap work-head">
+    <h1>Workflows I built</h1>
+    <p class="lede">Each one runs in n8n, with AI doing the reading and a person approving what matters.</p>
   </div>
+  <section class="wrap work-grid" aria-label="All workflows">
+    <div class="cards">
+      {all.map((w) => (
+        <WorkflowCard workflow={w} />
+      ))}
+    </div>
+  </section>
 </Layout>
