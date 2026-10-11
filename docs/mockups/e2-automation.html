@@ -177,36 +177,41 @@
 
       /* hero */
       .hero {
-        padding-block: clamp(40px, 7vw, 96px) clamp(36px, 5vw, 64px);
+        display: grid;
+        gap: clamp(40px, 6vw, 56px);
+        padding-block: clamp(36px, 6vw, 88px) clamp(48px, 6vw, 88px);
       }
-      .avatar {
-        display: block;
-        width: 88px;
-        height: 88px;
-        border-radius: 50%;
-        object-fit: cover;
-        margin-bottom: 28px;
-        box-shadow: 0 0 0 1px var(--line);
+      @media (min-width: 1024px) {
+        .hero {
+          grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+          align-items: center;
+          gap: clamp(48px, 5vw, 80px);
+        }
       }
       .hero h1 {
-        font-size: clamp(40px, 6vw, 76px);
-        line-height: 1.02;
+        font-size: clamp(40px, 5.2vw, 66px);
+        line-height: 1.03;
         letter-spacing: -0.035em;
-        max-width: 16ch;
+        max-width: 15ch;
       }
       .hero .lede {
         margin-top: 24px;
-        max-width: 40rem;
-        font-size: clamp(17px, 1.6vw, 20px);
+        max-width: 34rem;
+        font-size: clamp(17px, 1.5vw, 19px);
         color: var(--muted);
       }
       .hero .stat {
         display: flex;
         align-items: baseline;
         gap: 14px;
-        margin: 28px 0 0;
+        margin: 32px 0 0;
+        padding-top: 24px;
+        border-top: 1px solid var(--line);
+        max-width: 34rem;
       }
       .hero .stat b {
+        flex: none;
+        white-space: nowrap;
         font: 700 clamp(40px, 6vw, 56px) / 1 var(--head, 'Manrope', sans-serif);
         letter-spacing: -0.03em;
         color: #ad3b0f;
@@ -218,19 +223,113 @@
         color: #4d4f48;
       }
       .hero .actions {
-        margin-top: 36px;
+        margin-top: 32px;
         display: flex;
         flex-wrap: wrap;
         align-items: center;
         gap: 12px;
       }
 
+      /* terminal (hero) */
+      .term .screen-top {
+        flex-wrap: nowrap;
+        padding: 12px 18px;
+      }
+      .term .screen-top span + span {
+        color: var(--screen-wire);
+      }
+      .term-body {
+        padding: 22px 22px 24px;
+        font: 400 13px/1.75 var(--mono);
+        color: var(--screen-muted);
+      }
+      .t-prompt {
+        display: flex;
+        gap: 10px;
+        color: var(--screen-ink);
+      }
+      .t-caret {
+        color: var(--screen-wire);
+        flex: none;
+      }
+      .t-text {
+        position: relative;
+        flex: 1;
+        min-width: 0;
+      }
+      .t-ghost {
+        visibility: hidden;
+      }
+      .t-typed {
+        position: absolute;
+        inset: 0;
+      }
+      .term.is-typing .t-typed::after {
+        content: '';
+        display: inline-block;
+        width: 0.55em;
+        height: 1.1em;
+        margin-left: 2px;
+        vertical-align: -0.2em;
+        background: var(--screen-muted);
+      }
+      .t-steps {
+        list-style: none;
+        margin: 14px 0 0;
+        padding: 0;
+      }
+      .t-steps li {
+        display: flex;
+        align-items: baseline;
+        min-height: 1.75em;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .t-steps li:empty::before {
+        content: '\200b';
+      }
+      .t-tree {
+        width: 2.4em;
+        padding-left: 0.6em;
+        color: var(--screen-wire);
+        flex: none;
+      }
+      .t-ok {
+        width: 1.6em;
+        color: var(--screen-ink);
+        flex: none;
+      }
+      .t-done {
+        color: var(--screen-ink);
+      }
+      .t-glyph {
+        display: inline-block;
+        width: 2.4em;
+        padding-left: 0.5em;
+        color: var(--orange);
+        flex: none;
+      }
+      .t-verb {
+        color: #f59466;
+      }
+      .t-sum {
+        display: block !important;
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px dashed #dce7ce26;
+        color: var(--screen-muted);
+      }
+      .t-sum b {
+        font-weight: 400;
+        color: var(--screen-ink);
+      }
+
       /* marquee */
       .tools-strip {
-        padding-block: 8px clamp(40px, 6vw, 72px);
+        padding-block: 0 clamp(48px, 6vw, 80px);
       }
       .marquee {
-        overflow: hidden;
         border-radius: 12px;
         background: #e9eae3;
         border: 1px solid #d6d8cf;
@@ -238,10 +337,22 @@
           inset 0 2px 4px #2a2d2414,
           inset 0 -1px 0 #ffffffb0;
       }
+      .marquee-view {
+        overflow: hidden;
+        -webkit-mask-image: linear-gradient(
+          90deg,
+          transparent,
+          #000 48px,
+          #000 calc(100% - 48px),
+          transparent
+        );
+        mask-image: linear-gradient(90deg, transparent, #000 48px, #000 calc(100% - 48px), transparent);
+      }
       .track {
         display: flex;
         width: max-content;
-        animation: slide 70s linear infinite;
+        animation: slide 60s linear infinite;
+        will-change: transform;
       }
       .marquee:hover .track {
         animation-play-state: paused;
@@ -249,49 +360,49 @@
       .logos {
         display: flex;
         align-items: center;
-        gap: 56px;
+        gap: 48px;
         margin: 0;
-        padding: 18px 56px 18px 0;
+        padding: 20px 48px 20px 0;
         list-style: none;
       }
-      .logos:first-child {
-        padding-left: 28px;
-      }
-      .track .logos + .logos {
-        padding-left: 28px;
-      }
-      .lg {
-        display: block;
-        width: 26px;
-        height: 26px;
-        background: var(--ink);
-        opacity: 0.6;
-        -webkit-mask: var(--i) center / contain no-repeat;
-        mask: var(--i) center / contain no-repeat;
-        transition: opacity 0.2s;
-      }
-      .logos li:hover .lg {
-        opacity: 1;
-      }
-      .zap {
+      .logos li {
         display: inline-flex;
         align-items: center;
         gap: 10px;
-        font: 700 19px/1 var(--head);
+        white-space: nowrap;
+        font: 500 15px/1 var(--sans);
+        color: #3a3c36;
+      }
+      .lg {
+        display: block;
+        width: 22px;
+        height: 22px;
+        flex: none;
+      }
+      .logos .primary {
+        gap: 11px;
+        font: 700 18px/1 var(--head);
         letter-spacing: -0.02em;
+        color: var(--ink);
       }
-      .zap .lg {
-        width: 32px;
-        height: 32px;
-        background: #ff4f00;
-        opacity: 1;
+      .logos .primary .lg {
+        width: 28px;
+        height: 28px;
       }
+      /* three copies: start on copy 2 with Zapier just inside the fade, end on copy 3 */
       @keyframes slide {
+        from {
+          transform: translateX(calc(-100% / 3 + 56px));
+        }
         to {
-          transform: translateX(-50%);
+          transform: translateX(calc(-200% / 3 + 56px));
         }
       }
       @media (prefers-reduced-motion: reduce) {
+        .marquee-view {
+          -webkit-mask-image: none;
+          mask-image: none;
+        }
         .track {
           animation: none;
           width: auto;
@@ -302,8 +413,8 @@
         .logos {
           flex-wrap: wrap;
           justify-content: center;
-          gap: 20px 40px;
-          padding: 18px 24px !important;
+          gap: 18px 36px;
+          padding: 20px 24px;
         }
       }
 
@@ -700,14 +811,17 @@
         .beats {
           grid-template-columns: 1fr;
         }
-        .avatar {
-          width: 72px;
-          height: 72px;
-          margin-bottom: 22px;
+        .hero .stat {
+          flex-direction: column;
+          gap: 10px;
         }
         .logos {
-          gap: 40px;
-          padding-right: 40px;
+          gap: 36px;
+          padding-right: 36px;
+        }
+        .term-body {
+          padding: 18px 16px 20px;
+          font-size: 12.5px;
         }
       }
     </style>
@@ -720,242 +834,355 @@
       <nav aria-label="Main">
         <a href="#work">Work</a>
         <a href="#">About</a>
-        <a class="key key-sm" href="mailto:jomarifrancis.villanueva@g.msuiit.edu.ph">Email me</a>
+        <a class="key key-sm" href="mailto:jomarivillanueva83@gmail.com">Email me</a>
       </nav>
     </header>
 
     <main>
       <div class="wrap hero">
-        <h1>Hi, I’m Jom. I automate the boring parts of your work.</h1>
-        <p class="lede">
-          I connect your apps with Zapier, n8n, and AI, so repetitive tasks run on their own and you save time
-          for the work that matters.
-        </p>
-        <p class="stat">
-          <b>Up to 3 hrs</b><span>back every day to focus on the tasks that actually need you.</span>
-        </p>
-        <div class="actions">
-          <a class="key key-orange" href="#work">See the workflows</a>
-          <a class="key" href="academic.html">Academic work <span aria-hidden="true">→</span></a>
+        <div class="hero-copy">
+          <h1>Hi, I’m Jom. I automate the boring parts of your work.</h1>
+          <p class="lede">
+            I connect your apps with Zapier, n8n, and AI, so repetitive tasks run on their own and you save
+            time for the work that matters.
+          </p>
+          <p class="stat">
+            <b>Up to 3 hrs</b><span>back every day to focus on the tasks that actually need you.</span>
+          </p>
+          <div class="actions">
+            <a class="key key-orange" href="#work">See the workflows</a>
+          </div>
+        </div>
+        <div
+          class="device term"
+          role="img"
+          aria-label="Example automation run: a new partnership inquiry arrives in Gmail, AI screens it, a person approves it in Slack, and the contact and deal are created in HubSpot."
+        >
+          <div class="screen">
+            <div class="screen-top" aria-hidden="true">
+              <span>WF-01 · Live run</span>
+              <span>Partnership ops</span>
+            </div>
+            <div class="term-body" aria-hidden="true">
+              <p class="t-prompt">
+                <span class="t-caret">&gt;</span
+                ><span class="t-text"
+                  ><span class="t-ghost">automate: new partnership inquiry → screen → CRM</span
+                  ><span class="t-typed">automate: new partnership inquiry → screen → CRM</span></span
+                >
+              </p>
+              <ol class="t-steps">
+                <li class="t-done"><span class="t-tree">⎿</span><span class="t-ok">✓</span>Gmail trigger</li>
+                <li class="t-done">
+                  <span class="t-tree">⎿</span><span class="t-ok">✓</span>AI screened inquiry
+                </li>
+                <li class="t-done">
+                  <span class="t-tree">⎿</span><span class="t-ok">✓</span>Approved in Slack
+                </li>
+                <li class="t-done">
+                  <span class="t-tree">⎿</span><span class="t-ok">✓</span>Contact + deal in HubSpot
+                </li>
+                <li class="t-sum"><b>Done</b> · 4 steps · contract next</li>
+              </ol>
+            </div>
+          </div>
         </div>
       </div>
 
       <section class="wrap tools-strip" aria-label="Tools I build with">
         <p class="eyebrow" aria-hidden="true">Tools I build with</p>
+        <svg width="0" height="0" style="position: absolute" aria-hidden="true" focusable="false">
+          <symbol id="si-zapier" viewBox="0 0 24 24">
+            <path
+              d="M4.157 0A4.151 4.151 0 0 0 0 4.161v15.678A4.151 4.151 0 0 0 4.157 24h15.682A4.152 4.152 0 0 0 24 19.839V4.161A4.152 4.152 0 0 0 19.839 0H4.157Zm10.61 8.761h.03a.577.577 0 0 1 .23.038.585.585 0 0 1 .201.124.63.63 0 0 1 .162.431.612.612 0 0 1-.162.435.58.58 0 0 1-.201.128.58.58 0 0 1-.23.042.529.529 0 0 1-.235-.042.585.585 0 0 1-.332-.328.559.559 0 0 1-.038-.235.613.613 0 0 1 .17-.431.59.59 0 0 1 .405-.162Zm2.853 1.572c.03.004.061.004.095.004.325-.011.646.064.937.219.238.144.431.355.552.609.128.279.189.582.185.888v.193a2 2 0 0 1 0 .219h-2.498c.003.227.075.45.204.642a.78.78 0 0 0 .646.265.714.714 0 0 0 .484-.136.642.642 0 0 0 .23-.318l.915.257a1.398 1.398 0 0 1-.28.537c-.14.159-.321.284-.521.355a2.234 2.234 0 0 1-.836.136 1.923 1.923 0 0 1-1.001-.245 1.618 1.618 0 0 1-.665-.703 2.221 2.221 0 0 1-.227-1.036 1.95 1.95 0 0 1 .48-1.398 1.9 1.9 0 0 1 1.3-.488Zm-9.607.023c.162.004.325.026.48.079.207.065.4.174.563.314.26.302.393.692.366 1.088v2.276H8.53l-.109-.711h-.065c-.064.163-.155.31-.272.439a1.122 1.122 0 0 1-.374.264 1.023 1.023 0 0 1-.453.083 1.334 1.334 0 0 1-.866-.264.965.965 0 0 1-.329-.801.993.993 0 0 1 .076-.431 1.02 1.02 0 0 1 .242-.363 1.478 1.478 0 0 1 1.043-.303h.952v-.181a.696.696 0 0 0-.136-.454.553.553 0 0 0-.438-.154.695.695 0 0 0-.378.086.48.48 0 0 0-.193.254l-.99-.144a1.26 1.26 0 0 1 .257-.563c.14-.174.321-.302.533-.378.261-.091.54-.136.82-.129.053-.003.106-.007.163-.007Zm4.384.007c.174 0 .347.038.506.114.182.083.34.211.458.374.257.423.377.911.351 1.406a2.53 2.53 0 0 1-.355 1.448 1.148 1.148 0 0 1-1.009.517c-.204 0-.401-.045-.582-.136a1.052 1.052 0 0 1-.48-.457 1.298 1.298 0 0 1-.114-.234h-.045l.004 1.784h-1.059v-4.713h.904l.117.805h.057c.068-.208.177-.401.328-.56a1.129 1.129 0 0 1 .843-.344h.076v-.004Zm7.559.084h.903l.113.805h.053a1.37 1.37 0 0 1 .235-.484.813.813 0 0 1 .313-.242.82.82 0 0 1 .39-.076h.234v1.051h-.401a.662.662 0 0 0-.313.008.623.623 0 0 0-.272.155.663.663 0 0 0-.174.26.683.683 0 0 0-.027.314v1.875h-1.054v-3.666Zm-17.515.003h3.262v.896L3.73 13.104l.034.113h1.973l.042.9H2.4v-.9l1.931-1.754-.045-.117H2.441v-.896Zm11.815 0h1.055v3.659h-1.055V10.45Zm3.443.684.019.016a.69.69 0 0 0-.351.045.756.756 0 0 0-.287.204c-.11.155-.174.336-.189.522h1.545c-.034-.526-.257-.787-.74-.787h.003Zm-5.718.163c-.026 0-.057 0-.083.004a.78.78 0 0 0-.31.053.746.746 0 0 0-.257.189 1.016 1.016 0 0 0-.204.695v.064c-.015.257.057.507.204.711a.634.634 0 0 0 .253.196.638.638 0 0 0 .314.061.644.644 0 0 0 .578-.265c.14-.223.204-.48.189-.74a1.216 1.216 0 0 0-.181-.711.677.677 0 0 0-.503-.257Zm-4.509 1.266a.464.464 0 0 0-.268.102.373.373 0 0 0-.114.276c0 .053.008.106.027.155a.375.375 0 0 0 .087.132.576.576 0 0 0 .397.11v.004a.863.863 0 0 0 .563-.182.573.573 0 0 0 .211-.457v-.14h-.903Z"
+            />
+          </symbol>
+          <symbol id="si-n8n" viewBox="0 0 24 24">
+            <path
+              d="M21.4737 5.6842c-1.1772 0-2.1663.8051-2.4468 1.8947h-2.8955c-1.235 0-2.289.893-2.492 2.111l-.1038.623a1.263 1.263 0 0 1-1.246 1.0555H11.289c-.2805-1.0896-1.2696-1.8947-2.4468-1.8947s-2.1663.8051-2.4467 1.8947H4.973c-.2805-1.0896-1.2696-1.8947-2.4468-1.8947C1.1311 9.4737 0 10.6047 0 12s1.131 2.5263 2.5263 2.5263c1.1772 0 2.1663-.8051 2.4468-1.8947h1.4223c.2804 1.0896 1.2696 1.8947 2.4467 1.8947 1.1772 0 2.1663-.8051 2.4468-1.8947h1.0008a1.263 1.263 0 0 1 1.2459 1.0555l.1038.623c.203 1.218 1.257 2.111 2.492 2.111h.3692c.2804 1.0895 1.2696 1.8947 2.4468 1.8947 1.3952 0 2.5263-1.131 2.5263-2.5263s-1.131-2.5263-2.5263-2.5263c-1.1772 0-2.1664.805-2.4468 1.8947h-.3692a1.263 1.263 0 0 1-1.246-1.0555l-.1037-.623A2.52 2.52 0 0 0 13.9607 12a2.52 2.52 0 0 0 .821-1.4794l.1038-.623a1.263 1.263 0 0 1 1.2459-1.0555h2.8955c.2805 1.0896 1.2696 1.8947 2.4468 1.8947 1.3952 0 2.5263-1.131 2.5263-2.5263s-1.131-2.5263-2.5263-2.5263m0 1.2632a1.263 1.263 0 0 1 1.2631 1.2631 1.263 1.263 0 0 1-1.2631 1.2632 1.263 1.263 0 0 1-1.2632-1.2632 1.263 1.263 0 0 1 1.2632-1.2631M2.5263 10.7368A1.263 1.263 0 0 1 3.7895 12a1.263 1.263 0 0 1-1.2632 1.2632A1.263 1.263 0 0 1 1.2632 12a1.263 1.263 0 0 1 1.2631-1.2632m6.3158 0A1.263 1.263 0 0 1 10.1053 12a1.263 1.263 0 0 1-1.2632 1.2632A1.263 1.263 0 0 1 7.579 12a1.263 1.263 0 0 1 1.2632-1.2632m10.1053 3.7895a1.263 1.263 0 0 1 1.2631 1.2632 1.263 1.263 0 0 1-1.2631 1.2631 1.263 1.263 0 0 1-1.2632-1.2631 1.263 1.263 0 0 1 1.2632-1.2632"
+            />
+          </symbol>
+          <symbol id="si-openai" viewBox="0 0 24 24">
+            <path
+              d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z"
+            />
+          </symbol>
+          <symbol id="si-claude" viewBox="0 0 24 24">
+            <path
+              d="m4.7144 15.9555 4.7174-2.6471.079-.2307-.079-.1275h-.2307l-.7893-.0486-2.6956-.0729-2.3375-.0971-2.2646-.1214-.5707-.1215-.5343-.7042.0546-.3522.4797-.3218.686.0608 1.5179.1032 2.2767.1578 1.6514.0972 2.4468.255h.3886l.0546-.1579-.1336-.0971-.1032-.0972L6.973 9.8356l-2.55-1.6879-1.3356-.9714-.7225-.4918-.3643-.4614-.1578-1.0078.6557-.7225.8803.0607.2246.0607.8925.686 1.9064 1.4754 2.4893 1.8336.3643.3035.1457-.1032.0182-.0728-.164-.2733-1.3539-2.4467-1.445-2.4893-.6435-1.032-.17-.6194c-.0607-.255-.1032-.4674-.1032-.7285L6.287.1335 6.6997 0l.9957.1336.419.3642.6192 1.4147 1.0018 2.2282 1.5543 3.0296.4553.8985.2429.8318.091.255h.1579v-.1457l.1275-1.706.2368-2.0947.2307-2.6957.0789-.7589.3764-.9107.7468-.4918.5828.2793.4797.686-.0668.4433-.2853 1.8517-.5586 2.9021-.3643 1.9429h.2125l.2429-.2429.9835-1.3053 1.6514-2.0643.7286-.8196.85-.9046.5464-.4311h1.0321l.759 1.1293-.34 1.1657-1.0625 1.3478-.8804 1.1414-1.2628 1.7-.7893 1.36.0729.1093.1882-.0183 2.8535-.607 1.5421-.2794 1.8396-.3157.8318.3886.091.3946-.3278.8075-1.967.4857-2.3072.4614-3.4364.8136-.0425.0304.0486.0607 1.5482.1457.6618.0364h1.621l3.0175.2247.7892.522.4736.6376-.079.4857-1.2142.6193-1.6393-.3886-3.825-.9107-1.3113-.3279h-.1822v.1093l1.0929 1.0686 2.0035 1.8092 2.5075 2.3314.1275.5768-.3218.4554-.34-.0486-2.2039-1.6575-.85-.7468-1.9246-1.621h-.1275v.17l.4432.6496 2.3436 3.5214.1214 1.0807-.17.3521-.6071.2125-.6679-.1214-1.3721-1.9246L14.38 17.959l-1.1414-1.9428-.1397.079-.674 7.2552-.3156.3703-.7286.2793-.6071-.4614-.3218-.7468.3218-1.4753.3886-1.9246.3157-1.53.2853-1.9004.17-.6314-.0121-.0425-.1397.0182-1.4328 1.9672-2.1796 2.9446-1.7243 1.8456-.4128.164-.7164-.3704.0667-.6618.4008-.5889 2.386-3.0357 1.4389-1.882.929-1.0868-.0062-.1579h-.0546l-6.3385 4.1164-1.1293.1457-.4857-.4554.0608-.7467.2307-.2429 1.9064-1.3114Z"
+            />
+          </symbol>
+          <symbol id="si-hubspot" viewBox="0 0 24 24">
+            <path
+              d="M18.164 7.93V5.084a2.198 2.198 0 001.267-1.978v-.067A2.2 2.2 0 0017.238.845h-.067a2.2 2.2 0 00-2.193 2.193v.067a2.196 2.196 0 001.252 1.973l.013.006v2.852a6.22 6.22 0 00-2.969 1.31l.012-.01-7.828-6.095A2.497 2.497 0 104.3 4.656l-.012.006 7.697 5.991a6.176 6.176 0 00-1.038 3.446c0 1.343.425 2.588 1.147 3.607l-.013-.02-2.342 2.343a1.968 1.968 0 00-.58-.095h-.002a2.033 2.033 0 102.033 2.033 1.978 1.978 0 00-.1-.595l.005.014 2.317-2.317a6.247 6.247 0 104.782-11.134l-.036-.005zm-.964 9.378a3.206 3.206 0 113.215-3.207v.002a3.206 3.206 0 01-3.207 3.207z"
+            />
+          </symbol>
+          <symbol id="si-slack" viewBox="0 0 24 24">
+            <path
+              d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zM15.165 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zM15.165 17.688a2.527 2.527 0 0 1-2.52-2.523 2.526 2.526 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z"
+            />
+          </symbol>
+          <symbol id="si-gmail" viewBox="0 0 24 24">
+            <path
+              d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"
+            />
+          </symbol>
+          <symbol id="si-quickbooks" viewBox="0 0 24 24">
+            <path
+              d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm.642 4.1335c.9554 0 1.7296.776 1.7296 1.7332v9.0667h1.6c1.614 0 2.9275-1.3156 2.9275-2.933 0-1.6173-1.3136-2.9333-2.9276-2.9333h-.6654V7.3334h.6654c2.5722 0 4.6577 2.0897 4.6577 4.667 0 2.5774-2.0855 4.6666-4.6577 4.6666H12.642zM7.9837 7.333h3.3291v12.533c-.9555 0-1.73-.7759-1.73-1.7332V9.0662H7.9837c-1.6146 0-2.9277 1.316-2.9277 2.9334 0 1.6175 1.3131 2.9333 2.9277 2.9333h.6654v1.7332h-.6654c-2.5725 0-4.6577-2.0892-4.6577-4.6665 0-2.5771 2.0852-4.6666 4.6577-4.6666Z"
+            />
+          </symbol>
+          <symbol id="si-trello" viewBox="0 0 24 24">
+            <path
+              d="M21.147 0H2.853A2.86 2.86 0 000 2.853v18.294A2.86 2.86 0 002.853 24h18.294A2.86 2.86 0 0024 21.147V2.853A2.86 2.86 0 0021.147 0zM10.34 17.287a.953.953 0 01-.953.953h-4a.954.954 0 01-.954-.953V5.38a.953.953 0 01.954-.953h4a.954.954 0 01.953.953zm9.233-5.467a.944.944 0 01-.953.947h-4a.947.947 0 01-.953-.947V5.38a.953.953 0 01.953-.953h4a.954.954 0 01.953.953z"
+            />
+          </symbol>
+          <symbol id="si-clickup" viewBox="0 0 24 24">
+            <path
+              d="M2 18.439l3.69-2.828c1.961 2.56 4.044 3.739 6.363 3.739 2.307 0 4.33-1.166 6.203-3.704L22 18.405C19.298 22.065 15.941 24 12.053 24 8.178 24 4.788 22.078 2 18.439zM12.04 6.15l-6.568 5.66-3.036-3.52L12.055 0l9.543 8.296-3.05 3.509z"
+            />
+          </symbol>
+          <symbol id="si-googlesheets" viewBox="0 0 24 24">
+            <path
+              d="M11.318 12.545H7.91v-1.909h3.41v1.91zM14.728 0v6h6l-6-6zm1.363 10.636h-3.41v1.91h3.41v-1.91zm0 3.273h-3.41v1.91h3.41v-1.91zM20.727 6.5v15.864c0 .904-.732 1.636-1.636 1.636H4.909a1.636 1.636 0 0 1-1.636-1.636V1.636C3.273.732 4.005 0 4.909 0h9.318v6.5h6.5zm-3.273 2.773H6.545v7.909h10.91v-7.91zm-6.136 4.636H7.91v1.91h3.41v-1.91z"
+            />
+          </symbol>
+          <symbol id="si-googlecalendar" viewBox="0 0 24 24">
+            <path
+              d="M18.316 5.684H24v12.632h-5.684V5.684zM5.684 24h12.632v-5.684H5.684V24zM18.316 5.684V0H1.895A1.894 1.894 0 0 0 0 1.895v16.421h5.684V5.684h12.632zm-7.207 6.25v-.065c.272-.144.5-.349.687-.617s.279-.595.279-.982c0-.379-.099-.72-.3-1.025a2.05 2.05 0 0 0-.832-.714 2.703 2.703 0 0 0-1.197-.257c-.6 0-1.094.156-1.481.467-.386.311-.65.671-.793 1.078l1.085.452c.086-.249.224-.461.413-.633.189-.172.445-.257.767-.257.33 0 .602.088.816.264a.86.86 0 0 1 .322.703c0 .33-.12.589-.36.778-.24.19-.535.284-.886.284h-.567v1.085h.633c.407 0 .748.109 1.02.327.272.218.407.499.407.843 0 .336-.129.614-.387.832s-.565.327-.924.327c-.351 0-.651-.103-.897-.311-.248-.208-.422-.502-.521-.881l-1.096.452c.178.616.505 1.082.977 1.401.472.319.984.478 1.538.477a2.84 2.84 0 0 0 1.293-.291c.382-.193.684-.458.902-.794.218-.336.327-.72.327-1.149 0-.429-.115-.797-.344-1.105a2.067 2.067 0 0 0-.881-.689zm2.093-1.931l.602.913L15 10.045v5.744h1.187V8.446h-.827l-2.158 1.557zM22.105 0h-3.289v5.184H24V1.895A1.894 1.894 0 0 0 22.105 0zm-3.289 23.5l4.684-4.684h-4.684V23.5zM0 22.105C0 23.152.848 24 1.895 24h3.289v-5.184H0v3.289z"
+            />
+          </symbol>
+          <symbol id="si-clockify" viewBox="0 0 24 24">
+            <path
+              d="M13.3512 20.4035c1.1108 0 2.169-.2217 3.139-.6157l2.6913 2.6944C17.4555 23.4458 15.4688 24 13.3512 24 6.729 24 1.3594 18.627 1.3594 12.0006 1.3594 5.3729 6.7289 0 13.3512 0c2.0964 0 4.0652.5406 5.7789 1.4865L16.4834 4.136c-.9687-.3918-2.0236-.6134-3.1322-.6134-4.6379 0-8.3976 3.779-8.3976 8.441 0 4.6609 3.7597 8.4399 8.3976 8.4399zm2.176-12.1544l5.5104-5.5139 1.5773 1.5772-5.5104 5.514zm-2.2328 5.6348c-1.0784 0-1.952-.8775-1.952-1.961 0-1.0825.8736-1.9611 1.952-1.9611 1.0784 0 1.952.8786 1.952 1.961 0 1.0836-.8736 1.9611-1.952 1.9611zm9.3462 5.6953l-1.5772 1.5783-5.5105-5.514 1.5774-1.5783z"
+            />
+          </symbol>
+          <symbol id="si-buffer" viewBox="0 0 24 24">
+            <path
+              d="M1.371 5.476L11.943 0l10.686 5.476-10.686 5.495zm3.36 4.81l7.212 3.547 7.288-3.547 3.398 1.655-10.686 5.202L1.371 11.94zm0 6.171l7.212 3.911 7.288-3.91 3.398 1.815L11.943 24 1.371 18.273z"
+            />
+          </symbol>
+        </svg>
         <div class="marquee">
-          <div class="track">
-            <ul class="logos">
-              <li class="zap" title="Zapier">
-                <span
-                  class="lg"
-                  style="--i: url(https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/zapier.svg)"
-                  aria-hidden="true"
-                ></span
-                >Zapier
-              </li>
-              <li title="n8n">
-                <span
-                  class="lg"
-                  style="--i: url(https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/n8n.svg)"
-                  aria-hidden="true"
-                ></span
-                ><span class="sr">n8n</span>
-              </li>
-              <li title="OpenAI">
-                <span
-                  class="lg"
-                  style="--i: url(https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/openai.svg)"
-                  aria-hidden="true"
-                ></span
-                ><span class="sr">OpenAI</span>
-              </li>
-              <li title="HubSpot">
-                <span
-                  class="lg"
-                  style="--i: url(https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/hubspot.svg)"
-                  aria-hidden="true"
-                ></span
-                ><span class="sr">HubSpot</span>
-              </li>
-              <li title="Slack">
-                <span
-                  class="lg"
-                  style="--i: url(https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/slack.svg)"
-                  aria-hidden="true"
-                ></span
-                ><span class="sr">Slack</span>
-              </li>
-              <li title="Gmail">
-                <span
-                  class="lg"
-                  style="--i: url(https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/gmail.svg)"
-                  aria-hidden="true"
-                ></span
-                ><span class="sr">Gmail</span>
-              </li>
-              <li title="QuickBooks">
-                <span
-                  class="lg"
-                  style="--i: url(https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/quickbooks.svg)"
-                  aria-hidden="true"
-                ></span
-                ><span class="sr">QuickBooks</span>
-              </li>
-              <li title="Trello">
-                <span
-                  class="lg"
-                  style="--i: url(https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/trello.svg)"
-                  aria-hidden="true"
-                ></span
-                ><span class="sr">Trello</span>
-              </li>
-              <li title="ClickUp">
-                <span
-                  class="lg"
-                  style="--i: url(https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/clickup.svg)"
-                  aria-hidden="true"
-                ></span
-                ><span class="sr">ClickUp</span>
-              </li>
-              <li title="Google Sheets">
-                <span
-                  class="lg"
-                  style="--i: url(https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/googlesheets.svg)"
-                  aria-hidden="true"
-                ></span
-                ><span class="sr">Google Sheets</span>
-              </li>
-              <li title="Google Calendar">
-                <span
-                  class="lg"
-                  style="--i: url(https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/googlecalendar.svg)"
-                  aria-hidden="true"
-                ></span
-                ><span class="sr">Google Calendar</span>
-              </li>
-              <li title="Clockify">
-                <span
-                  class="lg"
-                  style="--i: url(https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/clockify.svg)"
-                  aria-hidden="true"
-                ></span
-                ><span class="sr">Clockify</span>
-              </li>
-              <li title="Buffer">
-                <span
-                  class="lg"
-                  style="--i: url(https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/buffer.svg)"
-                  aria-hidden="true"
-                ></span
-                ><span class="sr">Buffer</span>
-              </li>
-            </ul>
-            <ul class="logos" aria-hidden="true">
-              <li class="zap" title="Zapier">
-                <span
-                  class="lg"
-                  style="--i: url(https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/zapier.svg)"
-                  aria-hidden="true"
-                ></span
-                >Zapier
-              </li>
-              <li title="n8n">
-                <span
-                  class="lg"
-                  style="--i: url(https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/n8n.svg)"
-                  aria-hidden="true"
-                ></span
-                ><span class="sr">n8n</span>
-              </li>
-              <li title="OpenAI">
-                <span
-                  class="lg"
-                  style="--i: url(https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/openai.svg)"
-                  aria-hidden="true"
-                ></span
-                ><span class="sr">OpenAI</span>
-              </li>
-              <li title="HubSpot">
-                <span
-                  class="lg"
-                  style="--i: url(https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/hubspot.svg)"
-                  aria-hidden="true"
-                ></span
-                ><span class="sr">HubSpot</span>
-              </li>
-              <li title="Slack">
-                <span
-                  class="lg"
-                  style="--i: url(https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/slack.svg)"
-                  aria-hidden="true"
-                ></span
-                ><span class="sr">Slack</span>
-              </li>
-              <li title="Gmail">
-                <span
-                  class="lg"
-                  style="--i: url(https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/gmail.svg)"
-                  aria-hidden="true"
-                ></span
-                ><span class="sr">Gmail</span>
-              </li>
-              <li title="QuickBooks">
-                <span
-                  class="lg"
-                  style="--i: url(https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/quickbooks.svg)"
-                  aria-hidden="true"
-                ></span
-                ><span class="sr">QuickBooks</span>
-              </li>
-              <li title="Trello">
-                <span
-                  class="lg"
-                  style="--i: url(https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/trello.svg)"
-                  aria-hidden="true"
-                ></span
-                ><span class="sr">Trello</span>
-              </li>
-              <li title="ClickUp">
-                <span
-                  class="lg"
-                  style="--i: url(https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/clickup.svg)"
-                  aria-hidden="true"
-                ></span
-                ><span class="sr">ClickUp</span>
-              </li>
-              <li title="Google Sheets">
-                <span
-                  class="lg"
-                  style="--i: url(https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/googlesheets.svg)"
-                  aria-hidden="true"
-                ></span
-                ><span class="sr">Google Sheets</span>
-              </li>
-              <li title="Google Calendar">
-                <span
-                  class="lg"
-                  style="--i: url(https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/googlecalendar.svg)"
-                  aria-hidden="true"
-                ></span
-                ><span class="sr">Google Calendar</span>
-              </li>
-              <li title="Clockify">
-                <span
-                  class="lg"
-                  style="--i: url(https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/clockify.svg)"
-                  aria-hidden="true"
-                ></span
-                ><span class="sr">Clockify</span>
-              </li>
-              <li title="Buffer">
-                <span
-                  class="lg"
-                  style="--i: url(https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/buffer.svg)"
-                  aria-hidden="true"
-                ></span
-                ><span class="sr">Buffer</span>
-              </li>
-            </ul>
+          <div class="marquee-view">
+            <div class="track">
+              <ul class="logos">
+                <li class="primary">
+                  <svg class="lg" viewBox="0 0 24 24" fill="#FF4F00" aria-hidden="true" focusable="false">
+                    <use href="#si-zapier" /></svg
+                  >Zapier
+                </li>
+                <li>
+                  <svg class="lg" viewBox="0 0 24 24" fill="#EA4B71" aria-hidden="true" focusable="false">
+                    <use href="#si-n8n" /></svg
+                  >n8n
+                </li>
+                <li>
+                  <svg class="lg" viewBox="0 0 24 24" fill="#412991" aria-hidden="true" focusable="false">
+                    <use href="#si-openai" /></svg
+                  >OpenAI
+                </li>
+                <li>
+                  <svg class="lg" viewBox="0 0 24 24" fill="#D97757" aria-hidden="true" focusable="false">
+                    <use href="#si-claude" /></svg
+                  >Claude
+                </li>
+                <li>
+                  <svg class="lg" viewBox="0 0 24 24" fill="#FF7A59" aria-hidden="true" focusable="false">
+                    <use href="#si-hubspot" /></svg
+                  >HubSpot
+                </li>
+                <li>
+                  <svg class="lg" viewBox="0 0 24 24" fill="#4A154B" aria-hidden="true" focusable="false">
+                    <use href="#si-slack" /></svg
+                  >Slack
+                </li>
+                <li>
+                  <svg class="lg" viewBox="0 0 24 24" fill="#EA4335" aria-hidden="true" focusable="false">
+                    <use href="#si-gmail" /></svg
+                  >Gmail
+                </li>
+                <li>
+                  <svg class="lg" viewBox="0 0 24 24" fill="#2CA01C" aria-hidden="true" focusable="false">
+                    <use href="#si-quickbooks" /></svg
+                  >QuickBooks
+                </li>
+                <li>
+                  <svg class="lg" viewBox="0 0 24 24" fill="#0052CC" aria-hidden="true" focusable="false">
+                    <use href="#si-trello" /></svg
+                  >Trello
+                </li>
+                <li>
+                  <svg class="lg" viewBox="0 0 24 24" fill="#7B68EE" aria-hidden="true" focusable="false">
+                    <use href="#si-clickup" /></svg
+                  >ClickUp
+                </li>
+                <li>
+                  <svg class="lg" viewBox="0 0 24 24" fill="#34A853" aria-hidden="true" focusable="false">
+                    <use href="#si-googlesheets" /></svg
+                  >Google Sheets
+                </li>
+                <li>
+                  <svg class="lg" viewBox="0 0 24 24" fill="#4285F4" aria-hidden="true" focusable="false">
+                    <use href="#si-googlecalendar" /></svg
+                  >Google Calendar
+                </li>
+                <li>
+                  <svg class="lg" viewBox="0 0 24 24" fill="#03A9F4" aria-hidden="true" focusable="false">
+                    <use href="#si-clockify" /></svg
+                  >Clockify
+                </li>
+                <li>
+                  <svg class="lg" viewBox="0 0 24 24" fill="#231F20" aria-hidden="true" focusable="false">
+                    <use href="#si-buffer" /></svg
+                  >Buffer
+                </li>
+              </ul>
+              <ul class="logos" aria-hidden="true">
+                <li class="primary">
+                  <svg class="lg" viewBox="0 0 24 24" fill="#FF4F00" aria-hidden="true" focusable="false">
+                    <use href="#si-zapier" /></svg
+                  >Zapier
+                </li>
+                <li>
+                  <svg class="lg" viewBox="0 0 24 24" fill="#EA4B71" aria-hidden="true" focusable="false">
+                    <use href="#si-n8n" /></svg
+                  >n8n
+                </li>
+                <li>
+                  <svg class="lg" viewBox="0 0 24 24" fill="#412991" aria-hidden="true" focusable="false">
+                    <use href="#si-openai" /></svg
+                  >OpenAI
+                </li>
+                <li>
+                  <svg class="lg" viewBox="0 0 24 24" fill="#D97757" aria-hidden="true" focusable="false">
+                    <use href="#si-claude" /></svg
+                  >Claude
+                </li>
+                <li>
+                  <svg class="lg" viewBox="0 0 24 24" fill="#FF7A59" aria-hidden="true" focusable="false">
+                    <use href="#si-hubspot" /></svg
+                  >HubSpot
+                </li>
+                <li>
+                  <svg class="lg" viewBox="0 0 24 24" fill="#4A154B" aria-hidden="true" focusable="false">
+                    <use href="#si-slack" /></svg
+                  >Slack
+                </li>
+                <li>
+                  <svg class="lg" viewBox="0 0 24 24" fill="#EA4335" aria-hidden="true" focusable="false">
+                    <use href="#si-gmail" /></svg
+                  >Gmail
+                </li>
+                <li>
+                  <svg class="lg" viewBox="0 0 24 24" fill="#2CA01C" aria-hidden="true" focusable="false">
+                    <use href="#si-quickbooks" /></svg
+                  >QuickBooks
+                </li>
+                <li>
+                  <svg class="lg" viewBox="0 0 24 24" fill="#0052CC" aria-hidden="true" focusable="false">
+                    <use href="#si-trello" /></svg
+                  >Trello
+                </li>
+                <li>
+                  <svg class="lg" viewBox="0 0 24 24" fill="#7B68EE" aria-hidden="true" focusable="false">
+                    <use href="#si-clickup" /></svg
+                  >ClickUp
+                </li>
+                <li>
+                  <svg class="lg" viewBox="0 0 24 24" fill="#34A853" aria-hidden="true" focusable="false">
+                    <use href="#si-googlesheets" /></svg
+                  >Google Sheets
+                </li>
+                <li>
+                  <svg class="lg" viewBox="0 0 24 24" fill="#4285F4" aria-hidden="true" focusable="false">
+                    <use href="#si-googlecalendar" /></svg
+                  >Google Calendar
+                </li>
+                <li>
+                  <svg class="lg" viewBox="0 0 24 24" fill="#03A9F4" aria-hidden="true" focusable="false">
+                    <use href="#si-clockify" /></svg
+                  >Clockify
+                </li>
+                <li>
+                  <svg class="lg" viewBox="0 0 24 24" fill="#231F20" aria-hidden="true" focusable="false">
+                    <use href="#si-buffer" /></svg
+                  >Buffer
+                </li>
+              </ul>
+              <ul class="logos" aria-hidden="true">
+                <li class="primary">
+                  <svg class="lg" viewBox="0 0 24 24" fill="#FF4F00" aria-hidden="true" focusable="false">
+                    <use href="#si-zapier" /></svg
+                  >Zapier
+                </li>
+                <li>
+                  <svg class="lg" viewBox="0 0 24 24" fill="#EA4B71" aria-hidden="true" focusable="false">
+                    <use href="#si-n8n" /></svg
+                  >n8n
+                </li>
+                <li>
+                  <svg class="lg" viewBox="0 0 24 24" fill="#412991" aria-hidden="true" focusable="false">
+                    <use href="#si-openai" /></svg
+                  >OpenAI
+                </li>
+                <li>
+                  <svg class="lg" viewBox="0 0 24 24" fill="#D97757" aria-hidden="true" focusable="false">
+                    <use href="#si-claude" /></svg
+                  >Claude
+                </li>
+                <li>
+                  <svg class="lg" viewBox="0 0 24 24" fill="#FF7A59" aria-hidden="true" focusable="false">
+                    <use href="#si-hubspot" /></svg
+                  >HubSpot
+                </li>
+                <li>
+                  <svg class="lg" viewBox="0 0 24 24" fill="#4A154B" aria-hidden="true" focusable="false">
+                    <use href="#si-slack" /></svg
+                  >Slack
+                </li>
+                <li>
+                  <svg class="lg" viewBox="0 0 24 24" fill="#EA4335" aria-hidden="true" focusable="false">
+                    <use href="#si-gmail" /></svg
+                  >Gmail
+                </li>
+                <li>
+                  <svg class="lg" viewBox="0 0 24 24" fill="#2CA01C" aria-hidden="true" focusable="false">
+                    <use href="#si-quickbooks" /></svg
+                  >QuickBooks
+                </li>
+                <li>
+                  <svg class="lg" viewBox="0 0 24 24" fill="#0052CC" aria-hidden="true" focusable="false">
+                    <use href="#si-trello" /></svg
+                  >Trello
+                </li>
+                <li>
+                  <svg class="lg" viewBox="0 0 24 24" fill="#7B68EE" aria-hidden="true" focusable="false">
+                    <use href="#si-clickup" /></svg
+                  >ClickUp
+                </li>
+                <li>
+                  <svg class="lg" viewBox="0 0 24 24" fill="#34A853" aria-hidden="true" focusable="false">
+                    <use href="#si-googlesheets" /></svg
+                  >Google Sheets
+                </li>
+                <li>
+                  <svg class="lg" viewBox="0 0 24 24" fill="#4285F4" aria-hidden="true" focusable="false">
+                    <use href="#si-googlecalendar" /></svg
+                  >Google Calendar
+                </li>
+                <li>
+                  <svg class="lg" viewBox="0 0 24 24" fill="#03A9F4" aria-hidden="true" focusable="false">
+                    <use href="#si-clockify" /></svg
+                  >Clockify
+                </li>
+                <li>
+                  <svg class="lg" viewBox="0 0 24 24" fill="#231F20" aria-hidden="true" focusable="false">
+                    <use href="#si-buffer" /></svg
+                  >Buffer
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </section>
@@ -1098,8 +1325,8 @@
         <h2 id="contact-title">Got a task that eats your week?</h2>
         <p>Tell me what it is. I'll say honestly if it's worth automating.</p>
         <div class="actions">
-          <a class="key key-orange" href="mailto:jomarifrancis.villanueva@g.msuiit.edu.ph">Email me</a>
-          <span class="mail">jomarifrancis.villanueva@g.msuiit.edu.ph</span>
+          <a class="key key-orange" href="mailto:jomarivillanueva83@gmail.com">Email me</a>
+          <span class="mail">jomarivillanueva83@gmail.com</span>
         </div>
       </section>
     </main>
@@ -1111,9 +1338,118 @@
           <a href="academic.html">Academic work</a>
           <a href="#">LinkedIn</a>
           <a href="#">GitHub</a>
-          <a href="mailto:jomarifrancis.villanueva@g.msuiit.edu.ph">Email</a>
+          <a href="mailto:jomarivillanueva83@gmail.com">Email</a>
         </nav>
       </div>
     </footer>
+    <script>
+      (() => {
+        const term = document.querySelector('.term');
+        if (!term || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        const typed = term.querySelector('.t-typed');
+        const rows = [...term.querySelectorAll('.t-steps li')];
+        const PROMPT = typed.textContent;
+        const STEPS = [
+          ['Reading inbox…', 'Gmail trigger', 1300],
+          ['Screening with AI…', 'AI screened inquiry', 1700],
+          ['Waiting for approval…', 'Approved in Slack', 2100],
+          ['Updating HubSpot…', 'Contact + deal in HubSpot', 1500],
+        ];
+        const SUMMARY = '<b>Done</b> · 4 steps · contract next';
+        const GLYPHS = ['·', '✢', '✳', '✶', '✻', '✽', '✻', '✶', '✳', '✢'];
+        const done = (t) => `<span class="t-tree">⎿</span><span class="t-ok">✓</span>${t}`;
+
+        // Timeline of [delay before, action]
+        const plan = [];
+        plan.push([
+          500,
+          () => {
+            rows.forEach((r) => {
+              r.className = '';
+              r.innerHTML = '';
+            });
+            rows[4].className = 't-sum';
+            rows[4].style.visibility = 'hidden';
+            typed.textContent = '';
+            term.classList.add('is-typing');
+          },
+        ]);
+        for (let i = 1; i <= PROMPT.length; i++) {
+          plan.push([
+            i === 1 ? 400 : 28 + (PROMPT[i - 1] === ' ' ? 30 : 0),
+            () => (typed.textContent = PROMPT.slice(0, i)),
+          ]);
+        }
+        plan.push([450, () => term.classList.remove('is-typing')]);
+        STEPS.forEach(([verb, label, dur], i) => {
+          plan.push([
+            i ? 0 : 250,
+            () => {
+              rows[i].innerHTML = '<span class="t-glyph">·</span><span class="t-verb"></span>';
+              rows[i].querySelector('.t-verb').textContent = verb;
+              spin = rows[i].querySelector('.t-glyph');
+            },
+          ]);
+          plan.push([
+            dur,
+            () => {
+              spin = null;
+              rows[i].className = 't-done';
+              rows[i].innerHTML = done(label);
+            },
+          ]);
+        });
+        plan.push([
+          350,
+          () => {
+            rows[4].innerHTML = SUMMARY;
+            rows[4].style.visibility = '';
+          },
+        ]);
+        plan.push([3000, () => {}]);
+
+        let idx = 0,
+          timer = 0,
+          raf = 0,
+          running = false,
+          spin = null,
+          last = 0,
+          g = 0;
+        const tick = () => {
+          const [, fn] = plan[idx];
+          fn();
+          idx = (idx + 1) % plan.length;
+          schedule();
+        };
+        const schedule = () => {
+          timer = setTimeout(tick, plan[idx][0]);
+        };
+        const loop = (t) => {
+          if (spin && t - last > 110) {
+            last = t;
+            g = (g + 1) % GLYPHS.length;
+            spin.textContent = GLYPHS[g];
+          }
+          raf = requestAnimationFrame(loop);
+        };
+        const start = () => {
+          if (running || document.hidden) return;
+          running = true;
+          schedule();
+          raf = requestAnimationFrame(loop);
+        };
+        const stop = () => {
+          running = false;
+          clearTimeout(timer);
+          cancelAnimationFrame(raf);
+        };
+        let visible = false;
+        new IntersectionObserver(([e]) => {
+          visible = e.isIntersecting;
+          visible ? start() : stop();
+        }).observe(term);
+        document.addEventListener('visibilitychange', () => (document.hidden ? stop() : visible && start()));
+      })();
+    </script>
   </body>
 </html>
