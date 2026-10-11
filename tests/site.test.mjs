@@ -88,14 +88,31 @@ test('homepage: hero, terminal final state, marquee, featured, cards, no CDNs', 
   assert.doesNotMatch(html, /3 hours a day/);
   // terminal is server-rendered in its final state
   const term = html.match(/<div[^>]+class="[^"]*\bterm\b[\s\S]*?<\/ol>/)[0];
-  for (const line of [
-    'Pulled stories from Hacker News, Reddit, and the web',
-    'AI scored every story',
-    'Sent the best to Slack: Keep or Kill',
-    'Kept stories sent to the script writer',
-    'Done</b> · 4 steps · scripts next',
-  ])
-    assert.match(term, new RegExp(line), line);
+  const doneLines = [...term.matchAll(/<li class="t-done"[^>]*>([\s\S]*?)<\/li>/g)].map((m) =>
+    m[1]
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/&#39;/g, "'")
+      .replace(/\s+/g, ' ')
+      .trim(),
+  );
+  assert.deepEqual(doneLines, [
+    "⎿ ✓ Pulled today's stories from Hacker News, Reddit, and the web",
+    '⎿ ✓ AI kept the strongest few',
+    '⎿ ✓ Sent them to Slack: Keep or Kill',
+    '⎿ ✓ Kept stories sent to the script writer',
+  ]);
+  // done lines are words only; figures live in the summary line
+  for (const line of doneLines) assert.doesNotMatch(line, /\d/, line);
+  const summary = term
+    .match(/<li class="t-sum">([\s\S]*?)<\/li>/)[1]
+    .replace(/<[^>]+>/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+  assert.equal(summary, 'Done · 4 steps · ~5 min · saves ~2 h of manual work');
+  assert.match(
+    html,
+    /aria-label="Example automation run:[^"]*about 5 minutes, saving about 2 hours of manual work\."/,
+  );
   assert.match(html, /find today(&#39;|')s best stories → score → vote/);
   assert.match(html, />Story scout</);
   assert.doesNotMatch(term, /Partnership|HubSpot/);
@@ -139,6 +156,8 @@ test('homepage: hero, terminal final state, marquee, featured, cards, no CDNs', 
   );
   assert.match(row, /data-step="6" data-beat="2" data-kind="human"/);
   assert.match(row, /data-step="4" data-beat="1" data-kind="ai"/);
+  // stream settings from copy.flow: filter at "Worth it?" (step 5)
+  assert.match(row, /data-filter-at="5" data-keep-rate="0.35" data-vote-keep-rate="0.5"/);
   assert.match(row, /Pull stories/);
   assert.doesNotMatch(row, /Fetch Reddit|Web search/);
   assert.doesNotMatch(feat, /Dashed line/);

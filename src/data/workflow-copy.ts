@@ -20,6 +20,13 @@ export type WorkflowCopy = {
    * the previous one. The last beat's `through` must equal the main path's length.
    */
   beats?: { label: string; text: string; through: number }[];
+  /**
+   * Featured-diagram stream of items. `filterAt` names the main-path node where most items drop
+   * out (`keepRate` of them continue). Human nodes always queue items and release them one at a
+   * time; `voteKeepRate` is the share that passes the first decision node after the human node.
+   * Without `filterAt` every item passes the filter stage.
+   */
+  flow?: { filterAt?: string; keepRate?: number; voteKeepRate?: number };
   /** Plain-English "How it runs" list on the detail page. */
   steps: string[];
   /** Node name → short label for the full diagram on the detail page. */
@@ -323,6 +330,7 @@ export const workflowCopy: Record<string, WorkflowCopy> = {
       'Was It Kept?': 'Kept?',
       'Send To Content Generator': 'Make content',
     },
+    flow: { filterAt: 'Keep Stories Above Threshold', keepRate: 0.35, voteKeepRate: 0.5 },
     beats: [
       { label: 'Stories come in', text: 'Hacker News, Reddit, and the web, every morning.', through: 4 },
       { label: 'AI does the first read', text: 'Each story gets a score. Weak ones drop out.', through: 6 },

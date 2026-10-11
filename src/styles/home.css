@@ -132,6 +132,10 @@
   border-top: 1px dashed #dce7ce26;
   color: var(--screen-muted);
 }
+.t-sum .t-seg {
+  /* the summary wraps between its parts, never inside one */
+  white-space: nowrap;
+}
 .t-sum b {
   font-weight: 400;
   color: var(--screen-ink);
@@ -312,8 +316,10 @@ html.motion-paused .track {
   margin: -4.5px 0 0 -4.5px;
   border-radius: 50%;
   background: #ff9361;
+  /* thin dark rim keeps the dot readable on the orange AI node */
   box-shadow:
-    0 0 0 3px #ee652b38,
+    0 0 0 1.5px #242a25b3,
+    0 0 0 4px #ee652b38,
     0 0 14px 3px #ee652b8c;
   opacity: 0;
   pointer-events: none;
