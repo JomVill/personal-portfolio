@@ -84,7 +84,8 @@ test('homepage: hero, terminal final state, marquee, featured, cards, no CDNs', 
   const h1s = [...html.matchAll(/<h1[^>]*>([\s\S]*?)<\/h1>/g)];
   assert.equal(h1s.length, 1);
   assert.equal(h1s[0][1].trim(), 'Hi, I’m Jom, and I automate repetitive tasks.');
-  assert.match(html, /3 hours a day/);
+  assert.match(html, /saving you up to\s*<strong class="hl">60 hours a month<\/strong>\./);
+  assert.doesNotMatch(html, /3 hours a day/);
   // terminal is server-rendered in its final state
   const term = html.match(/<div[^>]+class="[^"]*\bterm\b[\s\S]*?<\/ol>/)[0];
   for (const line of [
