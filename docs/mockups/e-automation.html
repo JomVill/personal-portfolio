@@ -1,0 +1,963 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mockup E — AI automation · Jomari Villanueva</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Manrope:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --paper: #f8f8f5;
+        --white: #ffffff;
+        --ink: #252623;
+        --muted: #696b64;
+        --line: #e2e2dc;
+        --wire: #b9bab2;
+        --orange: #ee652b;
+        --accent: #ad3b0f;
+        --sans: 'DM Sans', system-ui, sans-serif;
+        --head: 'Manrope', system-ui, sans-serif;
+        --mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+        --gutter: clamp(16px, 4vw, 48px);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        -webkit-text-size-adjust: 100%;
+      }
+      @media (prefers-reduced-motion: no-preference) {
+        html {
+          scroll-behavior: smooth;
+        }
+      }
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font: 400 17px/1.6 var(--sans);
+      }
+      a {
+        color: inherit;
+      }
+      :focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 3px;
+        border-radius: 4px;
+      }
+      .wrap {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding-inline: var(--gutter);
+      }
+      h1,
+      h2,
+      h3 {
+        font-family: var(--head);
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        margin: 0;
+      }
+      p {
+        margin: 0;
+      }
+
+      /* header */
+      .top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding-block: 24px;
+      }
+      .brand {
+        white-space: nowrap;
+        font: 700 17px/1 var(--head);
+        text-decoration: none;
+        letter-spacing: -0.01em;
+      }
+      .top nav {
+        display: flex;
+        align-items: center;
+        gap: 28px;
+        font-size: 15px;
+      }
+      .top nav a {
+        text-decoration: none;
+      }
+      .top nav a:hover {
+        text-decoration: underline;
+        text-underline-offset: 4px;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 44px;
+        padding: 0 20px;
+        border-radius: 999px;
+        font: 600 15px/1 var(--sans);
+        text-decoration: none;
+        white-space: nowrap;
+      }
+      .btn-ink {
+        background: var(--ink);
+        color: var(--paper);
+      }
+      .btn-ink:hover {
+        background: #000;
+      }
+      .btn-line {
+        border: 1.5px solid var(--ink);
+      }
+      .btn-line:hover {
+        background: var(--ink);
+        color: var(--paper);
+      }
+      .top .btn {
+        min-height: 40px;
+        padding: 0 16px;
+        font-size: 14px;
+      }
+
+      /* hero */
+      .hero {
+        padding-block: clamp(48px, 8vw, 104px) clamp(48px, 6vw, 80px);
+      }
+      .hero h1 {
+        font-size: clamp(40px, 6vw, 76px);
+        line-height: 1.02;
+        letter-spacing: -0.035em;
+        max-width: 14ch;
+      }
+      .hero .lede {
+        margin-top: 28px;
+        max-width: 36rem;
+        font-size: clamp(17px, 1.6vw, 20px);
+        color: var(--muted);
+      }
+      .hero .lede strong {
+        color: var(--ink);
+        font-weight: 500;
+      }
+      .hero .actions {
+        margin-top: 36px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 12px 24px;
+      }
+      .textlink {
+        font-weight: 500;
+        text-decoration: underline;
+        text-decoration-color: var(--wire);
+        text-underline-offset: 5px;
+      }
+      .textlink:hover {
+        text-decoration-color: currentColor;
+      }
+
+      /* sections */
+      section {
+        padding-block: clamp(40px, 5vw, 64px);
+      }
+      .eyebrow {
+        font: 500 12px/1 var(--mono);
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 14px;
+      }
+      .sec-head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 8px 24px;
+        margin-bottom: 32px;
+      }
+      h2 {
+        font-size: clamp(28px, 3.4vw, 40px);
+        line-height: 1.1;
+      }
+
+      /* featured */
+      #work {
+        padding-top: 0;
+      }
+      .feature-title {
+        font-size: clamp(26px, 3vw, 36px);
+      }
+      .canvas {
+        margin-top: 28px;
+        background: var(--white);
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        padding: clamp(16px, 3vw, 40px) clamp(12px, 2.4vw, 32px) clamp(16px, 2.4vw, 28px);
+      }
+      .legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 22px;
+        list-style: none;
+        margin: 0 0 clamp(16px, 2.6vw, 28px);
+        padding: 0;
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .legend li {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .sw {
+        width: 14px;
+        height: 14px;
+        border-radius: 4px;
+        border: 1.5px solid var(--ink);
+        background: var(--white);
+      }
+      .sw.ai {
+        width: 22px;
+        background: var(--orange);
+        border-color: var(--orange);
+      }
+      .sw.hu {
+        background: var(--ink);
+      }
+      .sw.dec {
+        width: 12px;
+        height: 12px;
+        border-radius: 1px;
+        transform: rotate(45deg);
+        margin: 0 1px;
+      }
+      .wf {
+        display: block;
+        width: 100%;
+        height: auto;
+        overflow: visible;
+      }
+      .wf .e {
+        fill: none;
+        stroke: var(--wire);
+        stroke-width: 1.5;
+        vector-effect: non-scaling-stroke;
+      }
+      .wf .n {
+        fill: var(--white);
+        stroke: var(--ink);
+        stroke-width: 1.5;
+        vector-effect: non-scaling-stroke;
+      }
+      .wf .n.ai {
+        fill: var(--orange);
+        stroke: var(--orange);
+      }
+      .wf .n.human {
+        fill: var(--ink);
+      }
+      .wf .l {
+        font: 500 12.5px/1 var(--sans);
+        fill: var(--muted);
+      }
+      .wf .lai {
+        fill: var(--accent);
+        font-weight: 600;
+      }
+      .wf .lhu {
+        fill: var(--ink);
+        font-weight: 600;
+      }
+      .wf-mob {
+        display: none;
+      }
+      .steps {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 24px 32px;
+        margin: 32px 0 0;
+        padding: 0;
+        list-style: none;
+      }
+      .steps li {
+        border-top: 1px solid var(--ink);
+        padding-top: 14px;
+        font-size: 16px;
+        line-height: 1.55;
+      }
+      .steps b {
+        display: block;
+        font: 600 13px/1 var(--sans);
+        margin-bottom: 10px;
+      }
+      .steps .k-ai b {
+        color: var(--accent);
+      }
+      .steps .k-ai {
+        border-top-color: var(--orange);
+        border-top-width: 2px;
+        padding-top: 13px;
+      }
+      .steps .k-hu {
+        border-top-width: 2px;
+        padding-top: 13px;
+      }
+      .feature-foot {
+        margin-top: 28px;
+      }
+
+      /* cards */
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+      .card {
+        display: flex;
+        flex-direction: column;
+        background: var(--white);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 24px;
+      }
+      .card .pic {
+        height: 112px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 24px;
+      }
+      .card .pic .wf {
+        max-height: 100%;
+        width: auto;
+        max-width: 100%;
+      }
+      .card h3 {
+        font-size: 19px;
+        line-height: 1.25;
+        letter-spacing: -0.01em;
+      }
+      .card p {
+        margin-top: 8px;
+        font-size: 15px;
+        color: var(--muted);
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        list-style: none;
+        margin: 16px 0 20px;
+        padding: 0;
+      }
+      .chips li {
+        font-size: 13px;
+        line-height: 1;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: var(--paper);
+      }
+      .card .textlink {
+        margin-top: auto;
+        font-size: 15px;
+        align-self: flex-start;
+      }
+
+      /* tools */
+      .tools {
+        font: 600 clamp(19px, 2vw, 24px)/1.5 var(--head);
+        letter-spacing: -0.015em;
+        max-width: 52rem;
+      }
+      .tools {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.1em 1.1em;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .note {
+        margin-top: 16px;
+        font-size: 15px;
+        color: var(--muted);
+      }
+
+      /* how */
+      .how {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px 48px;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        counter-reset: s;
+      }
+      .how li {
+        counter-increment: s;
+      }
+      .how li::before {
+        content: '0' counter(s);
+        display: block;
+        font: 500 12px/1 var(--mono);
+        color: var(--muted);
+        margin-bottom: 16px;
+      }
+      .how h3 {
+        font-size: 20px;
+        line-height: 1.3;
+      }
+      .how p {
+        margin-top: 8px;
+        color: var(--muted);
+        font-size: 16px;
+      }
+
+      /* contact */
+      .contact {
+        padding-block: clamp(56px, 7vw, 96px);
+      }
+      .contact h2 {
+        font-size: clamp(32px, 4.6vw, 56px);
+        max-width: 18ch;
+        letter-spacing: -0.03em;
+      }
+      .contact p {
+        margin-top: 16px;
+        color: var(--muted);
+        max-width: 34rem;
+      }
+      .contact .actions {
+        margin-top: 32px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 12px 24px;
+      }
+      .mail {
+        color: var(--muted);
+        font-size: 15px;
+        overflow-wrap: anywhere;
+      }
+      footer {
+        border-top: 1px solid var(--line);
+        padding: 28px 0 40px;
+        font-size: 14px;
+        color: var(--muted);
+      }
+      footer .wrap {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 12px 24px;
+      }
+      footer nav {
+        display: flex;
+        gap: 20px;
+      }
+      footer a {
+        text-underline-offset: 4px;
+      }
+
+      @media (max-width: 960px) {
+        .steps {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .cards {
+          grid-template-columns: 1fr 1fr;
+        }
+        .how {
+          grid-template-columns: 1fr;
+          max-width: 36rem;
+        }
+      }
+      @media (max-width: 720px) {
+        .wf-desk {
+          display: none;
+        }
+        .wf-mob {
+          display: block;
+        }
+        .cards {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (max-width: 560px) {
+        body {
+          font-size: 16px;
+        }
+        .top nav {
+          gap: 14px;
+        }
+        .top .btn {
+          padding: 0 12px;
+        }
+        .steps {
+          grid-template-columns: 1fr;
+          gap: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="wrap top">
+      <a class="brand" href="#">Jomari Villanueva</a>
+      <nav aria-label="Main">
+        <a href="#work">Work</a>
+        <a href="#">About</a>
+        <a class="btn btn-line" href="mailto:jomarifrancis.villanueva@g.msuiit.edu.ph">Email me</a>
+      </nav>
+    </header>
+
+    <main>
+      <div class="wrap hero">
+        <h1>I build AI automations that do the busywork between your tools.</h1>
+        <p class="lede">
+          <strong>I'm Jomari, in Iligan City, Philippines.</strong> I build workflows in n8n, and from 2022 to
+          2026 I led technology and research at Future AI Lab.
+        </p>
+        <div class="actions">
+          <a class="btn btn-ink" href="#work">See the workflows</a>
+        </div>
+      </div>
+
+      <section id="work" class="wrap" aria-labelledby="feat-title">
+        <p class="eyebrow">Featured workflow</p>
+        <h2 id="feat-title" class="feature-title">Partnership Operations Automation</h2>
+        <div class="canvas">
+          <ul class="legend" aria-label="Legend">
+            <li><span class="sw ai" aria-hidden="true"></span>AI step</li>
+            <li><span class="sw hu" aria-hidden="true"></span>A person approves</li>
+          </ul>
+          <svg
+            class="wf wf-desk"
+            viewBox="0 0 1160 324"
+            role="img"
+            aria-label="Partnership Operations Automation: 23 steps in three parts"
+          >
+            <path class="e" d="M57.0 18.9H107.2" />
+            <path class="e" d="M151.4 18.9H250.3" />
+            <path class="e" d="M276.3 18.9H333.6" />
+            <path class="e" d="M363.5 18.9H420.8" />
+            <path class="e" d="M446.8 18.9H506.1" />
+            <path class="e" d="M532.1 18.9H591.4" />
+            <path class="e" d="M617.4 18.9H676.6" />
+            <path class="e" d="M702.6 18.9H761.9" />
+            <path class="e" d="M787.9 18.9H847.2" />
+            <path class="e" d="M873.2 18.9H932.5" />
+            <path class="e" d="M958.5 18.9H1015.8" />
+            <path class="e" d="M1045.7 18.9H1103.0" />
+            <path class="e" d="M57.0 136.9H116.3" />
+            <path class="e" d="M142.3 136.9H201.5" />
+            <path class="e" d="M227.5 136.9H286.8" />
+            <path class="e" d="M312.8 136.9H372.1" />
+            <path class="e" d="M57.0 254.9H116.3" />
+            <path class="e" d="M142.3 254.9H201.5" />
+            <path class="e" d="M227.5 254.9H277.7" />
+            <path class="e" d="M321.9 254.9H420.8" />
+            <path
+              class="n"
+              d="M44.0 5.9H51.3Q57.0 5.9 57.0 11.6V26.2Q57.0 31.9 51.3 31.9H44.0A13.0 13.0 0 0 1 44.0 5.9Z"
+            />
+            <text class="l" x="44.0" y="48.9" text-anchor="middle">
+              <tspan x="44.0" dy="0">New</tspan>
+              <tspan x="44.0" dy="15">Partnership</tspan>
+              <tspan x="44.0" dy="15">Inquiry</tspan>
+            </text>
+            <rect class="n ai" x="107.2" y="5.9" width="44.2" height="26.0" rx="5.7" />
+            <text class="l lai" x="129.3" y="48.9" text-anchor="middle">
+              <tspan x="129.3" dy="0">AI Screen</tspan>
+              <tspan x="129.3" dy="15">Inquiry</tspan>
+            </text>
+            <rect class="n" x="250.3" y="5.9" width="26.0" height="26.0" rx="5.7" />
+            <text class="l" x="263.3" y="48.9" text-anchor="middle">
+              <tspan x="263.3" dy="0">Mark Inquiry</tspan>
+              <tspan x="263.3" dy="15">As Read</tspan>
+            </text>
+            <path class="n" d="M348.5 3.9L363.5 18.9L348.5 33.8L333.6 18.9Z" />
+            <text class="l" x="348.5" y="48.9" text-anchor="middle">
+              <tspan x="348.5" dy="0">Qualified By</tspan>
+              <tspan x="348.5" dy="15">AI?</tspan>
+            </text>
+            <rect class="n human" x="420.8" y="5.9" width="26.0" height="26.0" rx="5.7" />
+            <text class="l lhu" x="433.8" y="48.9" text-anchor="middle">
+              <tspan x="433.8" dy="0">Human Review</tspan>
+              <tspan x="433.8" dy="15">In Slack</tspan>
+            </text>
+            <rect class="n human" x="506.1" y="5.9" width="26.0" height="26.0" rx="5.7" />
+            <text class="l lhu" x="519.1" y="48.9" text-anchor="middle">
+              <tspan x="519.1" dy="0">Approved By</tspan>
+              <tspan x="519.1" dy="15">Human?</tspan>
+            </text>
+            <rect class="n" x="591.4" y="5.9" width="26.0" height="26.0" rx="5.7" />
+            <text class="l" x="604.4" y="48.9" text-anchor="middle">
+              <tspan x="604.4" dy="0">Save Contact</tspan>
+              <tspan x="604.4" dy="15">In CRM</tspan>
+            </text>
+            <rect class="n" x="676.6" y="5.9" width="26.0" height="26.0" rx="5.7" />
+            <text class="l" x="689.6" y="48.9" text-anchor="middle">
+              <tspan x="689.6" dy="0">Create</tspan>
+              <tspan x="689.6" dy="15">Partnership</tspan>
+              <tspan x="689.6" dy="15">Deal</tspan>
+            </text>
+            <rect class="n" x="761.9" y="5.9" width="26.0" height="26.0" rx="5.7" />
+            <text class="l" x="774.9" y="48.9" text-anchor="middle">
+              <tspan x="774.9" dy="0">Create</tspan>
+              <tspan x="774.9" dy="15">Contract For</tspan>
+              <tspan x="774.9" dy="15">Signing</tspan>
+            </text>
+            <rect class="n" x="847.2" y="5.9" width="26.0" height="26.0" rx="5.7" />
+            <text class="l" x="860.2" y="48.9" text-anchor="middle">
+              <tspan x="860.2" dy="0">Wait 3 Days</tspan>
+            </text>
+            <rect class="n" x="932.5" y="5.9" width="26.0" height="26.0" rx="5.7" />
+            <text class="l" x="945.5" y="48.9" text-anchor="middle">
+              <tspan x="945.5" dy="0">Check</tspan>
+              <tspan x="945.5" dy="15">Signing</tspan>
+              <tspan x="945.5" dy="15">Status</tspan>
+            </text>
+            <path class="n" d="M1030.7 3.9L1045.7 18.9L1030.7 33.8L1015.8 18.9Z" />
+            <text class="l" x="1030.7" y="48.9" text-anchor="middle">
+              <tspan x="1030.7" dy="0">Still</tspan>
+              <tspan x="1030.7" dy="15">Unsigned?</tspan>
+            </text>
+            <rect class="n" x="1103.0" y="5.9" width="26.0" height="26.0" rx="5.7" />
+            <text class="l" x="1116.0" y="48.9" text-anchor="middle">
+              <tspan x="1116.0" dy="0">Send Signing</tspan>
+              <tspan x="1116.0" dy="15">Follow-Up</tspan>
+            </text>
+            <path
+              class="n"
+              d="M44.0 123.9H51.3Q57.0 123.9 57.0 129.6V144.2Q57.0 149.9 51.3 149.9H44.0A13.0 13.0 0 0 1 44.0 123.9Z"
+            />
+            <text class="l" x="44.0" y="166.9" text-anchor="middle">
+              <tspan x="44.0" dy="0">Contract</tspan>
+              <tspan x="44.0" dy="15">Signed</tspan>
+              <tspan x="44.0" dy="15">Webhook</tspan>
+            </text>
+            <rect class="n" x="116.3" y="123.9" width="26.0" height="26.0" rx="5.7" />
+            <text class="l" x="129.3" y="166.9" text-anchor="middle">
+              <tspan x="129.3" dy="0">Normalize</tspan>
+              <tspan x="129.3" dy="15">Signed</tspan>
+              <tspan x="129.3" dy="15">Contract</tspan>
+            </text>
+            <rect class="n" x="201.5" y="123.9" width="26.0" height="26.0" rx="5.7" />
+            <text class="l" x="214.5" y="166.9" text-anchor="middle">
+              <tspan x="214.5" dy="0">Create</tspan>
+              <tspan x="214.5" dy="15">Project Card</tspan>
+            </text>
+            <rect class="n" x="286.8" y="123.9" width="26.0" height="26.0" rx="5.7" />
+            <text class="l" x="299.8" y="166.9" text-anchor="middle">
+              <tspan x="299.8" dy="0">Create</tspan>
+              <tspan x="299.8" dy="15">Invoice</tspan>
+            </text>
+            <rect class="n" x="372.1" y="123.9" width="26.0" height="26.0" rx="5.7" />
+            <text class="l" x="385.1" y="166.9" text-anchor="middle">
+              <tspan x="385.1" dy="0">Announce</tspan>
+              <tspan x="385.1" dy="15">Signed</tspan>
+              <tspan x="385.1" dy="15">Partnership</tspan>
+            </text>
+            <path
+              class="n"
+              d="M44.0 241.9H51.3Q57.0 241.9 57.0 247.6V262.2Q57.0 267.9 51.3 267.9H44.0A13.0 13.0 0 0 1 44.0 241.9Z"
+            />
+            <text class="l" x="44.0" y="284.9" text-anchor="middle">
+              <tspan x="44.0" dy="0">Every Monday</tspan>
+              <tspan x="44.0" dy="15">9 AM</tspan>
+            </text>
+            <rect class="n" x="116.3" y="241.9" width="26.0" height="26.0" rx="5.7" />
+            <text class="l" x="129.3" y="284.9" text-anchor="middle">
+              <tspan x="129.3" dy="0">Get</tspan>
+              <tspan x="129.3" dy="15">Partnership</tspan>
+              <tspan x="129.3" dy="15">Deals</tspan>
+            </text>
+            <rect class="n" x="201.5" y="241.9" width="26.0" height="26.0" rx="5.7" />
+            <text class="l" x="214.5" y="284.9" text-anchor="middle">
+              <tspan x="214.5" dy="0">Combine</tspan>
+              <tspan x="214.5" dy="15">Deals</tspan>
+            </text>
+            <rect class="n ai" x="277.7" y="241.9" width="44.2" height="26.0" rx="5.7" />
+            <text class="l lai" x="299.8" y="284.9" text-anchor="middle">
+              <tspan x="299.8" dy="0">AI Write</tspan>
+              <tspan x="299.8" dy="15">Weekly</tspan>
+              <tspan x="299.8" dy="15">Report</tspan>
+            </text>
+            <rect class="n" x="420.8" y="241.9" width="26.0" height="26.0" rx="5.7" />
+            <text class="l" x="433.8" y="284.9" text-anchor="middle">
+              <tspan x="433.8" dy="0">Post Weekly</tspan>
+              <tspan x="433.8" dy="15">Report</tspan>
+            </text>
+          </svg>
+          <svg
+            class="wf wf-mob"
+            viewBox="0 0 1160 300"
+            role="img"
+            aria-label="Partnership Operations Automation, simplified"
+          >
+            <path class="e" d="M64.1 31.9H87.7" />
+            <path class="e" d="M165.9 31.9H238.6" />
+            <path class="e" d="M284.6 31.9H320.8" />
+            <path class="e" d="M373.7 31.9H410.0" />
+            <path class="e" d="M456.0 31.9H495.8" />
+            <path class="e" d="M541.8 31.9H581.5" />
+            <path class="e" d="M627.5 31.9H667.2" />
+            <path class="e" d="M713.2 31.9H753.0" />
+            <path class="e" d="M799.0 31.9H838.7" />
+            <path class="e" d="M884.7 31.9H924.4" />
+            <path class="e" d="M970.4 31.9H1006.7" />
+            <path class="e" d="M1059.6 31.9H1095.9" />
+            <path class="e" d="M64.1 149.9H103.8" />
+            <path class="e" d="M149.8 149.9H189.6" />
+            <path class="e" d="M235.6 149.9H275.3" />
+            <path class="e" d="M321.3 149.9H361.0" />
+            <path class="e" d="M64.1 267.9H103.8" />
+            <path class="e" d="M149.8 267.9H189.6" />
+            <path class="e" d="M235.6 267.9H259.2" />
+            <path class="e" d="M337.4 267.9H410.0" />
+            <path
+              class="n"
+              d="M41.1 8.9H54.0Q64.1 8.9 64.1 19.0V44.8Q64.1 54.9 54.0 54.9H41.1A23.0 23.0 0 0 1 41.1 8.9Z"
+            />
+            <rect class="n ai" x="87.7" y="8.9" width="78.2" height="46.0" rx="10.1" />
+            <rect class="n" x="238.6" y="8.9" width="46.0" height="46.0" rx="10.1" />
+            <path class="n" d="M347.3 5.4L373.7 31.9L347.3 58.3L320.8 31.9Z" />
+            <rect class="n human" x="410.0" y="8.9" width="46.0" height="46.0" rx="10.1" />
+            <rect class="n human" x="495.8" y="8.9" width="46.0" height="46.0" rx="10.1" />
+            <rect class="n" x="581.5" y="8.9" width="46.0" height="46.0" rx="10.1" />
+            <rect class="n" x="667.2" y="8.9" width="46.0" height="46.0" rx="10.1" />
+            <rect class="n" x="753.0" y="8.9" width="46.0" height="46.0" rx="10.1" />
+            <rect class="n" x="838.7" y="8.9" width="46.0" height="46.0" rx="10.1" />
+            <rect class="n" x="924.4" y="8.9" width="46.0" height="46.0" rx="10.1" />
+            <path class="n" d="M1033.2 5.4L1059.6 31.9L1033.2 58.3L1006.7 31.9Z" />
+            <rect class="n" x="1095.9" y="8.9" width="46.0" height="46.0" rx="10.1" />
+            <path
+              class="n"
+              d="M41.1 126.9H54.0Q64.1 126.9 64.1 137.0V162.8Q64.1 172.9 54.0 172.9H41.1A23.0 23.0 0 0 1 41.1 126.9Z"
+            />
+            <rect class="n" x="103.8" y="126.9" width="46.0" height="46.0" rx="10.1" />
+            <rect class="n" x="189.6" y="126.9" width="46.0" height="46.0" rx="10.1" />
+            <rect class="n" x="275.3" y="126.9" width="46.0" height="46.0" rx="10.1" />
+            <rect class="n" x="361.0" y="126.9" width="46.0" height="46.0" rx="10.1" />
+            <path
+              class="n"
+              d="M41.1 244.9H54.0Q64.1 244.9 64.1 255.0V280.8Q64.1 290.9 54.0 290.9H41.1A23.0 23.0 0 0 1 41.1 244.9Z"
+            />
+            <rect class="n" x="103.8" y="244.9" width="46.0" height="46.0" rx="10.1" />
+            <rect class="n" x="189.6" y="244.9" width="46.0" height="46.0" rx="10.1" />
+            <rect class="n ai" x="259.2" y="244.9" width="78.2" height="46.0" rx="10.1" />
+            <rect class="n" x="410.0" y="244.9" width="46.0" height="46.0" rx="10.1" />
+          </svg>
+        </div>
+        <ol class="steps">
+          <li><b>Trigger</b>A partnership inquiry lands in Gmail.</li>
+          <li class="k-ai"><b>AI</b>An AI agent screens it and returns a structured verdict.</li>
+          <li class="k-hu">
+            <b>A person approves</b>Qualified inquiries go to Slack. Nothing moves until someone says yes.
+          </li>
+          <li>
+            <b>Then</b>HubSpot contact and deal, a contract to sign, a nudge after 3 days. Once signed: Trello
+            card and QuickBooks invoice.
+          </li>
+        </ol>
+        <p class="feature-foot"><a class="textlink" href="#">How it runs, step by step</a></p>
+      </section>
+
+      <section class="wrap" aria-labelledby="more-title">
+        <div class="sec-head">
+          <h2 id="more-title">More workflows I built</h2>
+          <a class="textlink" href="#">See all 8 workflows</a>
+        </div>
+        <div class="cards">
+          <article class="card">
+            <div class="pic">
+              <svg
+                class="wf wf-card"
+                viewBox="0 0 320 125"
+                role="img"
+                aria-label="Shift Timesheet Reminders + AI Validation, simplified"
+              >
+                <path class="e" d="M31.7 41.9H54.5" />
+                <path class="e" d="M166.2 41.9H177.8" />
+                <path class="e" d="M262.3 41.9H288.3" />
+                <path class="e" d="M31.7 109.2H54.5" />
+                <path class="e" d="M173.9 109.2H213.0" />
+                <path class="e" d="M238.3 109.2H259.5" />
+                <path class="e" d="M76.5 41.9H144.2" />
+                <path class="e" d="M203.1 41.9C204.1 41.9 204.1 16.3 205.0 16.3" />
+                <path class="e" d="M227.0 16.3C233.7 16.3 233.7 41.9 240.3 41.9" />
+                <path class="e" d="M76.5 109.2H99.4" />
+                <path class="e" d="M121.4 109.2H136.5" />
+                <path
+                  class="n"
+                  d="M20.7 30.9H26.9Q31.7 30.9 31.7 35.8V48.1Q31.7 52.9 26.9 52.9H20.7A11.0 11.0 0 0 1 20.7 30.9Z"
+                />
+                <rect class="n" x="54.5" y="30.9" width="22.0" height="22.0" rx="4.8" />
+                <rect class="n" x="144.2" y="30.9" width="22.0" height="22.0" rx="4.8" />
+                <path class="n" d="M190.4 29.3L203.1 41.9L190.4 54.6L177.8 41.9Z" />
+                <rect class="n" x="240.3" y="30.9" width="22.0" height="22.0" rx="4.8" />
+                <rect class="n" x="288.3" y="30.9" width="22.0" height="22.0" rx="4.8" />
+                <path
+                  class="n"
+                  d="M20.7 98.2H26.9Q31.7 98.2 31.7 103.0V115.3Q31.7 120.2 26.9 120.2H20.7A11.0 11.0 0 0 1 20.7 98.2Z"
+                />
+                <rect class="n" x="54.5" y="98.2" width="22.0" height="22.0" rx="4.8" />
+                <rect class="n" x="99.4" y="98.2" width="22.0" height="22.0" rx="4.8" />
+                <rect class="n ai" x="136.5" y="98.2" width="37.4" height="22.0" rx="4.8" />
+                <path class="n" d="M225.6 96.5L238.3 109.2L225.6 121.8L213.0 109.2Z" />
+                <rect class="n" x="259.5" y="98.2" width="22.0" height="22.0" rx="4.8" />
+                <rect class="n" x="205.0" y="5.3" width="22.0" height="22.0" rx="4.8" />
+              </svg>
+            </div>
+            <h3>Shift Timesheet Reminders + AI Validation</h3>
+            <p>
+              Reminds people in Slack before a shift ends. Every hour, AI checks new time entries and flags
+              problems to a manager.
+            </p>
+            <ul class="chips" aria-label="Tools">
+              <li>Clockify</li>
+              <li>Slack</li>
+              <li>Trello</li>
+              <li>OpenAI</li>
+            </ul>
+            <a class="textlink" href="#">View workflow</a>
+          </article>
+          <article class="card">
+            <div class="pic">
+              <svg
+                class="wf wf-card"
+                viewBox="0 0 320 218"
+                role="img"
+                aria-label="AI Email Classifier, simplified"
+              >
+                <path class="e" d="M31.7 109.2H110.3" />
+                <path class="e" d="M147.7 109.2C218.0 109.2 218.0 16.3 288.3 16.3" />
+                <path class="e" d="M147.7 109.2H288.3" />
+                <path class="e" d="M147.7 109.2C218.0 109.2 218.0 202.0 288.3 202.0" />
+                <path
+                  class="n"
+                  d="M20.7 98.2H26.9Q31.7 98.2 31.7 103.0V115.3Q31.7 120.2 26.9 120.2H20.7A11.0 11.0 0 0 1 20.7 98.2Z"
+                />
+                <rect class="n ai" x="110.3" y="98.2" width="37.4" height="22.0" rx="4.8" />
+                <rect class="n" x="288.3" y="5.3" width="22.0" height="22.0" rx="4.8" />
+                <rect class="n" x="288.3" y="98.2" width="22.0" height="22.0" rx="4.8" />
+                <rect class="n" x="288.3" y="191.0" width="22.0" height="22.0" rx="4.8" />
+              </svg>
+            </div>
+            <h3>AI Email Classifier</h3>
+            <p>
+              AI reads each new email, labels it technical, billing, or other, and sends it to the matching
+              Slack alert.
+            </p>
+            <ul class="chips" aria-label="Tools">
+              <li>Gmail</li>
+              <li>OpenAI</li>
+              <li>Slack</li>
+            </ul>
+            <a class="textlink" href="#">View workflow</a>
+          </article>
+          <article class="card">
+            <div class="pic">
+              <svg
+                class="wf wf-card"
+                viewBox="0 0 320 33"
+                role="img"
+                aria-label="Article to Social Content, simplified"
+              >
+                <path class="e" d="M31.7 16.3H59.7" />
+                <path class="e" d="M81.7 16.3H102.0" />
+                <path class="e" d="M139.4 16.3H188.3" />
+                <path class="e" d="M210.3 16.3H238.3" />
+                <path class="e" d="M260.3 16.3H288.3" />
+                <path
+                  class="n"
+                  d="M20.7 5.3H26.9Q31.7 5.3 31.7 10.1V22.5Q31.7 27.3 26.9 27.3H20.7A11.0 11.0 0 0 1 20.7 5.3Z"
+                />
+                <rect class="n" x="59.7" y="5.3" width="22.0" height="22.0" rx="4.8" />
+                <rect class="n ai" x="102.0" y="5.3" width="37.4" height="22.0" rx="4.8" />
+                <rect class="n" x="188.3" y="5.3" width="22.0" height="22.0" rx="4.8" />
+                <rect class="n" x="238.3" y="5.3" width="22.0" height="22.0" rx="4.8" />
+                <rect class="n" x="288.3" y="5.3" width="22.0" height="22.0" rx="4.8" />
+              </svg>
+            </div>
+            <h3>Article to Social Content</h3>
+            <p>
+              Takes a new article, has AI write a caption and headline, makes the image in Placid, and drafts
+              the post in Buffer.
+            </p>
+            <ul class="chips" aria-label="Tools">
+              <li>OpenAI</li>
+              <li>Placid</li>
+              <li>Buffer</li>
+              <li>Slack</li>
+            </ul>
+            <a class="textlink" href="#">View workflow</a>
+          </article>
+        </div>
+      </section>
+
+      <section class="wrap" aria-labelledby="tools-title">
+        <p class="eyebrow" id="tools-title">Tools in these workflows</p>
+        <ul class="tools" aria-labelledby="tools-title">
+          <li>n8n</li>
+          <li>OpenAI</li>
+          <li>Gmail</li>
+          <li>Slack</li>
+          <li>HubSpot</li>
+          <li>QuickBooks</li>
+          <li>Trello</li>
+          <li>ClickUp</li>
+          <li>Google Calendar</li>
+          <li>Google Sheets</li>
+          <li>Clockify</li>
+          <li>Placid</li>
+          <li>Buffer</li>
+        </ul>
+      </section>
+
+      <section class="wrap" aria-labelledby="how-title">
+        <div class="sec-head"><h2 id="how-title">How I work</h2></div>
+        <ol class="how">
+          <li>
+            <h3>Show me the busywork</h3>
+            <p>We walk through the task your team repeats: every tool it touches, every decision in it.</p>
+          </li>
+          <li>
+            <h3>I build it in n8n</h3>
+            <p>AI does the reading, sorting, and drafting. Steps that matter wait for a person to approve.</p>
+          </li>
+          <li>
+            <h3>We test it on real cases</h3>
+            <p>Then I hand it over with notes your team can follow.</p>
+          </li>
+        </ol>
+      </section>
+
+      <section class="wrap contact" aria-labelledby="contact-title">
+        <h2 id="contact-title">Got a task that eats your week?</h2>
+        <p>Tell me what it is. I'll tell you honestly whether it's worth automating.</p>
+        <div class="actions">
+          <a class="btn btn-ink" href="mailto:jomarifrancis.villanueva@g.msuiit.edu.ph">Email me</a>
+          <span class="mail">jomarifrancis.villanueva@g.msuiit.edu.ph</span>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="wrap">
+        <span>© 2026 Jomari Villanueva</span>
+        <nav aria-label="Elsewhere">
+          <a href="#">LinkedIn</a>
+          <a href="#">GitHub</a>
+          <a href="mailto:jomarifrancis.villanueva@g.msuiit.edu.ph">Email</a>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>
