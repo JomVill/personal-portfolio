@@ -1,19 +1,20 @@
 ---
-import logo from '../assets/brand/jom-logo-black.png';
+import logo from '../assets/brand/j-logo.png';
 import { profile } from '../data/profile';
 import { path } from '../lib/paths';
 const links = [
   ['Work', 'work/'],
   ['About', 'about/'],
 ];
-// logo aspect 1284:591, shown 30px tall
-const logoHeight = 30;
-const logoWidth = Math.round((logoHeight * 1284) / 591);
+// J logo aspect 824:1047, shown 36px tall
+const logoHeight = 36;
+const logoWidth = Math.round((logoHeight * 824) / 1047);
 ---
 
 <header class="wrap top">
-  <a class="brand" href={path()}>
-    <img src={logo.src} alt="Jom — home" width={logoWidth} height={logoHeight} />
+  <a class="brand" href={path()} aria-label="Jomari Villanueva, home">
+    <img src={logo.src} alt="" width={logoWidth} height={logoHeight} />
+    <span class="brand-name">Jomari Villanueva</span>
   </a>
   <nav aria-label="Main">
     {links.map(([label, href]) => (

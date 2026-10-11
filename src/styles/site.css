@@ -266,7 +266,7 @@ section {
 }
 .brand img {
   display: block;
-  height: 30px;
+  height: 36px;
   width: auto;
 }
 .top nav {
@@ -312,5 +312,33 @@ section {
   }
   .top nav {
     gap: 16px;
+  }
+}
+
+.brand {
+  gap: 10px;
+}
+.brand-name {
+  font: 650 15px/1 var(--head, 'Manrope Variable', sans-serif);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+  .brand {
+    gap: 7px;
+  }
+  .brand img {
+    height: 28px;
+  }
+  .brand-name {
+    font-size: 13px;
+  }
+  .top nav {
+    gap: 12px;
+  }
+  .top nav a {
+    font-size: 13px;
   }
 }
