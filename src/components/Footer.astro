@@ -1,17 +1,19 @@
 ---
 import { profile, socialLinks } from '../data/profile';
 import { path } from '../lib/paths';
+const link = (label: string) => socialLinks.find((l) => l.label === label)!.href;
 ---
 
-<footer id="contact" class="footer wrap">
-  <a class="contact-link" href={`mailto:${profile.email}`}>
-    Let's connect <span aria-hidden="true">↗</span>
-  </a>
-  <div class="footer-links">
-    {socialLinks.slice(0, 3).map((link) => (
-      <a href={link.href}>{link.label === 'Google Scholar' ? 'Scholar' : link.label}</a>
-    ))}
-    <a href={path('cv/')}>CV</a>
+<footer class="site-footer">
+  <div class="wrap">
+    <span>
+      © {new Date().getFullYear()} {profile.fullName}
+    </span>
+    <nav aria-label="Elsewhere">
+      <a href={path('academic/')}>Academic work</a>
+      <a href={link('LinkedIn')}>LinkedIn</a>
+      <a href={link('GitHub')}>GitHub</a>
+      <a href={`mailto:${profile.email}`}>Email</a>
+    </nav>
   </div>
-  <span class="meta">© {new Date().getFullYear()}</span>
 </footer>

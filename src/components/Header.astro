@@ -1,24 +1,28 @@
 ---
+import logo from '../assets/brand/jom-logo-black.png';
+import { profile } from '../data/profile';
 import { path } from '../lib/paths';
 const links = [
   ['Work', 'work/'],
   ['About', 'about/'],
-  ['Contact', '#contact'],
 ];
+// logo aspect 1284:591, shown 30px tall
+const logoHeight = 30;
+const logoWidth = Math.round((logoHeight * 1284) / 591);
 ---
 
-<header class="site-header wrap">
-  <a class="wordmark" href={path()} aria-label="Jomari Francis Villanueva, home">
-    <span class="monogram" aria-hidden="true">
-      jv<span>.</span>
-    </span>
-    <span>Jomari Villanueva</span>
+<header class="wrap top">
+  <a class="brand" href={path()}>
+    <img src={logo.src} alt="Jom — home" width={logoWidth} height={logoHeight} />
   </a>
-  <nav aria-label="Main navigation">
+  <nav aria-label="Main">
     {links.map(([label, href]) => (
-      <a href={path(href)} aria-current={Astro.url.pathname === path(href) ? 'page' : undefined}>
+      <a href={path(href)} aria-current={Astro.url.pathname.startsWith(path(href)) ? 'page' : undefined}>
         {label}
       </a>
     ))}
+    <a class="key key-sm" href={`mailto:${profile.email}`}>
+      Email me
+    </a>
   </nav>
 </header>

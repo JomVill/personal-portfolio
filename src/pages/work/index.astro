@@ -1,41 +1,12 @@
 ---
+// Placeholder until Task 6 builds the work index.
 import Layout from '../../layouts/Layout.astro';
-import ProjectCard from '../../components/ProjectCard.astro';
-import { projects } from '../../data/projects';
 ---
 
-<Layout title="Selected work">
+<Layout title="Workflows">
   <div class="wrap">
-    <section class="page-intro">
-      <p class="eyebrow">WORK / RESEARCH INTO PRACTICE</p>
-      <h1>
-        Different contexts.
-        <br />
-        Connected questions.
-      </h1>
-      <p>
-        Selected work across applied AI, public-sector technology, capacity building, and connected systems.
-      </p>
-    </section>
-    <section class="section">
-      <div class="project-grid">
-        {projects.map((project) => (
-          <ProjectCard project={project} />
-        ))}
-      </div>
-    </section>
-    <section class="section">
-      <p class="eyebrow">OPEN SOURCE</p>
-      <h2 style="margin:15px 0 24px">Small tools, practical needs.</h2>
-      <article class="prose">
-        <h3>
-          <a href="https://github.com/JomVill/fdtr-generator">Faculty Daily Time Record generator ↗</a>
-        </h3>
-        <p>
-          A tool for generating MSU-IIT faculty daily time records in Excel, with a browser-based version and
-          a Python / Flask option for self-hosting. Source code is available on GitHub.
-        </p>
-      </article>
+    <section>
+      <h1>Workflows I built</h1>
     </section>
   </div>
 </Layout>

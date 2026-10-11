@@ -1,10 +1,10 @@
 export const profile = {
-  name: 'Jomari Francis Villanueva',
-  fullName: 'Jomari Francis B. Villanueva',
+  name: 'Jom',
+  fullName: 'Jomari Villanueva',
+  academicName: 'Jomari Francis B. Villanueva',
   email: 'jomarivillanueva83@gmail.com',
   location: 'Iligan City, Philippines',
-  description:
-    'Working at the intersection of AI, emerging technology, and society. Assistant Professor, applied researcher, and technology policy practitioner based in the Philippines.',
+  description: 'I connect your tools with Zapier, n8n, and AI so the busywork runs itself.',
 };
 export const socialLinks = [
   { label: 'LinkedIn', href: 'https://www.linkedin.com/in/jomari-francis-villanueva-63a5a1aa/' },
@@ -57,37 +57,6 @@ export const teaching = [
   'Robotics',
   'Data Analytics',
 ];
-export const themes = [
-  {
-    title: 'Artificial intelligence',
-    text: 'Applied AI, LLM workflows, AI agents, and content intelligence.',
-  },
-  { title: 'Automation', text: 'Workflow design, API integration, and AI-assisted operations.' },
-  {
-    title: 'Applied computing',
-    text: 'IoT, embedded systems, sensor networks, LoRa, and environmental sensing.',
-  },
-  { title: 'Technology & society', text: 'AI literacy, societal computing, and technology policy.' },
-  { title: 'Digital governance', text: 'Digital transformation and information systems strategy.' },
-  { title: 'Foresight', text: 'Futures thinking and the analysis of emerging technologies.' },
-];
-export const engagements = [
-  {
-    title: 'AI Ready ASEAN National Policy Convening',
-    date: '29 April 2026',
-    role: 'Panelist · DICT Headquarters, Quezon City',
-    text: 'Contributed perspectives on AI literacy in education, community engagement, and AI adoption in Mindanao.',
-    url: 'https://www.msuiit.edu.ph/news/news-detail.php?id=2477',
-  },
-  {
-    title: 'ASEAN AHEAD & digital safety training',
-    date: '18 August 2026',
-    role: 'PCETT-IPIL · MSU-IIT',
-    text: 'Led PCETT-IPIL’s support for training implementation with SmartCT, CDIIS, and Master Trainers.',
-    url: 'https://www.msuiit.edu.ph/news/news-detail.php?id=2550',
-  },
-];
-
 export const education = [
   {
     degree: 'MS in Computer Applications',
@@ -133,6 +102,3 @@ export const presentations = [
     date: '5–7 February 2026',
   },
 ];
-
-export const bench: { title: string; note: string }[] = [];
-export const personal: string[] = [];
