@@ -111,3 +111,42 @@ test('homepage: hero, terminal final state, marquee, featured, cards, no CDNs', 
   assert.match(html, /href="mailto:jomarivillanueva83@gmail\.com"[^>]*>\s*Email me/);
   assert.doesNotMatch(html, /cdn\.jsdelivr|fonts\.googleapis|fonts\.gstatic/);
 });
+
+test('work index lists all 8 workflows', async () => {
+  const html = await readPage('work');
+  const h1s = [...html.matchAll(/<h1[^>]*>([\s\S]*?)<\/h1>/g)];
+  assert.equal(h1s.length, 1);
+  assert.equal(h1s[0][1].trim(), 'Workflows I built');
+  assert.match(html, /Each one runs in n8n, with AI doing the reading and a person approving what matters\./);
+  const links = new Set(
+    [...html.matchAll(new RegExp(`href="${base}work/([a-z0-9-]+)/"`, 'g'))].map((m) => m[1]),
+  );
+  assert.equal(links.size, 8);
+  assert.equal([...html.matchAll(/<article class="card/g)].length, 8);
+});
+
+test('each workflow has a detail page', async () => {
+  const data = JSON.parse(await readFile('src/data/workflows.json', 'utf8'));
+  const copy = await readFile('src/data/workflow-copy.ts', 'utf8');
+  assert.equal(data.length, 8);
+  for (const w of data) {
+    const html = await readPage(`work/${w.id}`);
+    const h1s = [...html.matchAll(/<h1[^>]*>([\s\S]*?)<\/h1>/g)];
+    assert.equal(h1s.length, 1, w.id);
+    const title = copy.match(new RegExp(`'${w.id}':\\s*\\{\\s*title:\\s*'([^']+)'`))[1];
+    assert.equal(h1s[0][1].trim(), title, w.id);
+    assert.match(html, new RegExp(`href="${base}work/"[^>]*>[^<]*All workflows`), w.id);
+    assert.match(html, /<h2[^>]*>How it runs<\/h2>\s*<ol/, w.id);
+    assert.match(html, /<h2[^>]*>Built with<\/h2>/, w.id);
+    assert.match(html, /wfd--full/, w.id);
+    assert.match(html, /Want one like this\?/, w.id);
+    assert.match(html, /href="mailto:jomarivillanueva83@gmail\.com"[^>]*>\s*Email me/, w.id);
+  }
+  const p = await readPage('work/partnership-operations-automation');
+  assert.match(p, /A person approves in Slack before anything moves\./);
+  assert.match(p, /role="region"[^>]*aria-label="Workflow diagram, scroll sideways"/);
+  assert.match(p, /tabindex="0"/);
+  const e = await readPage('work/ai-email-classifier');
+  assert.doesNotMatch(e, /Where you stay in control/);
+  assert.match(e, /<li>New email<\/li>/);
+});

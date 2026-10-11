@@ -1,0 +1,26 @@
+---
+// Workflow card used on the homepage and the work index.
+import WorkflowDiagram from './WorkflowDiagram.astro';
+import { path } from '../lib/paths';
+import type { Workflow } from '../lib/workflows';
+import '../styles/cards.css';
+
+interface Props {
+  workflow: Workflow;
+}
+
+const { workflow: w } = Astro.props;
+const tag = `WF-${String(w.order).padStart(2, '0')}`;
+---
+
+<article class="card panel">
+  <span class="tag">{tag}</span>
+  <div class="pic">
+    <WorkflowDiagram workflow={w} variant="card" decorative />
+  </div>
+  <h3>{w.title}</h3>
+  <p>{w.summary}</p>
+  <a class="textlink" href={path(`work/${w.slug}/`)}>
+    View workflow<span class="sr">: {w.title}</span>
+  </a>
+</article>
