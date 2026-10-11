@@ -41,12 +41,17 @@ Minimal. Lots of whitespace, one accent color (orange), charcoal on warm off-whi
 
 ## Pages
 
-- `/` Home: headline about what he automates + one line about him → featured workflow (drawing + 3-line plain explanation: trigger, what AI does, where a human checks, outcome) → 3–4 other workflow cards → tools (n8n, OpenAI/LLM agents, HubSpot, Slack, Gmail, QuickBooks, ClickUp, Trello…, only those actually used) → how I work (3 steps) → contact button.
-- `/work/` all 8 workflows; `/work/<slug>/` per workflow: problem, how it runs (drawing + step list), tools, where the human stays in the loop.
-- `/about/` short personal intro, one credibility line (Assistant Professor at MSU-IIT · Head of PCETT · AI READY ASEAN Master Trainer · ex-Head of Technology & Research, Future AI Lab), CV link.
-- Contact: mailto link (header + footer + home).
+Owner decisions after mockup E (approved as base): less text; no "How I work"; no tools list; add academic button; photo + logo.
 
-Removed: research, policy, teaching, writing/logs pages; old `/work/<old-slug>/` case studies. Old URLs (`/research/`, `/teaching/`, `/writing/`, `/cv/` if removed, old work slugs) redirect to the closest new page.
+- `/` Home: header (logo mark + name, Work · About, Email me) → hero: headline + one short line + small round photo + "See the workflows" + secondary "Academic work" → logo marquee of tools (Zapier first and visually primary, then n8n, OpenAI, HubSpot, Slack, Gmail, QuickBooks, Trello, ClickUp, Google Sheets, Google Calendar, Clockify, Buffer; static row under reduced motion) → featured workflow (main path only, 8–10 nodes, readable) with 4 short beats → 3 other workflow cards → contact → footer (LinkedIn, GitHub, Email, Academic work).
+- `/work/` all 8 workflows; `/work/<slug>/` per workflow: problem, diagram + step list, tools, where the human stays in the loop. Short.
+- `/academic/` one simple page: role line, publications, research interests, teaching, PCETT/policy engagements, CV link. Linked from the hero secondary button and footer only (not main nav).
+- `/about/` short intro, photo, one credibility line, CV link.
+- Contact: mailto.
+
+Brand: "JV" monogram built from connected workflow nodes, one orange accent; used in header and favicon. Owner picks from 3 options (`docs/mockups/f-logos.html`). Owner supplies the photo; placeholder until then.
+
+Removed: research, policy, teaching, writing/logs pages, "How I work", tools list, FDTR generator. Old URLs (`/research/`, `/teaching/`, `/writing/`) redirect to `/academic/`; old work slugs redirect to `/work/`.
 
 ## Architecture
 
