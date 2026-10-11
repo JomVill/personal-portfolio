@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>jom logo — refined option 2</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 48px 24px;
+        font-family: system-ui, sans-serif;
+        background: #f8f8f5;
+        color: #252623;
+      }
+      h1 {
+        font-size: 20px;
+        margin: 0 0 8px;
+      }
+      p {
+        margin: 0 0 32px;
+        color: #696b64;
+        max-width: 640px;
+      }
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-bottom: 16px;
+      }
+      .tile {
+        flex: 1 1 320px;
+        display: flex;
+        align-items: flex-end;
+        gap: 28px;
+        padding: 28px;
+        border-radius: 16px;
+        border: 1px solid #dedfd8;
+      }
+      .dark {
+        background: #252623;
+        color: #f8f8f5;
+        border-color: #252623;
+      }
+      .tile small {
+        display: block;
+        font:
+          10px ui-monospace,
+          monospace;
+        opacity: 0.6;
+        margin-top: 6px;
+      }
+      svg {
+        display: block;
+      }
+      .ink {
+        stroke: currentColor;
+      }
+      .node {
+        stroke: #ee652b;
+      }
+      .port {
+        fill: currentColor;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>jom: one connected mark</h1>
+    <p>
+      The j's dot is an orange node and reads as the "o". Its wire runs on and becomes the "m". The j ends in
+      a round port. Full mark for the header; the j + node alone for the favicon.
+    </p>
+
+    <svg width="0" height="0" style="position: absolute">
+      <defs>
+        <symbol id="jom" viewBox="0 0 140 136">
+          <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path class="ink" stroke-width="13" d="M30 54 V110 Q30 124 16 124" />
+            <path class="ink" stroke-width="5" d="M47 25 H54 Q66 25 66 37 V56" />
+            <path
+              class="ink"
+              stroke-width="13"
+              d="M66 54 V104 M66 68 Q66 52 82 52 Q98 52 98 68 V104 M98 68 Q98 52 114 52 Q130 52 130 68 V104"
+            />
+            <rect class="node" x="14.5" y="9.5" width="31" height="31" rx="9" stroke-width="9" />
+          </g>
+          <circle class="port" cx="12" cy="124" r="8.5" />
+        </symbol>
+        <symbol id="jo" viewBox="0 0 56 136">
+          <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="15">
+            <path class="ink" d="M32 54 V110 Q32 124 18 124" />
+            <rect class="node" x="18" y="10" width="28" height="28" rx="8" stroke-width="11" />
+          </g>
+          <circle class="port" cx="13" cy="124" r="9.5" />
+        </symbol>
+      </defs>
+    </svg>
+
+    <div class="row">
+      <div class="tile">
+        <div>
+          <svg width="160" height="155"><use href="#jom" /></svg><small>160</small>
+        </div>
+        <div>
+          <svg width="64" height="62"><use href="#jom" /></svg><small>64</small>
+        </div>
+        <div>
+          <svg width="32" height="31"><use href="#jom" /></svg><small>32</small>
+        </div>
+        <div>
+          <svg width="16" height="39"><use href="#jo" /></svg><small>favicon 16</small>
+        </div>
+        <div>
+          <svg width="32" height="78"><use href="#jo" /></svg><small>favicon 32</small>
+        </div>
+      </div>
+      <div class="tile dark">
+        <div>
+          <svg width="160" height="155"><use href="#jom" /></svg><small>160</small>
+        </div>
+        <div>
+          <svg width="64" height="62"><use href="#jom" /></svg><small>64</small>
+        </div>
+        <div>
+          <svg width="32" height="31"><use href="#jom" /></svg><small>32</small>
+        </div>
+        <div>
+          <svg width="16" height="39"><use href="#jo" /></svg><small>favicon 16</small>
+        </div>
+        <div>
+          <svg width="32" height="78"><use href="#jo" /></svg><small>favicon 32</small>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="tile" style="align-items: center; justify-content: space-between">
+        <svg width="44" height="43"><use href="#jom" /></svg><span style="font-size: 14px">Work · About</span>
+      </div>
+      <div class="tile dark" style="align-items: center; justify-content: space-between">
+        <svg width="44" height="43"><use href="#jom" /></svg><span style="font-size: 14px">Work · About</span>
+      </div>
+    </div>
+  </body>
+</html>
