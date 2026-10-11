@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>JFV node options</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 40px 24px;
+        font-family: system-ui, sans-serif;
+        background: #f8f8f5;
+        color: #252623;
+      }
+      h1 {
+        font-size: 20px;
+        margin: 0 0 6px;
+      }
+      p {
+        margin: 0 0 8px;
+        color: #696b64;
+      }
+      h2 {
+        font-size: 14px;
+        margin: 28px 0 10px;
+      }
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      .tile {
+        flex: 1 1 300px;
+        display: flex;
+        align-items: flex-end;
+        gap: 24px;
+        padding: 22px;
+        border-radius: 14px;
+        border: 1px solid #dedfd8;
+      }
+      .dark {
+        background: #252623;
+        color: #f8f8f5;
+        border-color: #252623;
+      }
+      small {
+        display: block;
+        font:
+          10px ui-monospace,
+          monospace;
+        opacity: 0.6;
+        margin-top: 6px;
+      }
+      svg {
+        display: block;
+      }
+      .ink {
+        stroke: currentColor;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>JFV: node options</h1>
+    <p>Same letters, no connecting lines. Gray nodes = inputs or branches; one orange node = the output.</p>
+    <svg width="0" height="0" style="position: absolute">
+      <defs>
+        <symbol id="o1" viewBox="0 0 170 136">
+          <g fill="none" class="ink" stroke-width="13" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 18 H38 V92 Q38 116 16 116" />
+            <path d="M64 116 V18 H98 M64 64 H90" />
+            <path d="M114 18 L135 104 M156 18 L135 104" />
+          </g>
+          <rect x="122.0" y="98.0" width="26" height="26" rx="7" fill="#ee652b" />
+        </symbol>
+        <symbol id="o2" viewBox="0 0 170 136">
+          <g fill="none" class="ink" stroke-width="13" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 18 H38 V92 Q38 116 16 116" />
+            <path d="M64 116 V18 H98 M64 64 H90" />
+            <path d="M114 18 L135 104 M156 18 L135 104" />
+          </g>
+          <rect x="2.0" y="6.0" width="24" height="24" rx="7" fill="#9a9c94" />
+          <rect x="122.0" y="98.0" width="26" height="26" rx="7" fill="#ee652b" />
+        </symbol>
+        <symbol id="o3" viewBox="0 0 170 136">
+          <g fill="none" class="ink" stroke-width="13" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 18 H38 V92 Q38 116 16 116" />
+            <path d="M64 116 V18 H98 M64 64 H90" />
+            <path d="M114 18 L135 104 M156 18 L135 104" />
+          </g>
+          <rect x="4.0" y="104.0" width="24" height="24" rx="7" fill="#9a9c94" />
+          <rect x="78.0" y="52.0" width="24" height="24" rx="7" fill="#9a9c94" />
+          <rect x="122.0" y="98.0" width="26" height="26" rx="7" fill="#ee652b" />
+        </symbol>
+        <symbol id="o4" viewBox="0 0 170 136">
+          <g fill="none" class="ink" stroke-width="13" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 18 H38 V92 Q38 116 16 116" />
+            <path d="M64 116 V18 H98 M64 64 H90" />
+            <path d="M114 18 L135 104 M156 18 L135 104" />
+          </g>
+          <rect x="86.0" y="6.0" width="24" height="24" rx="7" fill="#9a9c94" />
+          <rect x="78.0" y="52.0" width="24" height="24" rx="7" fill="#9a9c94" />
+          <rect x="122.0" y="98.0" width="26" height="26" rx="7" fill="#ee652b" />
+        </symbol>
+        <symbol id="o5" viewBox="0 0 170 136">
+          <g fill="none" class="ink" stroke-width="13" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 18 H38 V92 Q38 116 16 116" />
+            <path d="M64 116 V18 H98 M64 64 H90" />
+            <path d="M114 18 L135 104 M156 18 L135 104" />
+          </g>
+          <rect x="2.0" y="6.0" width="24" height="24" rx="7" fill="#9a9c94" />
+          <rect x="86.0" y="6.0" width="24" height="24" rx="7" fill="#9a9c94" />
+          <rect x="78.0" y="52.0" width="24" height="24" rx="7" fill="#9a9c94" />
+          <rect x="122.0" y="98.0" width="26" height="26" rx="7" fill="#ee652b" />
+        </symbol>
+        <symbol id="o6" viewBox="0 0 170 136">
+          <g fill="none" class="ink" stroke-width="13" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 18 H38 V92 Q38 116 16 116" />
+            <path d="M64 116 V18 H98 M64 64 H90" />
+            <path d="M114 18 L135 104 M156 18 L135 104" />
+          </g>
+          <rect x="102.0" y="6.0" width="24" height="24" rx="7" fill="#9a9c94" />
+          <rect x="144.0" y="6.0" width="24" height="24" rx="7" fill="#9a9c94" />
+          <rect x="122.0" y="98.0" width="26" height="26" rx="7" fill="#ee652b" />
+        </symbol>
+      </defs>
+    </svg>
+    <section>
+      <h2>1 — Original: one orange output on the V</h2>
+      <div class="row">
+        <div class="tile">
+          <div>
+            <svg width="170" height="136"><use href="#o1" /></svg><small>170</small>
+          </div>
+          <div>
+            <svg width="64" height="51"><use href="#o1" /></svg><small>64</small>
+          </div>
+          <div>
+            <svg width="32" height="26"><use href="#o1" /></svg><small>32</small>
+          </div>
+        </div>
+        <div class="tile dark">
+          <div>
+            <svg width="170" height="136"><use href="#o1" /></svg><small>170</small>
+          </div>
+          <div>
+            <svg width="64" height="51"><use href="#o1" /></svg><small>64</small>
+          </div>
+          <div>
+            <svg width="32" height="26"><use href="#o1" /></svg><small>32</small>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section>
+      <h2>2 — Input → output: gray node starts the J, orange ends the V</h2>
+      <div class="row">
+        <div class="tile">
+          <div>
+            <svg width="170" height="136"><use href="#o2" /></svg><small>170</small>
+          </div>
+          <div>
+            <svg width="64" height="51"><use href="#o2" /></svg><small>64</small>
+          </div>
+          <div>
+            <svg width="32" height="26"><use href="#o2" /></svg><small>32</small>
+          </div>
+        </div>
+        <div class="tile dark">
+          <div>
+            <svg width="170" height="136"><use href="#o2" /></svg><small>170</small>
+          </div>
+          <div>
+            <svg width="64" height="51"><use href="#o2" /></svg><small>64</small>
+          </div>
+          <div>
+            <svg width="32" height="26"><use href="#o2" /></svg><small>32</small>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section>
+      <h2>3 — One node per letter: J's hook, F's middle arm, V's point</h2>
+      <div class="row">
+        <div class="tile">
+          <div>
+            <svg width="170" height="136"><use href="#o3" /></svg><small>170</small>
+          </div>
+          <div>
+            <svg width="64" height="51"><use href="#o3" /></svg><small>64</small>
+          </div>
+          <div>
+            <svg width="32" height="26"><use href="#o3" /></svg><small>32</small>
+          </div>
+        </div>
+        <div class="tile dark">
+          <div>
+            <svg width="170" height="136"><use href="#o3" /></svg><small>170</small>
+          </div>
+          <div>
+            <svg width="64" height="51"><use href="#o3" /></svg><small>64</small>
+          </div>
+          <div>
+            <svg width="32" height="26"><use href="#o3" /></svg><small>32</small>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section>
+      <h2>4 — Branches: the F's two arms end in gray nodes, V merges to orange</h2>
+      <div class="row">
+        <div class="tile">
+          <div>
+            <svg width="170" height="136"><use href="#o4" /></svg><small>170</small>
+          </div>
+          <div>
+            <svg width="64" height="51"><use href="#o4" /></svg><small>64</small>
+          </div>
+          <div>
+            <svg width="32" height="26"><use href="#o4" /></svg><small>32</small>
+          </div>
+        </div>
+        <div class="tile dark">
+          <div>
+            <svg width="170" height="136"><use href="#o4" /></svg><small>170</small>
+          </div>
+          <div>
+            <svg width="64" height="51"><use href="#o4" /></svg><small>64</small>
+          </div>
+          <div>
+            <svg width="32" height="26"><use href="#o4" /></svg><small>32</small>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section>
+      <h2>5 — Full flow: J input, F branches, V output</h2>
+      <div class="row">
+        <div class="tile">
+          <div>
+            <svg width="170" height="136"><use href="#o5" /></svg><small>170</small>
+          </div>
+          <div>
+            <svg width="64" height="51"><use href="#o5" /></svg><small>64</small>
+          </div>
+          <div>
+            <svg width="32" height="26"><use href="#o5" /></svg><small>32</small>
+          </div>
+        </div>
+        <div class="tile dark">
+          <div>
+            <svg width="170" height="136"><use href="#o5" /></svg><small>170</small>
+          </div>
+          <div>
+            <svg width="64" height="51"><use href="#o5" /></svg><small>64</small>
+          </div>
+          <div>
+            <svg width="32" height="26"><use href="#o5" /></svg><small>32</small>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section>
+      <h2>6 — Inputs on the V: gray tips merge into the orange point</h2>
+      <div class="row">
+        <div class="tile">
+          <div>
+            <svg width="170" height="136"><use href="#o6" /></svg><small>170</small>
+          </div>
+          <div>
+            <svg width="64" height="51"><use href="#o6" /></svg><small>64</small>
+          </div>
+          <div>
+            <svg width="32" height="26"><use href="#o6" /></svg><small>32</small>
+          </div>
+        </div>
+        <div class="tile dark">
+          <div>
+            <svg width="170" height="136"><use href="#o6" /></svg><small>170</small>
+          </div>
+          <div>
+            <svg width="64" height="51"><use href="#o6" /></svg><small>64</small>
+          </div>
+          <div>
+            <svg width="32" height="26"><use href="#o6" /></svg><small>32</small>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>
