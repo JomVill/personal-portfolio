@@ -1,7 +1,7 @@
 export const profile = {
   name: 'Jomari Francis Villanueva',
   fullName: 'Jomari Francis B. Villanueva',
-  email: 'jomarifrancis.villanueva@g.msuiit.edu.ph',
+  email: 'jomarivillanueva83@gmail.com',
   location: 'Iligan City, Philippines',
   description:
     'Working at the intersection of AI, emerging technology, and society. Assistant Professor, applied researcher, and technology policy practitioner based in the Philippines.',
