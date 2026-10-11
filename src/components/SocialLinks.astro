@@ -1,4 +1,12 @@
 ---
 import { socialLinks } from '../data/profile';
 ---
-<div class="social-links">{socialLinks.map(link => <a href={link.href}>{link.label}<span aria-hidden="true"> ↗</span></a>)}</div>
+
+<div class="social-links">
+  {socialLinks.map((link) => (
+    <a href={link.href}>
+      {link.label}
+      <span aria-hidden="true"> ↗</span>
+    </a>
+  ))}
+</div>

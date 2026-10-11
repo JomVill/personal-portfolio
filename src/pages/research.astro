@@ -5,4 +5,85 @@ import SectionHeader from '../components/SectionHeader.astro';
 import { publications } from '../data/publications';
 import { socialLinks, engagements, presentations } from '../data/profile';
 ---
-<Layout title="Research"><div class="wrap"><section class="page-intro"><p class="eyebrow">RESEARCH / APPLIED & INTERDISCIPLINARY</p><h1>Understanding technology.<br/>Studying its place in society.</h1><p>My research interests span AI, IoT, AIoT, environmental sensing, societal computing, technology policy, digital governance, AI literacy, and foresight.</p><div class="actions"><a class="button" href={socialLinks[2].href}>Google Scholar ↗</a></div></section><section class="section"><SectionHeader number="01 / PUBLICATIONS" title="Selected research."/>{publications.map(publication => <PublicationItem publication={publication}/>)}</section><section class="section"><SectionHeader number="02 / RESEARCH DIRECTIONS" title="Systems, people, futures."/><div class="theme-grid"><article><h3>Connected environments</h3><p>IoT, sensor networks, AIoT, and environmental data acquisition for smart communities.</p></article><article><h3>AI & society</h3><p>AI literacy, societal computing, and the relationship between technical capability and social context.</p></article><article><h3>Policy & futures</h3><p>Technology policy, digital governance, foresight, and emerging technology analysis.</p></article></div></section><section class="section"><SectionHeader number="03 / CONFERENCE PRESENTATIONS" title="Research in conversation."/>{presentations.map(p => <article class="engagement"><span class="meta">{p.date}</span><div><h3>{p.title}</h3><p>{p.type} · {p.event}<br/>{p.location}</p></div></article>)}</section><section class="section"><SectionHeader number="04 / RESEARCH & PUBLIC DIALOGUE" title="Taking questions further."/><p class="section-intro">Research interests also inform my contributions to policy and capacity-building discussions.</p>{engagements.map(e => <article class="engagement"><span class="meta">{e.date}</span><div><h3><a href={e.url}>{e.title} ↗</a></h3><p>{e.text}</p><span class="meta">{e.role}</span></div></article>)}</section></div></Layout>
+
+<Layout title="Research">
+  <div class="wrap">
+    <section class="page-intro">
+      <p class="eyebrow">RESEARCH / APPLIED & INTERDISCIPLINARY</p>
+      <h1>
+        Understanding technology.
+        <br />
+        Studying its place in society.
+      </h1>
+      <p>
+        My research interests span AI, IoT, AIoT, environmental sensing, societal computing, technology
+        policy, digital governance, AI literacy, and foresight.
+      </p>
+      <div class="actions">
+        <a class="button" href={socialLinks[2].href}>
+          Google Scholar ↗
+        </a>
+      </div>
+    </section>
+    <section class="section">
+      <SectionHeader number="01 / PUBLICATIONS" title="Selected research." />
+      {publications.map((publication) => (
+        <PublicationItem publication={publication} />
+      ))}
+    </section>
+    <section class="section">
+      <SectionHeader number="02 / RESEARCH DIRECTIONS" title="Systems, people, futures." />
+      <div class="theme-grid">
+        <article>
+          <h3>Connected environments</h3>
+          <p>IoT, sensor networks, AIoT, and environmental data acquisition for smart communities.</p>
+        </article>
+        <article>
+          <h3>AI & society</h3>
+          <p>
+            AI literacy, societal computing, and the relationship between technical capability and social
+            context.
+          </p>
+        </article>
+        <article>
+          <h3>Policy & futures</h3>
+          <p>Technology policy, digital governance, foresight, and emerging technology analysis.</p>
+        </article>
+      </div>
+    </section>
+    <section class="section">
+      <SectionHeader number="03 / CONFERENCE PRESENTATIONS" title="Research in conversation." />
+      {presentations.map((p) => (
+        <article class="engagement">
+          <span class="meta">{p.date}</span>
+          <div>
+            <h3>{p.title}</h3>
+            <p>
+              {p.type} · {p.event}
+              <br />
+              {p.location}
+            </p>
+          </div>
+        </article>
+      ))}
+    </section>
+    <section class="section">
+      <SectionHeader number="04 / RESEARCH & PUBLIC DIALOGUE" title="Taking questions further." />
+      <p class="section-intro">
+        Research interests also inform my contributions to policy and capacity-building discussions.
+      </p>
+      {engagements.map((e) => (
+        <article class="engagement">
+          <span class="meta">{e.date}</span>
+          <div>
+            <h3>
+              <a href={e.url}>{e.title} ↗</a>
+            </h3>
+            <p>{e.text}</p>
+            <span class="meta">{e.role}</span>
+          </div>
+        </article>
+      ))}
+    </section>
+  </div>
+</Layout>

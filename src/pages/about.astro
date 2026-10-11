@@ -2,4 +2,47 @@
 import Layout from '../layouts/Layout.astro';
 import { path } from '../lib/paths';
 ---
-<Layout title="About"><div class="wrap about-page"><section class="page-intro"><p class="eyebrow">A LITTLE ABOUT ME</p><h1>Curious by nature.<br/>Practical by design.</h1><p>I'm Jomari Francis Villanueva, an educator, researcher, and technology practitioner in Iligan City, Philippines.</p></section><section class="section detail-grid"><div class="about-emblem" aria-hidden="true">jv<span>.</span></div><div class="prose"><h2>Connecting the pieces.</h2><p>My work spans AI automation, connected devices, and the people who use them. At Future AI Lab / BrandNat, I worked on AI workflows, agents, and content intelligence.</p><p>At MSU-IIT, I teach Computer Applications and head the Policy Center for Emerging Trends & Technologies. These roles connect my technical practice with education and technology policy.</p><div class="actions"><a class="button" href={path('cv/')}>View CV ↗</a><a class="text-link" href={path('research/')}>Research ↗</a><a class="text-link" href={path('teaching/')}>Teaching ↗</a></div></div></section></div></Layout>
+
+<Layout title="About">
+  <div class="wrap about-page">
+    <section class="page-intro">
+      <p class="eyebrow">A LITTLE ABOUT ME</p>
+      <h1>
+        Curious by nature.
+        <br />
+        Practical by design.
+      </h1>
+      <p>
+        I'm Jomari Francis Villanueva, an educator, researcher, and technology practitioner in Iligan City,
+        Philippines.
+      </p>
+    </section>
+    <section class="section detail-grid">
+      <div class="about-emblem" aria-hidden="true">
+        jv<span>.</span>
+      </div>
+      <div class="prose">
+        <h2>Connecting the pieces.</h2>
+        <p>
+          My work spans AI automation, connected devices, and the people who use them. At Future AI Lab /
+          BrandNat, I worked on AI workflows, agents, and content intelligence.
+        </p>
+        <p>
+          At MSU-IIT, I teach Computer Applications and head the Policy Center for Emerging Trends &
+          Technologies. These roles connect my technical practice with education and technology policy.
+        </p>
+        <div class="actions">
+          <a class="button" href={path('cv/')}>
+            View CV ↗
+          </a>
+          <a class="text-link" href={path('research/')}>
+            Research ↗
+          </a>
+          <a class="text-link" href={path('teaching/')}>
+            Teaching ↗
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+</Layout>

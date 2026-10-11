@@ -96,6 +96,7 @@ were unsure about.
 ### Task 1: Groundwork (lead)
 
 **Files:**
+
 - Modify: `.github/workflows/deploy.yml`, `package.json`, `README.md`
 - Create: `.prettierrc.json`, `.prettierignore`
 - Delete: `src/assets/ai-workflow.png`, `src/assets/environmental-sensor.png` (unreferenced)
@@ -115,11 +116,18 @@ npm i -D --save-exact prettier prettier-plugin-astro
 ```
 
 `.prettierrc.json`:
+
 ```json
-{ "plugins": ["prettier-plugin-astro"], "singleQuote": true, "printWidth": 110,
-  "overrides": [{ "files": "*.astro", "options": { "parser": "astro" } }] }
+{
+  "plugins": ["prettier-plugin-astro"],
+  "singleQuote": true,
+  "printWidth": 110,
+  "overrides": [{ "files": "*.astro", "options": { "parser": "astro" } }]
+}
 ```
+
 `.prettierignore`:
+
 ```
 dist
 .astro
@@ -127,7 +135,9 @@ node_modules
 test-results
 package-lock.json
 ```
+
 `package.json` scripts — add:
+
 ```json
 "format": "prettier --write .",
 "format:check": "prettier --check .",
@@ -142,6 +152,7 @@ BASE_PATH=/personal-portfolio/ npm run build && cp -r dist /tmp/claude-501/dist-
 npm run format
 BASE_PATH=/personal-portfolio/ npm run build && diff -r /tmp/claude-501/dist-before dist
 ```
+
 Expected: diff shows only whitespace differences inside HTML (or none). If any text content differs, revert and inspect.
 
 - [ ] **Step 4: Deploy trigger + README**
@@ -161,10 +172,12 @@ git add -A && git commit -m "Add Prettier, format codebase, fix deploy branch, u
 ### Task 2: Content model, voice guide, placeholders (lead)
 
 **Files:**
+
 - Create: `docs/voice.md`, `src/data/channels.ts`, `src/components/Placeholder.astro`, `scripts/report-placeholders.mjs`, `tests/site.test.mjs`
 - Modify: `src/data/projects.ts` (add `channel`), `src/data/profile.ts` (add `bench`, `personal`)
 
 **Interfaces:**
+
 - Produces:
   - `type ChannelId = 'automation' | 'research' | 'policy' | 'teaching'`
   - `channels: { id: ChannelId; code: 'CH1'|'CH2'|'CH3'|'CH4'; name: string; route: string; blurb: string }[]` (order CH1..CH4)
@@ -181,7 +194,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
-export const readPage = route => readFile(join('dist', route, 'index.html'), 'utf8');
+export const readPage = (route) => readFile(join('dist', route, 'index.html'), 'utf8');
 
 test('placeholders are always marked', async () => {
   const html = await readPage('');
@@ -191,6 +204,7 @@ test('placeholders are always marked', async () => {
   }
 });
 ```
+
 Also add a node test importing data directly isn't possible from .ts without a loader — instead check in Step 3 via `astro check`.
 
 - [ ] **Step 2: Run** `BASE_PATH=/personal-portfolio/ npm run build && npm test` — expected PASS (no placeholders yet; test guards future tasks).
@@ -198,44 +212,91 @@ Also add a node test importing data directly isn't possible from .ts without a l
 - [ ] **Step 3: Implement**
 
 `src/data/channels.ts`:
+
 ```ts
 export type ChannelId = 'automation' | 'research' | 'policy' | 'teaching';
 export const channels = [
-  { id: 'automation', code: 'CH1', name: 'Automation', route: 'automation/', blurb: 'AI workflows and agents I build for real work.' },
-  { id: 'research', code: 'CH2', name: 'Research', route: 'research/', blurb: 'Societal computing: how sensing and AI land in communities.' },
-  { id: 'policy', code: 'CH3', name: 'Policy', route: 'policy/', blurb: 'Helping institutions decide how to adopt technology.' },
-  { id: 'teaching', code: 'CH4', name: 'Teaching', route: 'teaching/', blurb: 'Computing courses and AI literacy training.' },
+  {
+    id: 'automation',
+    code: 'CH1',
+    name: 'Automation',
+    route: 'automation/',
+    blurb: 'AI workflows and agents I build for real work.',
+  },
+  {
+    id: 'research',
+    code: 'CH2',
+    name: 'Research',
+    route: 'research/',
+    blurb: 'Societal computing: how sensing and AI land in communities.',
+  },
+  {
+    id: 'policy',
+    code: 'CH3',
+    name: 'Policy',
+    route: 'policy/',
+    blurb: 'Helping institutions decide how to adopt technology.',
+  },
+  {
+    id: 'teaching',
+    code: 'CH4',
+    name: 'Teaching',
+    route: 'teaching/',
+    blurb: 'Computing courses and AI literacy training.',
+  },
 ] as const satisfies readonly { id: ChannelId; code: string; name: string; route: string; blurb: string }[];
-export const channelById = (id: ChannelId) => channels.find(c => c.id === id)!;
+export const channelById = (id: ChannelId) => channels.find((c) => c.id === id)!;
 ```
+
 `src/components/Placeholder.astro`:
+
 ```astro
 ---
-interface Props { need: string }
+interface Props {
+  need: string;
+}
 const { need } = Astro.props;
 ---
-<span class="placeholder" data-placeholder>[Needs input: {need}]</span>
+
+<span class="placeholder" data-placeholder>
+  [Needs input: {need}]
+</span>
 ```
+
 `scripts/report-placeholders.mjs`:
+
 ```js
 import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
-async function walk(d) { return (await Promise.all((await readdir(d, { withFileTypes: true })).map(e => e.isDirectory() ? walk(join(d, e.name)) : join(d, e.name)))).flat(); }
+async function walk(d) {
+  return (
+    await Promise.all(
+      (await readdir(d, { withFileTypes: true })).map((e) =>
+        e.isDirectory() ? walk(join(d, e.name)) : join(d, e.name),
+      ),
+    )
+  ).flat();
+}
 let total = 0;
-for (const f of (await walk('dist')).filter(f => f.endsWith('.html'))) {
-  const hits = [...(await readFile(f, 'utf8')).matchAll(/\[Needs input: ([^\]]+)\]/g)].map(m => m[1]);
-  if (hits.length) { total += hits.length; console.log(f, '\n  - ' + hits.join('\n  - ')); }
+for (const f of (await walk('dist')).filter((f) => f.endsWith('.html'))) {
+  const hits = [...(await readFile(f, 'utf8')).matchAll(/\[Needs input: ([^\]]+)\]/g)].map((m) => m[1]);
+  if (hits.length) {
+    total += hits.length;
+    console.log(f, '\n  - ' + hits.join('\n  - '));
+  }
 }
 console.log(`${total} placeholder(s)`);
 ```
+
 Projects channels: `applied-ai` → `automation`, `ai-literacy-policy` → `teaching`, `digital-government` → `policy`, `environmental-sensing` → `research`. Also fix duplicated text: `digital-government.result` = `'The plan is the city’s roadmap for information systems. Implementation status is not documented here.'`
 In `profile.ts` add `export const bench: { title: string; note: string }[] = [];` and `export const personal: string[] = [];` (filled from owner input when supplied).
 
 `docs/voice.md` — write: the one-line story, the voice rules from Global Constraints, 3 do/don't pairs:
+
 - Do: "I wired a research agent to our content calendar. It saved hours; it also invented a source once, so now a human checks every citation." Don't: "Leveraging cutting-edge AI to revolutionize content."
 - Do: "I teach IoT by making students break sensors first." Don't: "Passionate educator committed to excellence."
 - Do: "PCETT helps the city decide what to build before buying it." Don't: "Driving digital transformation synergies."
-Note: examples illustrate tone only — never publish them as facts.
+  Note: examples illustrate tone only — never publish them as facts.
 
 - [ ] **Step 4: Verify** `npm run check && npm run lint && BASE_PATH=/personal-portfolio/ npm run build && npm test` — all PASS.
 - [ ] **Step 5: Commit** `git add -A && git commit -m "Add channel model, voice guide, placeholder component"`
@@ -280,11 +341,13 @@ Report a 2-sentence rationale.
 ### Task 4: Design system + shell (lead)
 
 **Files:**
+
 - Create: `src/styles/tokens.css`, `src/styles/base.css`, `src/styles/components.css`, `src/components/{ChannelTag,ChannelHeader,Readout,StatusLight,LogEntry}.astro`
 - Modify: `src/layouts/Layout.astro` (import new CSS instead of global.css), `src/components/Header.astro`, `src/components/Footer.astro`
 - Delete: `src/styles/global.css` after its still-needed rules move into base/components or per-page files
 
 **Interfaces:**
+
 - Consumes: `channels`, `ChannelId`, `channelById` (T2)
 - Produces:
   - CSS vars: `--paper --ink --muted --accent --signal --line --ch-automation --ch-research --ch-policy --ch-teaching --heading --body --mono`, plus spacing `--s1..--s6`
@@ -302,10 +365,11 @@ Report a 2-sentence rationale.
 test('header nav lists channels in order on every page', async () => {
   const html = await readPage('');
   const nav = html.match(/<nav[^>]*aria-label="Main navigation"[^>]*>([\s\S]*?)<\/nav>/)[1];
-  const labels = [...nav.matchAll(/>([^<>]+)<\/a>/g)].map(m => m[1].trim());
+  const labels = [...nav.matchAll(/>([^<>]+)<\/a>/g)].map((m) => m[1].trim());
   assert.deepEqual(labels.slice(0, 6), ['Automation', 'Research', 'Policy', 'Teaching', 'Logs', 'About']);
 });
 ```
+
 - [ ] **Step 2:** Run build + test → FAIL (old nav).
 - [ ] **Step 3:** Implement tokens/components/header/footer per chosen mockup. Channel colors from Task 3 brief. Footer: email CTA, socials, CV, Readout with location.
 - [ ] **Step 4:** Build + `npm test` PASS; `npm run check && npm run lint && npm run format:check` PASS; preview + `BROWSER_CHANNEL=chrome PREVIEW_URL=http://localhost:4321/personal-portfolio/ npm run test:browser` PASS for existing routes (route list still old; update in T10).
@@ -331,10 +395,12 @@ Sections in order: hero (headline + sub from Task 3 brief, location Readout) →
 test('home: showcase works without JS and links all channels', async () => {
   const html = await readPage('');
   assert.match(html, /id="workflow-title"[^>]*>[^<]+</, 'first workflow server-rendered');
-  for (const r of ['automation/', 'research/', 'policy/', 'teaching/']) assert.ok(html.includes(`/personal-portfolio/${r}"`), r);
+  for (const r of ['automation/', 'research/', 'policy/', 'teaching/'])
+    assert.ok(html.includes(`/personal-portfolio/${r}"`), r);
   assert.match(html, /8\.23°N 124\.24°E/);
 });
 ```
+
 - [ ] **Step 2:** build + test → FAIL.
 - [ ] **Step 3:** Implement.
 - [ ] **Step 4:** build + test + check + lint + format:check PASS.
@@ -358,6 +424,7 @@ test('automation page has workflows and a mailto CTA', async () => {
   assert.match(html, /href="mailto:/);
 });
 ```
+
 - [ ] **Steps 2–5:** fail → implement → pass (+check/lint/format) → `git commit -m "Add automation channel page"`
 
 ### Task 7: Logs collection + redirect (subagent)
@@ -376,6 +443,7 @@ test('logs: empty state and writing redirect', async () => {
   assert.match(old, /\/personal-portfolio\/logs\//);
 });
 ```
+
 - [ ] **Steps 2–5:** fail → implement → pass → `git commit -m "Replace writing with build logs and redirect old URL"`
 
 ### Task 8: Research + Policy pages (subagent)
@@ -392,13 +460,17 @@ Policy page: `ChannelHeader channel="policy"` → what PCETT does (from profile.
 
 ```js
 test('research and policy are separate channels', async () => {
-  const r = await readPage('research/'), p = await readPage('policy/');
-  assert.match(r, /data-channel="research"/); assert.match(r, /[Ss]ocietal computing/);
+  const r = await readPage('research/'),
+    p = await readPage('policy/');
+  assert.match(r, /data-channel="research"/);
+  assert.match(r, /[Ss]ocietal computing/);
   assert.match(r, /10\.1109\/ACDSA67686\.2026\.11468017/);
-  assert.match(p, /data-channel="policy"/); assert.match(p, /Information Systems Strategic Plan/);
+  assert.match(p, /data-channel="policy"/);
+  assert.match(p, /Information Systems Strategic Plan/);
   assert.doesNotMatch(r, /National Policy Convening/);
 });
 ```
+
 - [ ] **Steps 2–5:** fail → implement → pass → `git commit -m "Add policy channel and societal computing research page"`
 
 ### Task 9: Teaching, About, CV (subagent)
@@ -411,12 +483,16 @@ Teaching: `ChannelHeader channel="teaching"` → courses → AI READY ASEAN Mast
 
 ```js
 test('teaching, about, cv', async () => {
-  const t = await readPage('teaching/'), a = await readPage('about/'), c = await readPage('cv/');
-  assert.match(t, /data-channel="teaching"/); assert.doesNotMatch(t, /National Policy Convening/);
+  const t = await readPage('teaching/'),
+    a = await readPage('about/'),
+    c = await readPage('cv/');
+  assert.match(t, /data-channel="teaching"/);
+  assert.doesNotMatch(t, /National Policy Convening/);
   assert.match(a, /Outside the lab/);
   assert.match(c, /id="print-profile"/);
 });
 ```
+
 - [ ] **Steps 2–5:** fail → implement → pass → `git commit -m "Restyle teaching, about, and CV pages"`
 
 ---

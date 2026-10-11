@@ -6,10 +6,52 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { profile, socialLinks } from '../data/profile';
 import { path } from '../lib/paths';
-interface Props { title?: string; description?: string; }
+interface Props {
+  title?: string;
+  description?: string;
+}
 const { title, description = profile.description } = Astro.props;
 const pageTitle = title ? `${title} | ${profile.name}` : `${profile.name} — AI, technology & society`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
-const person = { '@context': 'https://schema.org', '@type': 'Person', name: profile.name, alternateName: profile.fullName, url: new URL(path(), Astro.site).href, jobTitle: 'Assistant Professor', sameAs: socialLinks.filter(l => l.href.startsWith('https')).map(l => l.href) };
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: profile.name,
+  alternateName: profile.fullName,
+  url: new URL(path(), Astro.site).href,
+  jobTitle: 'Assistant Professor',
+  sameAs: socialLinks.filter((l) => l.href.startsWith('https')).map((l) => l.href),
+};
 ---
-<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="theme-color" content="#f8f8f5"/><title>{pageTitle}</title><meta name="description" content={description}/><link rel="canonical" href={canonical}/><link rel="icon" type="image/svg+xml" href={path('favicon.svg')}/><link rel="sitemap" href={path('sitemap-index.xml')}/><meta property="og:type" content="website"/><meta property="og:title" content={pageTitle}/><meta property="og:description" content={description}/><meta property="og:url" content={canonical}/><meta name="twitter:card" content="summary"/><meta name="twitter:title" content={pageTitle}/><meta name="twitter:description" content={description}/><script is:inline type="application/ld+json" set:html={JSON.stringify(person).replace(/</g, '\\u003c')}/></head><body><a class="skip-link" href="#main">Skip to content</a><Header/><main id="main" tabindex="-1"><slot/></main><Footer/></body></html>
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f8f8f5" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href={path('favicon.svg')} />
+    <link rel="sitemap" href={path('sitemap-index.xml')} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(person).replace(/</g, '\\u003c')} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">
+      Skip to content
+    </a>
+    <Header />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

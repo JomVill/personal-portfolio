@@ -1,7 +1,7 @@
 name: Deploy portfolio to GitHub Pages
 on:
   push:
-    branches: [main]
+    branches: [master]
   workflow_dispatch:
 permissions:
   contents: read
@@ -25,6 +25,7 @@ jobs:
       - run: npm ci
       - run: npm run check
       - run: npm run lint
+      - run: npm run format:check
       - run: npm run build
       - run: npm test
       - uses: actions/configure-pages@v5
