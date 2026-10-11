@@ -1,0 +1,49 @@
+---
+// Hero terminal. Server-rendered in its final state (every step done + summary) so it reads
+// complete without JS or under reduced motion; src/scripts/terminal.ts replays the run.
+const prompt = 'automate: new partnership inquiry → screen → CRM';
+const steps = [
+  { verb: 'Reading inbox…', label: 'Gmail trigger', ms: 1300 },
+  { verb: 'Screening with AI…', label: 'AI screened inquiry', ms: 1700 },
+  { verb: 'Waiting for approval…', label: 'Approved in Slack', ms: 2100 },
+  { verb: 'Updating HubSpot…', label: 'Contact + deal in HubSpot', ms: 1500 },
+];
+---
+
+<div
+  class="device term"
+  role="img"
+  aria-label="Example automation run: a new partnership inquiry arrives in Gmail, AI screens it, a person approves it in Slack, and the contact and deal are created in HubSpot."
+>
+  <div class="screen">
+    <div class="screen-top" aria-hidden="true">
+      <span>WF-01 · Live run</span>
+      <span>Partnership ops</span>
+    </div>
+    <div class="term-body" aria-hidden="true">
+      <p class="t-prompt">
+        <span class="t-caret">&gt;</span>
+        <span class="t-text">
+          <span class="t-ghost">{prompt}</span>
+          <span class="t-typed">{prompt}</span>
+        </span>
+      </p>
+      <ol class="t-steps">
+        {steps.map((s) => (
+          <li class="t-done" data-verb={s.verb} data-label={s.label} data-ms={s.ms}>
+            <span class="t-tree">⎿</span>
+            <span class="t-ok">✓</span>
+            {s.label}
+          </li>
+        ))}
+        <li class="t-sum">
+          <b>Done</b> · 4 steps · contract next
+        </li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<script>
+  import '../scripts/terminal';
+</script>

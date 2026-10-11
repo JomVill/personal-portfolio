@@ -67,3 +67,47 @@ test('old URLs redirect under the base path', async () => {
   for (const slug of ['applied-ai', 'ai-literacy-policy', 'digital-government', 'environmental-sensing'])
     assert.match(await readPage(`work/${slug}`), new RegExp(`url=${base}work/"`), slug);
 });
+
+test('homepage: hero, terminal final state, marquee, featured, cards, no CDNs', async () => {
+  const html = await readPage('');
+  const h1s = [...html.matchAll(/<h1[^>]*>([\s\S]*?)<\/h1>/g)];
+  assert.equal(h1s.length, 1);
+  assert.equal(h1s[0][1].trim(), 'Hi, I’m Jom, and I automate repetitive tasks.');
+  assert.match(html, /3 hours a day/);
+  // terminal is server-rendered in its final state
+  const term = html.match(/<div[^>]+class="[^"]*\bterm\b[\s\S]*?<\/ol>/)[0];
+  for (const line of [
+    'Gmail trigger',
+    'AI screened inquiry',
+    'Approved in Slack',
+    'Contact \\+ deal in HubSpot',
+    'Done</b> · 4 steps · contract next',
+  ])
+    assert.match(term, new RegExp(line), line);
+  // marquee: first item is Zapier, duplicate tracks hidden from AT
+  const logos = [...html.matchAll(/<ul[^>]+class="logos"([^>]*)>([\s\S]*?)<\/ul>/g)];
+  assert.ok(logos.length >= 2);
+  assert.doesNotMatch(logos[0][1], /aria-hidden/);
+  for (const l of logos.slice(1)) assert.match(l[1], /aria-hidden="true"/);
+  const first = logos[0][2].match(/<li[^>]*>([\s\S]*?)<\/li>/)[1].replace(/<svg[\s\S]*?<\/svg>/g, '');
+  assert.equal(first.trim(), 'Zapier');
+  assert.match(logos[0][2], /<svg[^>]+fill="#FF4F00"[^>]*>\s*<use href="#si-zapier"/);
+  assert.match(html, /<symbol id="si-zapier"[^>]*>\s*<path d="M/);
+  // featured workflow
+  assert.match(html, /Partnership inquiries, handled end to end/);
+  assert.match(html, /data-step="9"/);
+  assert.match(html, /AI does the first read/);
+  assert.match(html, new RegExp(`href="${base}work/partnership-operations-automation/"`));
+  assert.match(html, new RegExp(`href="${base}work/"[^>]*>\\s*See my workflows`));
+  // three cards with links
+  for (const [title, slug] of [
+    ['Timesheets that check themselves', 'shift-timesheet-reminders-ai-validation'],
+    ['Every email reaches the right team', 'ai-email-classifier'],
+    ['One article, ready-to-post social content', 'article-to-social-content'],
+  ]) {
+    assert.match(html, new RegExp(title), title);
+    assert.match(html, new RegExp(`href="${base}work/${slug}/"`), slug);
+  }
+  assert.match(html, /href="mailto:jomarivillanueva83@gmail\.com"[^>]*>\s*Email me/);
+  assert.doesNotMatch(html, /cdn\.jsdelivr|fonts\.googleapis|fonts\.gstatic/);
+});
