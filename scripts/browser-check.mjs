@@ -3,7 +3,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { mkdir, writeFile } from 'node:fs/promises';
 const base = process.env.PREVIEW_URL || 'http://127.0.0.1:4321/';
 const browser = await chromium.launch({ channel: process.env.BROWSER_CHANNEL || undefined, headless: true });
-const page = await browser.newPage();
+const page = await (await browser.newContext()).newPage();
 const failures = [];
 const report = [];
 page.on('pageerror', error => failures.push(error.message));
