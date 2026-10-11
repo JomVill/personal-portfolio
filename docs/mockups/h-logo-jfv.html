@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>JFV logo options</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 48px 24px;
+        font-family: system-ui, sans-serif;
+        background: #f8f8f5;
+        color: #252623;
+      }
+      h1 {
+        font-size: 20px;
+        margin: 0 0 8px;
+      }
+      h2 {
+        font-size: 15px;
+        margin: 32px 0 12px;
+      }
+      p {
+        margin: 0 0 8px;
+        color: #696b64;
+        max-width: 640px;
+      }
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+      .tile {
+        flex: 1 1 320px;
+        display: flex;
+        align-items: flex-end;
+        gap: 28px;
+        padding: 28px;
+        border-radius: 16px;
+        border: 1px solid #dedfd8;
+      }
+      .dark {
+        background: #252623;
+        color: #f8f8f5;
+        border-color: #252623;
+      }
+      small {
+        display: block;
+        font:
+          10px ui-monospace,
+          monospace;
+        opacity: 0.6;
+        margin-top: 6px;
+      }
+      svg {
+        display: block;
+      }
+      .ink {
+        stroke: currentColor;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>JFV: entry, branch, merge</h1>
+    <p>
+      J is the trigger coming in, F is a branch (one line splitting in two), V is a merge into one output —
+      the solid orange node.
+    </p>
+
+    <svg width="0" height="0" style="position: absolute">
+      <defs>
+        <symbol id="a" viewBox="0 0 168 136">
+          <g fill="none" class="ink" stroke-width="13" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 18 H38 V92 Q38 116 16 116" />
+            <path d="M64 116 V18 H98 M64 64 H90" />
+            <path d="M114 18 L135 104 M156 18 L135 104" />
+          </g>
+          <rect x="122" y="98" width="26" height="26" rx="8" fill="#ee652b" />
+        </symbol>
+        <symbol id="b" viewBox="0 0 168 136">
+          <g fill="none" class="ink" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke-width="13" d="M14 18 H98 M38 18 V92 Q38 116 16 116 M64 18 V116 M64 64 H90" />
+            <path stroke-width="13" d="M114 18 L135 104 M156 18 L135 104" />
+          </g>
+          <rect x="122" y="98" width="26" height="26" rx="8" fill="#ee652b" />
+        </symbol>
+        <symbol id="fav" viewBox="0 0 64 64">
+          <rect width="64" height="64" rx="14" fill="#252623" />
+          <g fill="none" stroke="#f8f8f5" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 14 L29 44 M43 14 L29 44" />
+          </g>
+          <rect x="22" y="40" width="14" height="14" rx="4" fill="#ee652b" />
+        </symbol>
+      </defs>
+    </svg>
+
+    <h2>A — three letters, orange output node on the V</h2>
+    <div class="row">
+      <div class="tile">
+        <div>
+          <svg width="168" height="136"><use href="#a" /></svg><small>168</small>
+        </div>
+        <div>
+          <svg width="64" height="52"><use href="#a" /></svg><small>64</small>
+        </div>
+        <div>
+          <svg width="32" height="26"><use href="#a" /></svg><small>32</small>
+        </div>
+      </div>
+      <div class="tile dark">
+        <div>
+          <svg width="168" height="136"><use href="#a" /></svg><small>168</small>
+        </div>
+        <div>
+          <svg width="64" height="52"><use href="#a" /></svg><small>64</small>
+        </div>
+        <div>
+          <svg width="32" height="26"><use href="#a" /></svg><small>32</small>
+        </div>
+      </div>
+    </div>
+
+    <h2>B — J and F share one top rail (connected), V merges into the node</h2>
+    <div class="row">
+      <div class="tile">
+        <div>
+          <svg width="168" height="136"><use href="#b" /></svg><small>168</small>
+        </div>
+        <div>
+          <svg width="64" height="52"><use href="#b" /></svg><small>64</small>
+        </div>
+        <div>
+          <svg width="32" height="26"><use href="#b" /></svg><small>32</small>
+        </div>
+      </div>
+      <div class="tile dark">
+        <div>
+          <svg width="168" height="136"><use href="#b" /></svg><small>168</small>
+        </div>
+        <div>
+          <svg width="64" height="52"><use href="#b" /></svg><small>64</small>
+        </div>
+        <div>
+          <svg width="32" height="26"><use href="#b" /></svg><small>32</small>
+        </div>
+      </div>
+    </div>
+
+    <h2>Favicon (both) — the merge: V into the orange node</h2>
+    <div class="row">
+      <div class="tile">
+        <div>
+          <svg width="16" height="16"><use href="#fav" /></svg><small>16</small>
+        </div>
+        <div>
+          <svg width="32" height="32"><use href="#fav" /></svg><small>32</small>
+        </div>
+        <div>
+          <svg width="64" height="64"><use href="#fav" /></svg><small>64</small>
+        </div>
+      </div>
+    </div>
+
+    <h2>In the header</h2>
+    <div class="row">
+      <div class="tile" style="align-items: center; justify-content: space-between">
+        <span style="display: flex; align-items: center; gap: 12px"
+          ><svg width="44" height="36"><use href="#a" /></svg
+          ><strong style="font-size: 15px">Jomari Villanueva</strong></span
+        ><span style="font-size: 14px">Work · About</span>
+      </div>
+      <div class="tile dark" style="align-items: center; justify-content: space-between">
+        <span style="display: flex; align-items: center; gap: 12px"
+          ><svg width="44" height="36"><use href="#b" /></svg
+          ><strong style="font-size: 15px">Jomari Villanueva</strong></span
+        ><span style="font-size: 14px">Work · About</span>
+      </div>
+    </div>
+  </body>
+</html>
