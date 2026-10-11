@@ -127,7 +127,10 @@ test('work index lists all 8 workflows', async () => {
   const h1s = [...html.matchAll(/<h1[^>]*>([\s\S]*?)<\/h1>/g)];
   assert.equal(h1s.length, 1);
   assert.equal(h1s[0][1].trim(), 'Workflows I built');
-  assert.match(html, /Each one is built in n8n, with AI doing the reading and a person approving what matters\./);
+  assert.match(
+    html,
+    /Each one is built in n8n, with AI doing the reading and a person approving what matters\./,
+  );
   const links = new Set(
     [...html.matchAll(new RegExp(`href="${base}work/([a-z0-9-]+)/"`, 'g'))].map((m) => m[1]),
   );
