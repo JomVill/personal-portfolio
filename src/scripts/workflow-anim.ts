@@ -1,6 +1,8 @@
 // Workflow diagrams on the homepage: one packet travels the path and nodes light as it arrives
 // (ported from the approved mockup). Drives the [data-step] nodes rendered by WorkflowDiagram.
 // Never runs under reduced motion; each animation pauses off-screen and while the tab is hidden.
+import { isPaused, onPauseChange } from './motion';
+
 type Anim = { t: number; on: boolean; vis: boolean; draw: () => void };
 
 if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -18,10 +20,10 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
         a.draw();
         any = true;
       }
-    raf = any ? requestAnimationFrame(frame) : 0;
+    raf = any && !isPaused() ? requestAnimationFrame(frame) : 0;
   };
   const wake = () => {
-    if (raf || document.hidden || !anims.some((a) => a.on)) return;
+    if (raf || document.hidden || isPaused() || !anims.some((a) => a.on)) return;
     prev = 0;
     raf = requestAnimationFrame(frame);
   };
@@ -41,10 +43,17 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
     } else wake();
   });
 
+  onPauseChange((paused) => {
+    if (paused) {
+      cancelAnimationFrame(raf);
+      raf = 0;
+    } else wake();
+  });
+
   // ---- featured diagram (row on wide screens, column on narrow; whichever is displayed) ----
   const screen = document.querySelector<HTMLElement>('.flow-screen');
-  if (screen) {
-    const diagrams = [...screen.querySelectorAll<SVGSVGElement>('svg.wfd--featured')];
+  const diagrams = screen ? [...screen.querySelectorAll<SVGSVGElement>('svg.wfd--featured')] : [];
+  if (screen && diagrams.length) {
     const stepsOf = (svg: SVGSVGElement) =>
       [...svg.querySelectorAll<SVGGElement>('[data-step]')].sort(
         (a, b) => Number(a.dataset.step) - Number(b.dataset.step),

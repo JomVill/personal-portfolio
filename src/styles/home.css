@@ -161,7 +161,9 @@
   will-change: transform;
 }
 .marquee:hover .track,
-.marquee.is-paused .track {
+.marquee:focus-within .track,
+.marquee.is-paused .track,
+html.motion-paused .track {
   animation-play-state: paused;
 }
 .logos {
@@ -406,5 +408,31 @@
   .term-body {
     padding: 18px 16px 20px;
     font-size: 12.5px;
+  }
+}
+
+/* ---- pause-motion button (terminal header) ---- */
+.motion-toggle {
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: #8d9a80;
+  background: transparent;
+  border: 1px solid #dce7ce2e;
+  border-radius: 4px;
+  padding: 2px 8px;
+  cursor: pointer;
+}
+.motion-toggle:hover,
+.motion-toggle[aria-pressed='true'] {
+  color: var(--screen-ink);
+  border-color: #dce7ce59;
+}
+.motion-toggle[hidden] {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .motion-toggle {
+    display: none;
   }
 }

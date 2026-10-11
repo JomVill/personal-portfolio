@@ -65,3 +65,16 @@ const { steps, control } = w;
     </section>
   </div>
 </Layout>
+
+<script>
+  // The scroll region is only a keyboard tab stop while it actually overflows.
+  const regions = document.querySelectorAll<HTMLElement>('.diagram-scroll');
+  const sync = () =>
+    regions.forEach((r) => {
+      if (r.scrollWidth > r.clientWidth) r.setAttribute('tabindex', '0');
+      else r.removeAttribute('tabindex');
+    });
+  sync();
+  addEventListener('resize', sync);
+  if ('ResizeObserver' in window) regions.forEach((r) => new ResizeObserver(sync).observe(r));
+</script>

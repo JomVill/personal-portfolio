@@ -173,6 +173,7 @@ export const workflowCopy: Record<string, WorkflowCopy> = {
     steps: [
       'Someone fills in your sign-up form.',
       "They're added to HubSpot as a contact.",
+      'Only people who picked the free option continue.',
       'The workflow checks which offer they picked.',
       'Small offer: they get a payment link by email.',
       'Big offer: a contract is created from your template.',

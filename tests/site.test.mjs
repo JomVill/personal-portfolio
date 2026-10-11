@@ -84,6 +84,16 @@ test('homepage: hero, terminal final state, marquee, featured, cards, no CDNs', 
     'Done</b> · 4 steps · contract next',
   ])
     assert.match(term, new RegExp(line), line);
+  assert.match(html, /Example run/);
+  assert.doesNotMatch(html, /Live run/);
+  assert.match(
+    html,
+    /<button[^>]*class="motion-toggle"[^>]*aria-pressed="false"[^>]*hidden[^>]*>Pause motion<\/button>/,
+  );
+  // decorative card diagrams carry no <title>/<desc> (no hover tooltips)
+  for (const m of html.matchAll(/<svg[^>]*wfd--card[^>]*>[\s\S]*?<\/svg>/g)) {
+    assert.doesNotMatch(m[0], /<title|<desc|aria-labelledby/);
+  }
   // marquee: first item is Zapier, duplicate tracks hidden from AT
   const logos = [...html.matchAll(/<ul[^>]+class="logos"([^>]*)>([\s\S]*?)<\/ul>/g)];
   assert.ok(logos.length >= 2);
@@ -117,7 +127,7 @@ test('work index lists all 8 workflows', async () => {
   const h1s = [...html.matchAll(/<h1[^>]*>([\s\S]*?)<\/h1>/g)];
   assert.equal(h1s.length, 1);
   assert.equal(h1s[0][1].trim(), 'Workflows I built');
-  assert.match(html, /Each one runs in n8n, with AI doing the reading and a person approving what matters\./);
+  assert.match(html, /Each one is built in n8n, with AI doing the reading and a person approving what matters\./);
   const links = new Set(
     [...html.matchAll(new RegExp(`href="${base}work/([a-z0-9-]+)/"`, 'g'))].map((m) => m[1]),
   );
@@ -145,7 +155,9 @@ test('each workflow has a detail page', async () => {
   const p = await readPage('work/partnership-operations-automation');
   assert.match(p, /A person approves in Slack before anything moves\./);
   assert.match(p, /role="region"[^>]*aria-label="Workflow diagram, scroll sideways"/);
-  assert.match(p, /tabindex="0"/);
+  assert.match(p, /tabindex="0"/); // server-rendered; script removes it when nothing overflows
+  const gf = await readPage('work/google-form-to-hubspot-with-10-link-and-1000-contract');
+  assert.match(gf, /Only people who picked the free option continue\./);
   const e = await readPage('work/ai-email-classifier');
   assert.match(e, /Where you stay in control/);
   const inv = await readPage('work/create-invoice-from-hubspot-to-quickbooks');

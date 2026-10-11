@@ -10,17 +10,20 @@ const steps = [
 ];
 ---
 
-<div
-  class="device term"
-  role="img"
-  aria-label="Example automation run: a new partnership inquiry arrives in Gmail, AI screens it, a person approves it in Slack, and the contact and deal are created in HubSpot."
->
+<div class="device term">
   <div class="screen">
-    <div class="screen-top" aria-hidden="true">
-      <span>WF-01 · Live run</span>
-      <span>Partnership ops</span>
+    <div class="screen-top">
+      <span aria-hidden="true">WF-01 · Example run</span>
+      <span aria-hidden="true">Partnership ops</span>
+      <button type="button" class="motion-toggle" aria-pressed="false" hidden>
+        Pause motion
+      </button>
     </div>
-    <div class="term-body" aria-hidden="true">
+    <div
+      class="term-body"
+      role="img"
+      aria-label="Example automation run: a new partnership inquiry arrives in Gmail, AI screens it, a person approves it in Slack, and the contact and deal are created in HubSpot."
+    >
       <p class="t-prompt">
         <span class="t-caret">&gt;</span>
         <span class="t-text">
@@ -46,4 +49,5 @@ const steps = [
 
 <script>
   import '../scripts/terminal';
+  import '../scripts/motion-toggle';
 </script>
