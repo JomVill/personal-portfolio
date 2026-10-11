@@ -49,3 +49,21 @@ test('workflow copy keys match workflow ids', async () => {
   assert.equal(steps.length, 10);
   for (const s of steps) assert.ok(names.has(s), s);
 });
+
+test('site shell: header logo, Email me key, footer links', async () => {
+  const html = await readPage('');
+  const header = html.match(/<header[\s\S]*?<\/header>/)[0];
+  assert.match(header, /<img[^>]+alt="Jom — home"/);
+  assert.match(header, /<a[^>]+href="mailto:jomarivillanueva83@gmail\.com"[^>]*>\s*Email me\s*<\/a>/);
+  assert.doesNotMatch(header, /Jomari/);
+  const footer = html.match(/<footer[\s\S]*?<\/footer>/)[0];
+  assert.match(footer, /Academic work/);
+  assert.match(footer, /© \d{4} Jomari Villanueva/);
+});
+
+test('old URLs redirect under the base path', async () => {
+  for (const route of ['research', 'teaching', 'writing'])
+    assert.match(await readPage(route), new RegExp(`url=${base}academic/"`), route);
+  for (const slug of ['applied-ai', 'ai-literacy-policy', 'digital-government', 'environmental-sensing'])
+    assert.match(await readPage(`work/${slug}`), new RegExp(`url=${base}work/"`), slug);
+});

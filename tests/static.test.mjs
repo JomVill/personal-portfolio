@@ -15,8 +15,11 @@ test('all built internal links and assets resolve under the deployment base', as
   const base = new URL(home.match(/rel="canonical" href="([^"]+)"/)[1]).pathname;
   for (const file of htmlFiles) {
     const html = await readFile(file, 'utf8');
-    assert.match(html, /<html lang="en"/);
-    assert.equal((html.match(/<h1[ >]/g) || []).length, 1, file);
+    // Astro's redirect stubs carry no <html lang> or <h1>; their links are still checked below.
+    if (!/http-equiv="refresh"/.test(html)) {
+      assert.match(html, /<html lang="en"/);
+      assert.equal((html.match(/<h1[ >]/g) || []).length, 1, file);
+    }
     for (const [, raw] of html.matchAll(/(?:href|src)="([^"#]+)[^"]*"/g)) {
       const url = raw.split('#')[0].split('?')[0];
       if (!url.startsWith('/')) continue;
