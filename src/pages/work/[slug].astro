@@ -1,7 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import WorkflowDiagram from '../../components/WorkflowDiagram.astro';
-import { controlLine, getWorkflows, stepList, type Workflow } from '../../lib/workflows';
+import { getWorkflows, type Workflow } from '../../lib/workflows';
 import { profile } from '../../data/profile';
 import { path } from '../../lib/paths';
 import '../../styles/work.css';
@@ -10,8 +10,7 @@ export function getStaticPaths() {
   return getWorkflows().map((workflow) => ({ params: { slug: workflow.slug }, props: { workflow } }));
 }
 const { workflow: w } = Astro.props as { workflow: Workflow };
-const steps = stepList(w);
-const control = controlLine(w);
+const { steps, control } = w;
 ---
 
 <Layout title={w.title}>

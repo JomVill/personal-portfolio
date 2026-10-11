@@ -140,39 +140,5 @@ export const sentenceCase = (name: string) =>
     })
     .join(' ');
 
-/**
- * Steps shown under "How it runs": CEO labels along the main path when the copy sets
- * them, else every visible node name (AI models/parsers excluded) in path order,
- * following each trigger's chain in turn.
- */
-export const stepList = (w: Workflow): string[] => {
-  if (w.mainPath?.length && w.labels) return mainPath(w).map((n) => nodeLabel(w, n));
-  const nodes = visibleNodes(w);
-  const edges = mainEdges(w);
-  const seen = new Set<string>();
-  const order: string[] = [];
-  const triggers = nodes
-    .filter((n) => isTriggerNode(w, n))
-    .sort((a, b) => a.position[1] - b.position[1] || a.position[0] - b.position[0]);
-  for (const t of triggers) {
-    const queue = [t.name];
-    while (queue.length) {
-      const cur = queue.shift()!;
-      if (seen.has(cur)) continue;
-      seen.add(cur);
-      order.push(cur);
-      queue.push(...edges.filter((e) => e.from === cur).map((e) => e.to));
-    }
-  }
-  const visible = new Set(nodes.map((n) => n.name));
-  return order.filter((n) => visible.has(n)).map(sentenceCase);
-};
-
-/** One factual line about where a person decides, or null when no step involves one. */
-export const controlLine = (w: Workflow): string | null => {
-  const human = w.nodes.filter(isHumanNode);
-  if (!human.length) return null;
-  if (w.slug === 'partnership-operations-automation')
-    return 'A person approves in Slack before anything moves.';
-  return `A person is part of this one: ${human.map((n) => sentenceCase(n.name).replace(/\?$/, '')).join(', ')}.`;
-};
+/** Label for the full diagram: the copy's `fullLabels` entry, else the sentence-cased name. */
+export const fullLabel = (w: Workflow, name: string) => w.fullLabels?.[name] ?? sentenceCase(name);

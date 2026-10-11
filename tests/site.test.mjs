@@ -147,6 +147,12 @@ test('each workflow has a detail page', async () => {
   assert.match(p, /role="region"[^>]*aria-label="Workflow diagram, scroll sideways"/);
   assert.match(p, /tabindex="0"/);
   const e = await readPage('work/ai-email-classifier');
-  assert.doesNotMatch(e, /Where you stay in control/);
-  assert.match(e, /<li>New email<\/li>/);
+  assert.match(e, /Where you stay in control/);
+  const inv = await readPage('work/create-invoice-from-hubspot-to-quickbooks');
+  assert.doesNotMatch(inv, /Where you stay in control/);
+  assert.match(e, /AI reads it and decides what it(&#39;|')s about\./);
+  assert.doesNotMatch(e, /Slack Technical Issue/);
+  assert.doesNotMatch(p, /Mark Inquiry As Read/);
+  assert.match(copy.slice(copy.indexOf("'ai-email-classifier'")), /steps: \[/);
+  assert.equal([...copy.matchAll(/^    steps: \[/gm)].length, 8);
 });

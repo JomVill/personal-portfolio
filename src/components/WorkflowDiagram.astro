@@ -13,6 +13,7 @@ import {
   isTriggerNode,
   mainEdges,
   mainPath,
+  fullLabel,
   nodeLabel,
   reachable,
   visibleNodes,
@@ -165,7 +166,7 @@ if (column) {
     h,
     width: nodeWidth(node, h),
     step: stepOf.get(node.name),
-    label: full ? wrap(nodeLabel(w, node.name), 16) : undefined,
+    label: full ? wrap(fullLabel(w, node.name), 16) : undefined,
   }));
   const at = new Map(placed.map((p) => [p.node.name, p]));
   edges = mainEdges(w)
@@ -207,7 +208,10 @@ const onPath = placed
   .sort((a, b) => a.step! - b.step!)
   .map((p, i, list) => {
     const later = i > 0 && !reachable(w, list[i - 1].node.name, p.node.name);
-    return nodeLabel(w, p.node.name) + (later ? ' (starts later, from a separate trigger)' : '');
+    return (
+      (variant === 'full' ? fullLabel(w, p.node.name) : nodeLabel(w, p.node.name)) +
+      (later ? ' (starts later, from a separate trigger)' : '')
+    );
   });
 const desc =
   variant === 'card'
