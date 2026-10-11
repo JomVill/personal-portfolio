@@ -34,6 +34,12 @@ if (term && typed && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
   plan.push([
     500,
     () => {
+      // Hold the final-state height (labels may wrap) so the box does not jump during the replay.
+      const body = term.querySelector<HTMLElement>('.term-body');
+      if (body) {
+        body.style.minHeight = '';
+        body.style.minHeight = `${body.offsetHeight}px`;
+      }
       stepRows.forEach((r) => {
         r.className = '';
         r.replaceChildren();

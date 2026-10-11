@@ -94,9 +94,9 @@
   display: flex;
   align-items: baseline;
   min-height: 1.75em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  /* long labels wrap with a hanging indent (the label is its own flex item) */
+  min-width: 0;
+  line-height: 1.75;
 }
 .t-steps li:empty::before {
   content: '\200b';
