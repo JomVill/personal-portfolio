@@ -1,6 +1,8 @@
 // Replays the hero terminal run (typing, spinner, ticks, summary) as in the approved mockup.
 // The HTML already holds the final state; nothing runs under reduced motion, and the
 // replay pauses while the terminal is off-screen or the tab is hidden.
+import { isPaused, onPauseChange } from './motion';
+
 const term = document.querySelector<HTMLElement>('.term');
 const typed = term?.querySelector<HTMLElement>('.t-typed');
 
@@ -101,7 +103,7 @@ if (term && typed && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
     raf = requestAnimationFrame(loop);
   };
   const start = () => {
-    if (running || document.hidden) return;
+    if (running || document.hidden || isPaused()) return;
     running = true;
     schedule();
     raf = requestAnimationFrame(loop);
@@ -118,6 +120,10 @@ if (term && typed && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
   }).observe(term);
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) stop();
+    else if (visible) start();
+  });
+  onPauseChange((paused) => {
+    if (paused) stop();
     else if (visible) start();
   });
 }

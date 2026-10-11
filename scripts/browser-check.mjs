@@ -89,6 +89,35 @@ if ((await page.evaluate(() => getComputedStyle(document.documentElement).scroll
   const t2 = await mp.locator('.term-body').textContent();
   if (t1 === t2) failures.push('Terminal did not animate with motion allowed');
   report.push({ terminalAnimates: t1 !== t2 });
+  // Pause control: freezes terminal and marquee, resumes on second click.
+  const btn = mp.locator('.motion-toggle');
+  await btn.scrollIntoViewIfNeeded();
+  await btn.click();
+  if ((await btn.getAttribute('aria-pressed')) !== 'true') failures.push('Pause button not pressed');
+  if (!(await mp.evaluate(() => document.documentElement.classList.contains('motion-paused'))))
+    failures.push('motion-paused class not set');
+  await mp.mouse.move(0, 0);
+  const p1 = await mp.locator('.term-body').textContent();
+  await mp.waitForTimeout(2000);
+  const p2 = await mp.locator('.term-body').textContent();
+  if (p1 !== p2) failures.push('Terminal kept animating while paused');
+  const marqueeRunning = await mp.evaluate(
+    () =>
+      document
+        .querySelector('.marquee')
+        ?.getAnimations({ subtree: true })
+        .filter((a) => a.playState === 'running').length ?? 0,
+  );
+  if (marqueeRunning !== 0) failures.push('Marquee kept animating while paused');
+  await btn.click();
+  const r1 = await mp.locator('.term-body').textContent();
+  let resumed = false;
+  for (let i = 0; i < 8 && !resumed; i++) {
+    await mp.waitForTimeout(500);
+    resumed = (await mp.locator('.term-body').textContent()) !== r1;
+  }
+  if (!resumed) failures.push('Terminal did not resume after Play motion');
+  report.push({ pauseControl: { frozen: p1 === p2, marqueeRunning, resumed } });
   await ctx.close();
 }
 await writeFile('test-results/browser-report.json', JSON.stringify({ report, failures }, null, 2));

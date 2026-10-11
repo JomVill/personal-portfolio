@@ -235,8 +235,8 @@ const lineH = variant === 'full' ? 14 : 16;
     ? { 'aria-hidden': 'true', focusable: 'false' }
     : { role: 'img', 'aria-labelledby': `${uid}-t ${uid}-d` })}
 >
-  <title id={`${uid}-t`}>{w.title}</title>
-  <desc id={`${uid}-d`}>{desc}</desc>
+  {!decorative && <title id={`${uid}-t`}>{w.title}</title>}
+  {!decorative && <desc id={`${uid}-d`}>{desc}</desc>}
   <g class="edges">
     {edges.map((e) => (
       <path class:list={['e', { later: e.later }]} d={e.d} />
