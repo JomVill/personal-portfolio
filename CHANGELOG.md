@@ -6,6 +6,20 @@ This project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [2.1.0] - 2026-10-11
+
+### Added
+
+- Four-part n8n content pipeline: Daily Story Scout, Content Package Generator, Weekly Preference Learning, and Monthly Performance Review, each with a detail page (12 workflows in total).
+
+### Changed
+
+- Story Scout is the featured workflow and the hero terminal run; the featured eyebrow reads "Featured workflow · Content".
+- Featured diagram beats are synced from copy data (`beats[].through`) instead of a hardcoded step map.
+- Homepage cards are chosen with an explicit `homeCard` flag: Content Package Generator, Weekly Preference Learning, and Partnership.
+- Workflow order puts the content pipeline first and Partnership fifth.
+- Hero metric now reads "up to 60 hours a month" (owner's statement).
+
 ## [2.0.0] - 2026-10-11
 
 ### Changed
