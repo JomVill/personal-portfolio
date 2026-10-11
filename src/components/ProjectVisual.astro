@@ -1,7 +1,33 @@
 ---
-interface Props { kind: string; }
+interface Props {
+  kind: string;
+}
 const { kind } = Astro.props;
-const labels: Record<string, string[]> = {workflow: ['INPUT', 'AI', 'OUTPUT'], society: ['LEARN', 'AI', 'SHARE'], governance: ['PEOPLE', 'ISSP', 'SYSTEMS'], sensing: ['SENSE', 'LoRa', 'DATA']};
+const labels: Record<string, string[]> = {
+  workflow: ['INPUT', 'AI', 'OUTPUT'],
+  society: ['LEARN', 'AI', 'SHARE'],
+  governance: ['PEOPLE', 'ISSP', 'SYSTEMS'],
+  sensing: ['SENSE', 'LoRa', 'DATA'],
+};
 const stages = labels[kind] || labels.workflow;
 ---
-<div class:list={['project-visual', kind]} aria-hidden="true"><div class="mini-flow">{stages.map((stage,i) => <>{i > 0 && <span class="mini-wire"></span>}<span class:list={['mini-node', { 'mini-processor': i === 1 }]}>{stage}</span></>)}</div><span class="visual-label">{kind === 'workflow' ? 'CONNECTED INTELLIGENCE' : kind === 'sensing' ? 'CONNECTED ENVIRONMENTS' : kind === 'governance' ? 'PUBLIC SYSTEMS' : 'TECHNOLOGY & SOCIETY'}</span></div>
+
+<div class:list={['project-visual', kind]} aria-hidden="true">
+  <div class="mini-flow">
+    {stages.map((stage, i) => (
+      <>
+        {i > 0 && <span class="mini-wire"></span>}
+        <span class:list={['mini-node', { 'mini-processor': i === 1 }]}>{stage}</span>
+      </>
+    ))}
+  </div>
+  <span class="visual-label">
+    {kind === 'workflow'
+      ? 'CONNECTED INTELLIGENCE'
+      : kind === 'sensing'
+        ? 'CONNECTED ENVIRONMENTS'
+        : kind === 'governance'
+          ? 'PUBLIC SYSTEMS'
+          : 'TECHNOLOGY & SOCIETY'}
+  </span>
+</div>

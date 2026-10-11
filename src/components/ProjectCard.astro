@@ -2,16 +2,27 @@
 import ProjectVisual from './ProjectVisual.astro';
 import { path } from '../lib/paths';
 import type { projects } from '../data/projects';
-interface Props { project: typeof projects[number]; }
+interface Props {
+  project: (typeof projects)[number];
+}
 const { project: p } = Astro.props;
 ---
+
 <article class:list={['project-card', `card-${p.visual}`]}>
   <a class="project-link" href={path(`work/${p.slug}/`)}>
-    <ProjectVisual kind={p.visual}/>
+    <ProjectVisual kind={p.visual} />
     <div class="project-copy">
-      <div class="project-meta meta"><span>{p.category}</span><span>{p.number}</span></div>
+      <div class="project-meta meta">
+        <span>{p.category}</span>
+        <span>{p.number}</span>
+      </div>
       <h3>{p.title}</h3>
-      <div class="project-bottom"><p>{p.organization}</p><span class="round-arrow" aria-hidden="true">↗</span></div>
+      <div class="project-bottom">
+        <p>{p.organization}</p>
+        <span class="round-arrow" aria-hidden="true">
+          ↗
+        </span>
+      </div>
     </div>
   </a>
 </article>

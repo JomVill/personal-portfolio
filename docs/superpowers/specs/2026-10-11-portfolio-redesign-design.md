@@ -12,12 +12,12 @@ Success: a visitor understands within one screen that Jomari builds AI automatio
 
 One-line story: **"I build AI systems — and study and shape how they land in society."**
 
-| Channel | Audience | Role in story |
-|---|---|---|
-| CH1 Automation | Clients, employers | Lead. What he builds. |
-| CH2 Research | PhD committees, collaborators | Societal computing: sensing, AIoT, communities. |
-| CH3 Policy | Government, uni | PCETT, Iligan ISSP, AI Ready ASEAN convenings. Separate from uni teaching/research. |
-| CH4 Teaching | Uni, training partners | MSU-IIT courses, AI READY ASEAN Master Trainer. |
+| Channel        | Audience                      | Role in story                                                                       |
+| -------------- | ----------------------------- | ----------------------------------------------------------------------------------- |
+| CH1 Automation | Clients, employers            | Lead. What he builds.                                                               |
+| CH2 Research   | PhD committees, collaborators | Societal computing: sensing, AIoT, communities.                                     |
+| CH3 Policy     | Government, uni               | PCETT, Iligan ISSP, AI Ready ASEAN convenings. Separate from uni teaching/research. |
+| CH4 Teaching   | Uni, training partners        | MSU-IIT courses, AI READY ASEAN Master Trainer.                                     |
 
 ## Voice
 
@@ -54,6 +54,7 @@ Nav: Automation · Research · Policy · Teaching · Logs · About. Contact = ma
 ## Architecture
 
 Static Astro, no client framework (unchanged). Data-driven:
+
 - `src/data/channels.ts` — channel id, name, color token, blurb.
 - Projects/engagements gain a `channel` field.
 - `src/content/logs/` collection replaces `writing`.

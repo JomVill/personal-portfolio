@@ -2,4 +2,16 @@
 import { profile, socialLinks } from '../data/profile';
 import { path } from '../lib/paths';
 ---
-<footer id="contact" class="footer wrap"><a class="contact-link" href={`mailto:${profile.email}`}>Let's connect <span aria-hidden="true">↗</span></a><div class="footer-links">{socialLinks.slice(0,3).map(link => <a href={link.href}>{link.label === 'Google Scholar' ? 'Scholar' : link.label}</a>)}<a href={path('cv/')}>CV</a></div><span class="meta">© {new Date().getFullYear()}</span></footer>
+
+<footer id="contact" class="footer wrap">
+  <a class="contact-link" href={`mailto:${profile.email}`}>
+    Let's connect <span aria-hidden="true">↗</span>
+  </a>
+  <div class="footer-links">
+    {socialLinks.slice(0, 3).map((link) => (
+      <a href={link.href}>{link.label === 'Google Scholar' ? 'Scholar' : link.label}</a>
+    ))}
+    <a href={path('cv/')}>CV</a>
+  </div>
+  <span class="meta">© {new Date().getFullYear()}</span>
+</footer>
