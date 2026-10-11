@@ -1,6 +1,8 @@
 import { chromium } from 'playwright';
 import AxeBuilder from '@axe-core/playwright';
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
+
+const workflows = JSON.parse(await readFile(new URL('../src/data/workflows.json', import.meta.url), 'utf8'));
 const base = process.env.PREVIEW_URL || 'http://127.0.0.1:4321/';
 const browser = await chromium.launch({ channel: process.env.BROWSER_CHANNEL || undefined, headless: true });
 const page = await (await browser.newContext()).newPage();
@@ -16,19 +18,7 @@ for (const width of [375, 768, 1024, 1440, 1920]) {
   await page.screenshot({ path: `test-results/home-${width}.png`, fullPage: true });
   report.push({ viewport: width, horizontalOverflow: overflow });
 }
-for (const route of [
-  '',
-  'work/',
-  'work/applied-ai/',
-  'work/ai-literacy-policy/',
-  'work/digital-government/',
-  'work/environmental-sensing/',
-  'research/',
-  'teaching/',
-  'about/',
-  'cv/',
-  'writing/',
-]) {
+for (const route of ['', 'work/', ...workflows.map((w) => `work/${w.id}/`), 'about/', 'academic/', 'cv/']) {
   const response = await page.goto(new URL(route, base).href, { waitUntil: 'networkidle' });
   if (!response.ok()) failures.push(`${route}: HTTP ${response.status()}`);
   const result = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
@@ -64,6 +54,43 @@ if ((await page.locator('body').getAttribute('data-printed')) !== 'true')
 await page.emulateMedia({ reducedMotion: 'reduce' });
 if ((await page.evaluate(() => getComputedStyle(document.documentElement).scrollBehavior)) !== 'auto')
   failures.push('Reduced motion not respected');
+
+// Reduced motion: nothing animates, terminal sits in its final state.
+{
+  const ctx = await browser.newContext({ reducedMotion: 'reduce' });
+  const rm = await ctx.newPage();
+  await rm.goto(base, { waitUntil: 'networkidle' });
+  await rm.waitForTimeout(2000);
+  const running = await rm.evaluate(
+    () => document.getAnimations().filter((a) => a.playState === 'running').length,
+  );
+  if (running !== 0) failures.push(`Reduced motion: ${running} animations still running`);
+  const marqueeRunning = await rm.evaluate(
+    () =>
+      document
+        .querySelector('.marquee')
+        ?.getAnimations({ subtree: true })
+        .filter((a) => a.playState === 'running').length ?? 0,
+  );
+  if (marqueeRunning !== 0) failures.push('Reduced motion: marquee is animating');
+  if (!(await rm.locator('.t-sum').isVisible()))
+    failures.push('Reduced motion: terminal summary not visible');
+  report.push({ reducedMotion: { runningAnimations: running, marqueeRunning } });
+  await ctx.close();
+}
+// Motion allowed: terminal text must change over time.
+{
+  const ctx = await browser.newContext({ reducedMotion: 'no-preference' });
+  const mp = await ctx.newPage();
+  await mp.goto(base, { waitUntil: 'domcontentloaded' });
+  await mp.waitForTimeout(500);
+  const t1 = await mp.locator('.term-body').textContent();
+  await mp.waitForTimeout(2500);
+  const t2 = await mp.locator('.term-body').textContent();
+  if (t1 === t2) failures.push('Terminal did not animate with motion allowed');
+  report.push({ terminalAnimates: t1 !== t2 });
+  await ctx.close();
+}
 await writeFile('test-results/browser-report.json', JSON.stringify({ report, failures }, null, 2));
 await browser.close();
 console.log(JSON.stringify({ report, failures }, null, 2));
