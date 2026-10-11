@@ -13,7 +13,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test:browser": "node scripts/browser-check.mjs",
-    "report:placeholders": "node scripts/report-placeholders.mjs"
+    "report:placeholders": "node scripts/report-placeholders.mjs",
+    "import:n8n": "node scripts/import-n8n.mjs"
   },
   "engines": {
     "node": ">=22.12.0"
