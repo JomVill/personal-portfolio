@@ -50,7 +50,7 @@ Minimal. Lots of whitespace, one accent color (orange), charcoal on warm off-whi
 - Contact email: jomarivillanueva83@gmail.com.
 - Contact: mailto.
 
-Brand (final, owner-designed): the bold "JOM" logo, used exactly as supplied — never redrawn or recolored without the owner. Files in `src/assets/brand/`: `jom-logo-original.webp` (source), `jom-logo-black.png` / `jom-logo-white.png` (trimmed, transparent, for light/dark), `favicon-32/180/512.png`. Owner's detailed "JOM as an n8n canvas" artwork is a candidate hero illustration once supplied as SVG. Photo: not used (owner removed it); refined headshot kept in `src/assets/portrait/` for later.
+Brand (final, owner-designed, updated 2026-10-11): the orange "J" logo with an n8n-style workflow inside it (`src/assets/brand/j-logo.png`, source `j-logo-original.webp`), shown with the name "Jomari Villanueva" beside it in the header. Used exactly as supplied — never redrawn or recolored without the owner. Favicons `favicon-32/180/512.png` are generated from it. The earlier JOM wordmark files remain in `src/assets/brand/` but are unused.
 
 Removed: research, policy, teaching, writing/logs pages, "How I work", tools list, FDTR generator. Old URLs (`/research/`, `/teaching/`, `/writing/`) redirect to `/academic/`; old work slugs redirect to `/work/`.
 

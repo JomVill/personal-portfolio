@@ -53,9 +53,9 @@ test('workflow copy keys match workflow ids', async () => {
 test('site shell: header logo, Email me key, footer links', async () => {
   const html = await readPage('');
   const header = html.match(/<header[\s\S]*?<\/header>/)[0];
-  assert.match(header, /<img[^>]+alt="Jom — home"/);
+  assert.match(header, /<img[^>]+j-logo/);
+  assert.match(header, /class="brand-name">Jomari Villanueva</);
   assert.match(header, /<a[^>]+href="mailto:jomarivillanueva83@gmail\.com"[^>]*>\s*Email me\s*<\/a>/);
-  assert.doesNotMatch(header, /Jomari/);
   const footer = html.match(/<footer[\s\S]*?<\/footer>/)[0];
   assert.match(footer, /Academic work/);
   assert.match(footer, /© \d{4} Jomari Villanueva/);
