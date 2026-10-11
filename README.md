@@ -46,7 +46,7 @@ All workflows are built in Zapier and can be replicated in n8n.
 
 ## Tools I build with
 
-Zapier · n8n · OpenAI · Claude · HubSpot · Slack · Gmail · Google Sheets · Notion · QuickBooks · Trello · ClickUp · Buffer
+Zapier · n8n · OpenAI · Claude · Perplexity · HubSpot · Slack · Gmail · Google Sheets · Google Apps Script · Airtable · Notion · Obsidian · Feedly · QuickBooks · Trello · ClickUp · Buffer
 
 ## Let’s talk
 
