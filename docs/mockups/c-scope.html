@@ -1,0 +1,1634 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mockup C — Scope · Jomari Villanueva</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Manrope:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /*
+        Variant C "Scope" — oscilloscope front panel.
+        Light chassis, one dark display window. Channel colors only on labels, traces, LEDs.
+        Contrast (checked):
+          on paper #f8f8f5 — ink 14.3, muted 5.08, accent 5.79, CH1 5.50, CH2 5.65, CH3 6.18, CH4 5.31
+          on chassis #eeede7 — muted 4.60, CH1 4.99, CH2 5.12, CH3 5.60, CH4 4.81
+          on display #12140f — lighter tints used: CH1 #ff9466 8.55, CH2 #6fc6e3 9.59,
+            CH3 #bba3f0 8.48, CH4 #86d391 10.37, phosphor text #e8eae0 15.25, dim #a3a698 7.47
+      */
+      :root {
+        --paper: #f8f8f5;
+        --chassis: #eeede7;
+        --cap: #fdfdfb;
+        --rule: #d6d5cd;
+        --rule-strong: #b9b8af;
+        --ink: #252623;
+        --muted: #696b64;
+        --signal: #ee652b;
+        --accent: #ad3b0f;
+        --ch1: #b33d0b;
+        --ch2: #1d6b85;
+        --ch3: #6d4aa8;
+        --ch4: #2e7539;
+        /* display (dark) */
+        --scr: #12140f;
+        --scr-2: #1b1d17;
+        --scr-grid: rgba(232, 234, 224, 0.08);
+        --scr-grid-strong: rgba(232, 234, 224, 0.2);
+        --phos: #e8eae0;
+        --phos-dim: #a3a698;
+        --t1: #ff9466;
+        --t2: #6fc6e3;
+        --t3: #bba3f0;
+        --t4: #86d391;
+        --mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+        --sans: 'DM Sans', system-ui, sans-serif;
+        --head: 'Manrope', system-ui, sans-serif;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        -webkit-text-size-adjust: 100%;
+      }
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font: 400 17px/1.55 var(--sans);
+        overflow-x: hidden;
+      }
+      a {
+        color: inherit;
+      }
+      :focus-visible {
+        outline: 2px solid var(--signal);
+        outline-offset: 3px;
+      }
+      .mono {
+        font-family: var(--mono);
+      }
+      .wrap {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 40px;
+      }
+      .label {
+        font: 600 11px/1.3 var(--mono);
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+      }
+
+      /* ---------- Needs-input chip ---------- */
+      .todo {
+        display: inline-block;
+        max-width: 100%;
+        padding: 3px 9px;
+        border: 1.5px dashed var(--accent);
+        border-radius: 4px;
+        background: repeating-linear-gradient(-45deg, #fdf1ea 0 6px, #f8f8f5 6px 12px);
+        color: var(--accent);
+        font: 600 13px/1.45 var(--mono);
+        letter-spacing: 0.01em;
+        overflow-wrap: anywhere;
+      }
+
+      /* ---------- Top bar ---------- */
+      .topbar {
+        border-bottom: 1px solid var(--rule);
+      }
+      .topbar .wrap {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        min-height: 68px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+        font: 700 16px/1 var(--head);
+      }
+      .brand-mark {
+        display: grid;
+        place-items: center;
+        width: 34px;
+        height: 34px;
+        border: 1.5px solid var(--ink);
+        border-radius: 6px;
+        font: 700 12px/1 var(--mono);
+        letter-spacing: 0.04em;
+      }
+      .nav {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 4px 22px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        font-size: 15px;
+      }
+      .nav a {
+        display: inline-flex;
+        align-items: baseline;
+        gap: 6px;
+        padding: 6px 0;
+        text-decoration: none;
+      }
+      .nav a:hover {
+        text-decoration: underline;
+        text-underline-offset: 4px;
+      }
+      .nav .code {
+        font: 600 10px/1 var(--mono);
+        letter-spacing: 0.06em;
+      }
+      .nav .contact {
+        padding: 7px 14px;
+        border: 1.5px solid var(--ink);
+        border-radius: 999px;
+        font-weight: 500;
+      }
+      .nav .contact:hover {
+        background: var(--ink);
+        color: var(--paper);
+        text-decoration: none;
+      }
+
+      /* ---------- Hero ---------- */
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 380px;
+        gap: 56px;
+        align-items: end;
+        padding-block: 56px 40px;
+      }
+      .readout {
+        display: inline-flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 6px 14px;
+        margin: 0 0 26px;
+        font: 500 13px/1.3 var(--mono);
+        letter-spacing: 0.04em;
+      }
+      .readout .coord {
+        padding: 5px 10px;
+        border: 1px solid var(--rule-strong);
+        border-radius: 4px;
+        background: var(--cap);
+      }
+      .readout .coord b {
+        color: var(--accent);
+        font-weight: 600;
+      }
+      .readout .clock {
+        color: var(--muted);
+      }
+      h1 {
+        margin: 0;
+        max-width: 15ch;
+        font: 800 clamp(40px, 6.2vw, 84px) / 1 var(--head);
+        letter-spacing: -0.035em;
+      }
+      h1 .dash {
+        color: var(--signal);
+      }
+      .sub {
+        max-width: 46ch;
+        margin: 26px 0 0;
+        font-size: 20px;
+        line-height: 1.5;
+        color: var(--ink);
+      }
+      .plate {
+        margin: 0;
+        border: 1px solid var(--rule-strong);
+        border-radius: 8px;
+        background: var(--cap);
+        font: 400 13px/1.4 var(--mono);
+      }
+      .plate div {
+        display: grid;
+        grid-template-columns: 76px 1fr;
+        gap: 12px;
+        padding: 10px 14px;
+        border-top: 1px solid var(--rule);
+      }
+      .plate div:first-child {
+        border-top: 0;
+      }
+      .plate dt {
+        color: var(--muted);
+        font-size: 11px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding-top: 1px;
+      }
+      .plate dd {
+        margin: 0;
+      }
+
+      /* ---------- Chassis ---------- */
+      .chassis {
+        position: relative;
+        border: 1px solid var(--rule-strong);
+        border-radius: 18px;
+        background: var(--chassis);
+        box-shadow:
+          0 1px 0 #fff inset,
+          0 24px 48px -32px rgba(37, 38, 35, 0.35);
+      }
+      .chassis-head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px 20px;
+        padding: 14px 24px;
+        border-bottom: 1px solid var(--rule);
+      }
+      .model {
+        display: flex;
+        align-items: baseline;
+        gap: 12px;
+      }
+      .model strong {
+        font: 800 15px/1 var(--head);
+        letter-spacing: 0.02em;
+      }
+      .cal {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      .cal .sticker {
+        padding: 3px 8px;
+        border: 1px solid var(--ink);
+        border-radius: 3px;
+        background: var(--cap);
+        font: 600 11px/1.3 var(--mono);
+        letter-spacing: 0.08em;
+      }
+      .chassis-body {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 272px;
+        gap: 24px;
+        padding: 24px;
+      }
+
+      /* ---------- Display ---------- */
+      .display {
+        --t: var(--t1);
+        display: flex;
+        border-radius: 12px;
+        padding: 10px;
+        background: #2b2c28;
+        box-shadow:
+          0 0 0 1px #1a1b18,
+          0 2px 0 rgba(255, 255, 255, 0.6);
+      }
+      .display[data-ch='2'] {
+        --t: var(--t2);
+      }
+      .display[data-ch='3'] {
+        --t: var(--t3);
+      }
+      .display[data-ch='4'] {
+        --t: var(--t4);
+      }
+      .screen {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        border-radius: 6px;
+        background: var(--scr);
+        color: var(--phos);
+        font-family: var(--mono);
+      }
+      .scr-bar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 6px 16px;
+        padding: 10px 16px;
+        border-bottom: 1px solid var(--scr-grid-strong);
+        font-size: 12px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--phos-dim);
+      }
+      .scr-ch {
+        padding: 2px 7px;
+        border: 1px solid var(--t);
+        border-radius: 3px;
+        color: var(--t);
+        font-weight: 700;
+      }
+      .scr-name {
+        color: var(--phos);
+        font-weight: 600;
+      }
+      .scr-state {
+        margin-left: auto;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        color: var(--phos);
+      }
+      .scr-state i {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--t4);
+        box-shadow: 0 0 8px var(--t4);
+      }
+      .screen[data-run='stop'] .scr-state i {
+        background: var(--t1);
+        box-shadow: 0 0 8px var(--t1);
+      }
+
+      .grat {
+        position: relative;
+        flex: 1;
+        min-height: 250px;
+        background:
+          linear-gradient(var(--scr-grid) 1px, transparent 1px) 0 0 / 100% 12.5%,
+          linear-gradient(90deg, var(--scr-grid) 1px, transparent 1px) 0 0 / 10% 100%,
+          var(--scr);
+        border-bottom: 1px solid var(--scr-grid-strong);
+      }
+      .grat::before,
+      .grat::after {
+        content: '';
+        position: absolute;
+        background: var(--scr-grid-strong);
+      }
+      .grat::before {
+        left: 0;
+        right: 0;
+        top: 50%;
+        height: 1px;
+      }
+      .grat::after {
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        width: 1px;
+      }
+      .grat svg {
+        position: absolute;
+        inset: 14px 0;
+        width: 100%;
+        height: calc(100% - 28px);
+        overflow: visible;
+      }
+      .trace {
+        fill: none;
+        stroke: var(--t);
+        stroke-width: 2;
+        stroke-linejoin: round;
+        vector-effect: non-scaling-stroke;
+        filter: drop-shadow(0 0 4px color-mix(in srgb, var(--t) 55%, transparent));
+        display: none;
+      }
+      .display[data-ch='1'] .trace[data-tr='1'],
+      .display[data-ch='2'] .trace[data-tr='2'],
+      .display[data-ch='3'] .trace[data-tr='3'],
+      .display[data-ch='4'] .trace[data-tr='4'] {
+        display: block;
+      }
+      .cursor {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 0;
+        border-left: 1px dashed rgba(232, 234, 224, 0.45);
+      }
+      .cursor span {
+        position: absolute;
+        top: 8px;
+        left: 6px;
+        font-size: 11px;
+        color: var(--phos-dim);
+        white-space: nowrap;
+      }
+      .display:not([data-ch='1']) .cursor {
+        display: none;
+      }
+      .gnd {
+        position: absolute;
+        left: 8px;
+        bottom: 10px;
+        font-size: 11px;
+        color: var(--t);
+      }
+      .scale {
+        position: absolute;
+        right: 10px;
+        bottom: 10px;
+        font-size: 11px;
+        color: var(--phos-dim);
+      }
+      .sweep {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 2px;
+        background: linear-gradient(transparent, color-mix(in srgb, var(--t) 70%, transparent), transparent);
+        animation: sweep 5s linear infinite;
+        opacity: 0.8;
+      }
+      .screen[data-run='stop'] .sweep {
+        animation-play-state: paused;
+      }
+      @keyframes sweep {
+        from {
+          left: 0;
+        }
+        to {
+          left: 100%;
+        }
+      }
+
+      /* stage legend (CH1) */
+      .stages {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      .stages li {
+        position: relative;
+        padding: 14px 16px 16px;
+        border-left: 1px dashed rgba(232, 234, 224, 0.25);
+        transition:
+          background 0.25s,
+          color 0.25s;
+      }
+      .stages li:first-child {
+        border-left: 0;
+      }
+      .stages .idx {
+        display: block;
+        font-size: 11px;
+        letter-spacing: 0.1em;
+        color: var(--phos-dim);
+      }
+      .stages strong {
+        display: block;
+        margin-top: 4px;
+        font: 700 20px/1.2 var(--head);
+        color: var(--phos);
+        letter-spacing: -0.01em;
+      }
+      .stages .cap {
+        display: block;
+        margin-top: 4px;
+        font: 400 14px/1.35 var(--sans);
+        color: var(--phos-dim);
+      }
+      .stages .arrow {
+        position: absolute;
+        right: -8px;
+        top: 16px;
+        z-index: 1;
+        color: var(--t);
+        font-size: 13px;
+      }
+      .screen[data-stage] .stages li {
+        color: var(--phos-dim);
+      }
+      .screen[data-stage='1'] .stages li:nth-child(1),
+      .screen[data-stage='2'] .stages li:nth-child(-n + 2),
+      .screen[data-stage='3'] .stages li {
+        background: color-mix(in srgb, var(--t) 10%, transparent);
+      }
+      .screen[data-stage='1'] .stages li:nth-child(1) .idx,
+      .screen[data-stage='2'] .stages li:nth-child(2) .idx,
+      .screen[data-stage='3'] .stages li:nth-child(3) .idx {
+        color: var(--t);
+      }
+
+      /* channel brief (CH2–4) */
+      .brief {
+        padding: 16px 16px 18px;
+      }
+      .brief h3 {
+        margin: 0;
+        font: 700 22px/1.2 var(--head);
+        color: var(--t);
+      }
+      .brief p {
+        margin: 6px 0 0;
+        max-width: 56ch;
+        font: 400 16px/1.45 var(--sans);
+        color: var(--phos);
+      }
+      .meas {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        border-top: 1px solid var(--scr-grid-strong);
+        background: var(--scr-2);
+      }
+      .meas div {
+        padding: 10px 16px 12px;
+        border-left: 1px solid var(--scr-grid);
+        min-width: 0;
+      }
+      .meas div:first-child {
+        border-left: 0;
+      }
+      .meas dt {
+        font-size: 10px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--phos-dim);
+      }
+      .meas dd {
+        margin: 3px 0 0;
+        font-size: 13px;
+        color: var(--phos);
+        overflow-wrap: anywhere;
+      }
+      .meas dd.hl {
+        color: var(--t);
+      }
+      .panel[hidden] {
+        display: none;
+      }
+
+      /* ---------- Controls ---------- */
+      .controls {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+      .group > .label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+      .group > .label::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: var(--rule-strong);
+      }
+      .keys {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .key {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+        min-height: 84px;
+        padding: 12px 12px 10px;
+        border: 1px solid var(--rule-strong);
+        border-radius: 10px;
+        background: var(--cap);
+        color: var(--ink);
+        font: inherit;
+        text-align: left;
+        cursor: pointer;
+        box-shadow:
+          0 3px 0 #cfcec6,
+          0 4px 10px -6px rgba(37, 38, 35, 0.4);
+        transition:
+          transform 0.08s,
+          box-shadow 0.08s;
+      }
+      .key:hover {
+        border-color: var(--ink);
+      }
+      .key:active,
+      .key[aria-selected='true'],
+      .key[aria-pressed='true'] {
+        transform: translateY(2px);
+        box-shadow:
+          0 1px 0 #cfcec6,
+          inset 0 1px 3px rgba(37, 38, 35, 0.12);
+      }
+      .key .led {
+        position: absolute;
+        top: 13px;
+        right: 12px;
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: #d9d8d0;
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.2);
+      }
+      .key[aria-selected='true'] .led {
+        background: var(--c);
+        box-shadow:
+          0 0 0 3px color-mix(in srgb, var(--c) 18%, transparent),
+          0 0 10px var(--c);
+      }
+      .key .kc {
+        font: 700 13px/1 var(--mono);
+        letter-spacing: 0.06em;
+        color: var(--c, var(--ink));
+      }
+      .key .kn {
+        margin-top: auto;
+        font: 500 15px/1.15 var(--sans);
+      }
+      .key-1 {
+        --c: var(--ch1);
+      }
+      .key-2 {
+        --c: var(--ch2);
+      }
+      .key-3 {
+        --c: var(--ch3);
+      }
+      .key-4 {
+        --c: var(--ch4);
+      }
+      .key.wide {
+        min-height: 56px;
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+      }
+      .key.wide .kn {
+        margin: 0;
+        font-size: 14px;
+      }
+      .key.wide .kc {
+        color: var(--ink);
+      }
+      .key:disabled {
+        cursor: default;
+        opacity: 0.7;
+      }
+      .open {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 14px 16px;
+        border-radius: 10px;
+        background: var(--ink);
+        color: var(--paper);
+        font-weight: 500;
+        text-decoration: none;
+      }
+      .open:hover {
+        background: #000;
+      }
+      .open .route {
+        white-space: nowrap;
+        font: 400 12px/1 var(--mono);
+        color: #c9cbc2;
+      }
+      .hint {
+        margin: 0;
+        font: 400 12px/1.5 var(--mono);
+        color: var(--muted);
+      }
+      kbd {
+        display: inline-block;
+        min-width: 18px;
+        padding: 0 4px;
+        border: 1px solid var(--rule-strong);
+        border-bottom-width: 2px;
+        border-radius: 3px;
+        background: var(--cap);
+        font: 600 11px/1.5 var(--mono);
+        text-align: center;
+        color: var(--ink);
+      }
+
+      /* ---------- Inputs (channel entry points) ---------- */
+      .inputs {
+        border-top: 1px solid var(--rule);
+        padding: 18px 24px 24px;
+      }
+      .inputs > .label {
+        margin: 0 0 14px;
+      }
+      .jacks {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      .jack {
+        display: grid;
+        grid-template-columns: 40px 1fr;
+        gap: 4px 14px;
+        height: 100%;
+        padding: 16px 16px 16px 14px;
+        border: 1px solid var(--rule);
+        border-radius: 10px;
+        background: var(--paper);
+        text-decoration: none;
+        transition: border-color 0.15s;
+      }
+      .jack:hover {
+        border-color: var(--c);
+      }
+      .jack:hover h3 span {
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+      .bnc {
+        grid-row: span 3;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 3px solid var(--c);
+        background: radial-gradient(circle, var(--ink) 0 4px, var(--cap) 5px 11px, #d9d8d0 12px);
+      }
+      .jack .kc {
+        font: 700 12px/1.2 var(--mono);
+        letter-spacing: 0.08em;
+        color: var(--c);
+      }
+      .jack h3 {
+        margin: 0;
+        font: 700 19px/1.2 var(--head);
+        letter-spacing: -0.01em;
+      }
+      .jack p {
+        grid-column: 2;
+        margin: 2px 0 0;
+        font-size: 15px;
+        line-height: 1.45;
+        color: var(--muted);
+      }
+
+      /* ---------- Bench + log ---------- */
+      .lower {
+        display: grid;
+        grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+        gap: 24px;
+        padding-block: 40px 24px;
+      }
+      .sec-head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 6px 16px;
+        margin-bottom: 14px;
+      }
+      .sec-head h2 {
+        margin: 0;
+        font: 800 26px/1.15 var(--head);
+        letter-spacing: -0.02em;
+      }
+      .bench {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        border-top: 1.5px solid var(--ink);
+      }
+      .bench li {
+        display: grid;
+        grid-template-columns: 56px minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 16px;
+        padding: 18px 0;
+        border-bottom: 1px solid var(--rule);
+      }
+      .probe {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font: 700 12px/1 var(--mono);
+        letter-spacing: 0.06em;
+      }
+      .probe i {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--signal);
+        box-shadow: 0 0 0 3px rgba(238, 101, 43, 0.2);
+        animation: blink 2.4s ease-in-out infinite;
+      }
+      @keyframes blink {
+        50% {
+          opacity: 0.35;
+        }
+      }
+      .bench .state {
+        font: 500 11px/1 var(--mono);
+        letter-spacing: 0.1em;
+        color: var(--muted);
+        text-transform: uppercase;
+      }
+      .log {
+        display: flex;
+        flex-direction: column;
+        border: 1px solid var(--rule-strong);
+        border-radius: 12px;
+        background: var(--cap);
+        overflow: hidden;
+      }
+      .log-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 10px 16px;
+        border-bottom: 1px solid var(--rule);
+        background: var(--chassis);
+      }
+      .log-body {
+        display: grid;
+        gap: 10px;
+        padding: 18px 16px 20px;
+      }
+      .log-body .row {
+        display: grid;
+        grid-template-columns: 64px minmax(0, 1fr);
+        gap: 12px;
+        align-items: baseline;
+      }
+      .log-foot {
+        margin-top: auto;
+        padding: 12px 16px;
+        border-top: 1px solid var(--rule);
+      }
+      .text-link {
+        font-weight: 500;
+        text-underline-offset: 4px;
+      }
+
+      /* ---------- Footer ---------- */
+      footer {
+        margin-top: 32px;
+        border-top: 1px solid var(--rule);
+      }
+      footer .wrap {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 12px 24px;
+        padding-top: 22px;
+        padding-bottom: 32px;
+        font-size: 14px;
+      }
+      footer ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px 20px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      /* ---------- Responsive ---------- */
+      .keys.two {
+        grid-template-columns: 1fr 1fr !important;
+      }
+      @media (max-width: 1080px) {
+        .hero {
+          grid-template-columns: 1fr;
+          gap: 32px;
+        }
+        .plate {
+          max-width: 520px;
+        }
+        .chassis-body {
+          grid-template-columns: 1fr;
+        }
+        .controls {
+          display: grid;
+          grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+          align-items: start;
+        }
+        .keys {
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+        .jacks {
+          grid-template-columns: 1fr 1fr;
+        }
+        .lower {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (max-width: 720px) {
+        body {
+          font-size: 16px;
+        }
+        .wrap {
+          padding: 0 16px;
+        }
+        .topbar .wrap {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 8px;
+          padding-top: 14px;
+          padding-bottom: 10px;
+        }
+        .nav {
+          gap: 2px 16px;
+          font-size: 14px;
+        }
+        .hero {
+          padding-block: 32px 28px;
+        }
+        h1 {
+          font-size: 40px;
+          line-height: 1.04;
+        }
+        .sub {
+          font-size: 18px;
+          margin-top: 18px;
+        }
+        .chassis {
+          border-radius: 14px;
+          margin: 0 -6px;
+        }
+        .chassis-head {
+          padding: 12px 14px;
+        }
+        .chassis-body {
+          padding: 12px;
+          gap: 16px;
+        }
+        .display {
+          padding: 6px;
+        }
+        .scr-bar {
+          padding: 8px 10px;
+          font-size: 11px;
+          gap: 4px 10px;
+        }
+        .scr-ctx {
+          display: none;
+        }
+        .grat {
+          min-height: 150px;
+        }
+        .stages li {
+          padding: 10px 8px 12px;
+        }
+        .stages .idx {
+          font-size: 10px;
+          letter-spacing: 0.04em;
+        }
+        .stages strong {
+          font-size: 15px;
+        }
+        .stages .cap {
+          font-size: 12px;
+        }
+        .stages .arrow {
+          display: none;
+        }
+        .brief {
+          padding: 12px 10px 14px;
+        }
+        .brief h3 {
+          font-size: 18px;
+        }
+        .brief p {
+          font-size: 15px;
+        }
+        .meas {
+          grid-template-columns: 1fr 1fr;
+        }
+        .meas div {
+          padding: 8px 10px;
+        }
+        .meas div:nth-child(3) {
+          border-left: 0;
+        }
+        .meas div:nth-child(n + 3) {
+          border-top: 1px solid var(--scr-grid);
+        }
+        .controls {
+          grid-template-columns: 1fr;
+          gap: 14px;
+        }
+        .key {
+          min-height: 66px;
+          padding: 9px 8px 8px;
+        }
+        .key .led {
+          top: 10px;
+          right: 8px;
+          width: 8px;
+          height: 8px;
+        }
+        .key .kn {
+          font-size: 12px;
+        }
+        .plate div {
+          grid-template-columns: 64px 1fr;
+          gap: 10px;
+          padding: 9px 12px;
+        }
+        .hint {
+          display: none;
+        }
+        .inputs {
+          padding: 14px 12px 14px;
+        }
+        .jacks {
+          grid-template-columns: 1fr;
+          gap: 8px;
+        }
+        .jack {
+          grid-template-columns: 32px 1fr;
+          padding: 12px;
+        }
+        .bnc {
+          width: 32px;
+          height: 32px;
+          border-width: 2.5px;
+          background: radial-gradient(circle, var(--ink) 0 3px, var(--cap) 4px 8px, #d9d8d0 9px);
+        }
+        .jack h3 {
+          font-size: 17px;
+        }
+        .bench li {
+          grid-template-columns: 48px minmax(0, 1fr);
+        }
+        .bench .state {
+          grid-column: 2;
+        }
+        .lower {
+          padding-top: 32px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .sweep,
+        .probe i {
+          animation: none;
+        }
+        .sweep {
+          display: none;
+        }
+        .key,
+        .stages li {
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="wrap">
+        <a class="brand" href="#">
+          <span class="brand-mark" aria-hidden="true">JV</span>
+          Jomari Villanueva
+        </a>
+        <nav aria-label="Main">
+          <ul class="nav">
+            <li>
+              <a href="#"><span class="code" style="color: var(--ch1)">CH1</span>Automation</a>
+            </li>
+            <li>
+              <a href="#"><span class="code" style="color: var(--ch2)">CH2</span>Research</a>
+            </li>
+            <li>
+              <a href="#"><span class="code" style="color: var(--ch3)">CH3</span>Policy</a>
+            </li>
+            <li>
+              <a href="#"><span class="code" style="color: var(--ch4)">CH4</span>Teaching</a>
+            </li>
+            <li><a href="#">Logs</a></li>
+            <li><a href="#">About</a></li>
+            <li><a class="contact" href="mailto:jomarifrancis.villanueva@g.msuiit.edu.ph">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="wrap hero" aria-labelledby="hero-title">
+        <div>
+          <p class="readout">
+            <span class="coord"><b>8.23°N 124.24°E</b> · ILIGAN CITY, PH</span>
+            <span class="clock" id="clock">UTC+8 · PHT</span>
+          </p>
+          <h1 id="hero-title">
+            I build AI systems <span class="dash">—</span> and study how they land in society.
+          </h1>
+          <p class="sub">I'm Jomari. I wire up workflows, sensors, and classrooms in Iligan City.</p>
+        </div>
+        <dl class="plate" aria-label="Who is operating this instrument">
+          <div>
+            <dt>Role</dt>
+            <dd>Assistant Professor I, MSU-IIT</dd>
+          </div>
+          <div>
+            <dt>Also</dt>
+            <dd>Head, PCETT (tech policy center)</dd>
+          </div>
+          <div>
+            <dt>Trainer</dt>
+            <dd>AI READY ASEAN Master Trainer</dd>
+          </div>
+          <div>
+            <dt>Next</dt>
+            <dd><span class="todo">[Needs input: PhD timing / target programs]</span></dd>
+          </div>
+        </dl>
+      </section>
+
+      <div class="wrap">
+        <section class="chassis" aria-labelledby="scope-title">
+          <div class="chassis-head">
+            <div class="model">
+              <strong id="scope-title">JV-4 Field Scope</strong>
+              <span class="label">4 channels · 1 operator</span>
+            </div>
+            <div class="cal">
+              <span class="label">Last calibrated</span>
+              <span class="sticker">CAL 2026-10-11</span>
+            </div>
+          </div>
+
+          <div class="chassis-body">
+            <!-- Display -->
+            <div class="display" id="display" data-ch="1">
+              <div class="screen" id="screen" data-run="run">
+                <div class="scr-bar">
+                  <span class="scr-ch" id="scr-ch">CH1</span>
+                  <span class="scr-name" id="scr-name">Automation</span>
+                  <span class="scr-ctx" id="scr-ctx">Future AI Lab / BrandNat</span>
+                  <span class="scr-state" role="status" id="scr-state"
+                    ><i aria-hidden="true"></i><span>Run</span></span
+                  >
+                </div>
+                <div class="grat" aria-hidden="true">
+                  <svg viewBox="0 0 1000 400" preserveAspectRatio="none">
+                    <path
+                      class="trace"
+                      data-tr="1"
+                      d="M0 265 L4 329.3 L8 285.4 L12 280.1 L16 315.6 L20 302.2 L24 288.5 L28 316.8 L32 316.9 L36 302.8 L40 312.1 L44 308.8 L48 320.4 L52 283.5 L56 292 L60 313.1 L64 312.4 L68 272.3 L72 311.3 L76 298 L80 325.6 L84 318.5 L88 277.5 L92 300.8 L96 324.9 L100 311 L104 308.3 L108 304.4 L112 323.5 L116 323.1 L120 292.8 L124 290.9 L128 318.6 L132 290.8 L136 281.2 L140 289.1 L144 296.2 L148 289.2 L152 322.9 L156 303 L160 311.8 L164 319.2 L168 277.8 L172 288.7 L176 303 L180 300.4 L184 296.2 L188 285.2 L192 319.5 L196 279 L200 293.7 L204 292.8 L208 307.5 L212 319.2 L216 300.7 L220 285.2 L224 295.9 L228 290.6 L232 294.2 L236 296.8 L240 293 L244 301.3 L248 304.7 L252 289.2 L256 316.3 L260 298.3 L264 314.2 L268 305.2 L272 305.1 L276 300.6 L280 300.2 L284 307 L288 316 L292 296.3 L296 307.4 L300 291.3 L304 303 L308 294.9 L312 294.3 L316 296.4 L320 309.6 L333 300 L345 270 L345 136 L349 150 L371 150 L371 270 L397 270 L397 270 L397 136 L401 150 L423 150 L423 270 L449 270 L449 270 L449 150 L453 150 L475 150 L475 270 L501 270 L501 270 L501 150 L505 150 L527 150 L527 270 L553 270 L553 270 L553 150 L557 150 L579 150 L579 270 L605 270 L605 270 L605 150 L609 150 L631 150 L631 270 L657 270 L666 270 L672 110 L678 92 L686 104 L694 98 L704 100 L1000 100"
+                    />
+                    <path
+                      class="trace"
+                      data-tr="2"
+                      d="M0 200 L5 211.3 L10 222.4 L15 233.1 L20 243.3 L25 252.8 L30 261.4 L35 269 L40 275.5 L45 280.7 L50 284.7 L55 287.3 L60 288.4 L65 288.2 L70 286.6 L75 283.5 L80 279.2 L85 273.7 L90 267 L95 259.3 L100 250.7 L105 241.4 L110 231.5 L115 221.1 L120 210.6 L125 200 L130 189.5 L135 179.3 L140 169.5 L145 160.4 L150 151.9 L155 144.4 L160 137.8 L165 132.3 L170 127.9 L175 124.8 L180 122.9 L185 122.2 L190 122.8 L195 124.6 L200 127.6 L205 131.7 L210 136.8 L215 142.8 L220 149.6 L225 157.1 L230 165.1 L235 173.6 L240 182.3 L245 191.2 L250 200 L255 208.7 L260 217 L265 224.9 L270 232.3 L275 239.1 L280 245 L285 250.2 L290 254.4 L295 257.7 L300 260.1 L305 261.4 L310 261.8 L315 261.1 L320 259.5 L325 257 L330 253.7 L335 249.6 L340 244.8 L345 239.4 L350 233.5 L355 227.2 L360 220.5 L365 213.7 L370 206.9 L375 200 L380 193.3 L385 186.8 L390 180.6 L395 174.9 L400 169.6 L405 165 L410 160.9 L415 157.5 L420 154.9 L425 152.9 L430 151.8 L435 151.4 L440 151.7 L445 152.8 L450 154.6 L455 157.1 L460 160.2 L465 163.9 L470 168.1 L475 172.8 L480 177.8 L485 183.1 L490 188.6 L495 194.3 L500 200 L505 205.7 L510 211.2 L515 216.6 L520 221.7 L525 226.5 L530 230.8 L535 234.7 L540 238 L545 240.8 L550 242.9 L555 244.4 L560 245.2 L565 245.3 L570 244.7 L575 243.4 L580 241.5 L585 238.8 L590 235.6 L595 231.8 L600 227.4 L605 222.6 L610 217.4 L615 211.8 L620 206 L625 200 L630 193.9 L635 187.9 L640 181.9 L645 176.1 L650 170.6 L655 165.5 L660 160.8 L665 156.6 L670 153.1 L675 150.3 L680 148.1 L685 146.8 L690 146.3 L695 146.6 L700 147.8 L705 149.8 L710 152.7 L715 156.4 L720 160.9 L725 166 L730 171.9 L735 178.3 L740 185.2 L745 192.5 L750 200 L755 207.7 L760 215.4 L765 223.1 L770 230.5 L775 237.7 L780 244.3 L785 250.4 L790 255.8 L795 260.3 L800 264.1 L805 266.8 L810 268.5 L815 269.2 L820 268.8 L825 267.2 L830 264.5 L835 260.8 L840 255.9 L845 250.1 L850 243.4 L855 235.9 L860 227.7 L865 218.8 L870 209.6 L875 200 L880 190.3 L885 180.6 L890 171 L895 161.8 L900 153.1 L905 145 L910 137.6 L915 131.2 L920 125.8 L925 121.6 L930 118.5 L935 116.7 L940 116.3 L945 117.1 L950 119.4 L955 122.9 L960 127.7 L965 133.7 L970 140.9 L975 149 L980 158.1 L985 167.8 L990 178.2 L995 189 L1000 200"
+                    />
+                    <path
+                      class="trace"
+                      data-tr="3"
+                      d="M0 280 L100 280 L100 280 L200 280 L200 200 L300 200 L300 200 L400 200 L400 240 L500 240 L500 140 L600 140 L600 140 L700 140 L700 160 L800 160 L800 120 L900 120 L900 120 L1000 120"
+                    />
+                    <path
+                      class="trace"
+                      data-tr="4"
+                      d="M0 300 L180 180 L200 280 L200 278 L380 158 L400 258 L400 256 L580 136 L600 236 L600 234 L780 114 L800 214 L800 212 L980 92 L1000 192"
+                    />
+                  </svg>
+                  <span class="cursor" style="left: 33.3%"><span>A · in</span></span>
+                  <span class="cursor" style="left: 66.6%"><span>B · out</span></span>
+                  <span class="gnd" id="gnd">1▸</span>
+                  <span class="scale" id="scale">noise → structure → signal</span>
+                  <span class="sweep"></span>
+                </div>
+
+                <!-- CH1 panel: the automation showcase -->
+                <div class="panel" id="panel-1" role="tabpanel" aria-labelledby="key-1">
+                  <ol class="stages" aria-label="Workflow: Research to AI workflow to Content">
+                    <li>
+                      <span class="idx">01 · INPUT</span>
+                      <strong>Research</strong>
+                      <span class="cap">Gather context</span>
+                      <span class="arrow" aria-hidden="true">▶</span>
+                    </li>
+                    <li>
+                      <span class="idx">02 · PROCESS</span>
+                      <strong>AI workflow</strong>
+                      <span class="cap">Connect &amp; create</span>
+                      <span class="arrow" aria-hidden="true">▶</span>
+                    </li>
+                    <li>
+                      <span class="idx">03 · OUTPUT</span>
+                      <strong>Content</strong>
+                      <span class="cap">Ready for review</span>
+                    </li>
+                  </ol>
+                  <dl class="meas">
+                    <div>
+                      <dt>Source</dt>
+                      <dd class="hl">CH1 Automation</dd>
+                    </div>
+                    <div>
+                      <dt>Context</dt>
+                      <dd>Future AI Lab</dd>
+                    </div>
+                    <div>
+                      <dt>Stages</dt>
+                      <dd>3 · in → out</dd>
+                    </div>
+                    <div>
+                      <dt>Workflow</dt>
+                      <dd>
+                        01 /
+                        <span class="todo" style="font-size: 11px; padding: 0 5px">[Needs input: 2–4]</span>
+                      </dd>
+                    </div>
+                  </dl>
+                </div>
+
+                <div class="panel" id="panel-2" role="tabpanel" aria-labelledby="key-2" hidden>
+                  <div class="brief">
+                    <h3>Research</h3>
+                    <p>Societal computing: how sensing and AI land in communities.</p>
+                  </div>
+                  <dl class="meas">
+                    <div>
+                      <dt>Source</dt>
+                      <dd class="hl">CH2 Research</dd>
+                    </div>
+                    <div>
+                      <dt>Latest</dt>
+                      <dd>ACDSA 2026 · oral</dd>
+                    </div>
+                    <div>
+                      <dt>Signal</dt>
+                      <dd>LoRa PM2.5 sensing</dd>
+                    </div>
+                    <div>
+                      <dt>Route</dt>
+                      <dd>/research/</dd>
+                    </div>
+                  </dl>
+                </div>
+
+                <div class="panel" id="panel-3" role="tabpanel" aria-labelledby="key-3" hidden>
+                  <div class="brief">
+                    <h3>Policy</h3>
+                    <p>Helping institutions decide how to adopt technology.</p>
+                  </div>
+                  <dl class="meas">
+                    <div>
+                      <dt>Source</dt>
+                      <dd class="hl">CH3 Policy</dd>
+                    </div>
+                    <div>
+                      <dt>Center</dt>
+                      <dd>PCETT · MSU-IIT</dd>
+                    </div>
+                    <div>
+                      <dt>Latest</dt>
+                      <dd>AI Ready ASEAN · 29 Apr 2026</dd>
+                    </div>
+                    <div>
+                      <dt>Route</dt>
+                      <dd>/policy/</dd>
+                    </div>
+                  </dl>
+                </div>
+
+                <div class="panel" id="panel-4" role="tabpanel" aria-labelledby="key-4" hidden>
+                  <div class="brief">
+                    <h3>Teaching</h3>
+                    <p>Computing courses and AI literacy training.</p>
+                  </div>
+                  <dl class="meas">
+                    <div>
+                      <dt>Source</dt>
+                      <dd class="hl">CH4 Teaching</dd>
+                    </div>
+                    <div>
+                      <dt>Courses</dt>
+                      <dd>IoT · Robotics · +5</dd>
+                    </div>
+                    <div>
+                      <dt>Training</dt>
+                      <dd>AI READY ASEAN</dd>
+                    </div>
+                    <div>
+                      <dt>Route</dt>
+                      <dd>/teaching/</dd>
+                    </div>
+                  </dl>
+                </div>
+              </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="controls">
+              <div class="group">
+                <span class="label" id="ch-label">Channel</span>
+                <div class="keys" role="tablist" aria-labelledby="ch-label">
+                  <button
+                    class="key key-1"
+                    id="key-1"
+                    role="tab"
+                    aria-selected="true"
+                    aria-controls="panel-1"
+                    data-ch="1"
+                  >
+                    <span class="led" aria-hidden="true"></span><span class="kc">CH1</span
+                    ><span class="kn">Automation</span>
+                  </button>
+                  <button
+                    class="key key-2"
+                    id="key-2"
+                    role="tab"
+                    aria-selected="false"
+                    aria-controls="panel-2"
+                    tabindex="-1"
+                    data-ch="2"
+                  >
+                    <span class="led" aria-hidden="true"></span><span class="kc">CH2</span
+                    ><span class="kn">Research</span>
+                  </button>
+                  <button
+                    class="key key-3"
+                    id="key-3"
+                    role="tab"
+                    aria-selected="false"
+                    aria-controls="panel-3"
+                    tabindex="-1"
+                    data-ch="3"
+                  >
+                    <span class="led" aria-hidden="true"></span><span class="kc">CH3</span
+                    ><span class="kn">Policy</span>
+                  </button>
+                  <button
+                    class="key key-4"
+                    id="key-4"
+                    role="tab"
+                    aria-selected="false"
+                    aria-controls="panel-4"
+                    tabindex="-1"
+                    data-ch="4"
+                  >
+                    <span class="led" aria-hidden="true"></span><span class="kc">CH4</span
+                    ><span class="kn">Teaching</span>
+                  </button>
+                </div>
+              </div>
+              <div class="group">
+                <span class="label">Acquire</span>
+                <div class="keys two">
+                  <button class="key wide" id="single" type="button">
+                    <span class="kc">▶</span><span class="kn">Single run</span>
+                  </button>
+                  <button class="key wide" id="runstop" type="button" aria-pressed="false">
+                    <span class="kc">❚❚</span><span class="kn">Hold</span>
+                  </button>
+                </div>
+              </div>
+              <a class="open" id="open" href="#">
+                <span>Open <span id="open-name">Automation</span></span>
+                <span class="route" id="open-route">/automation/ ↗</span>
+              </a>
+              <p class="hint">
+                Press <kbd>1</kbd>–<kbd>4</kbd> to switch channel. <kbd>Space</kbd> on Single run steps the
+                workflow.
+              </p>
+            </div>
+          </div>
+
+          <!-- Inputs: the four channel entry points -->
+          <div class="inputs">
+            <p class="label">Inputs — four channels, one person</p>
+            <ul class="jacks">
+              <li>
+                <a class="jack" href="#" style="--c: var(--ch1)">
+                  <span class="bnc" aria-hidden="true"></span>
+                  <span class="kc">CH1</span>
+                  <h3><span>Automation</span></h3>
+                  <p>AI workflows and agents I build for real work.</p>
+                </a>
+              </li>
+              <li>
+                <a class="jack" href="#" style="--c: var(--ch2)">
+                  <span class="bnc" aria-hidden="true"></span>
+                  <span class="kc">CH2</span>
+                  <h3><span>Research</span></h3>
+                  <p>Societal computing: how sensing and AI land in communities.</p>
+                </a>
+              </li>
+              <li>
+                <a class="jack" href="#" style="--c: var(--ch3)">
+                  <span class="bnc" aria-hidden="true"></span>
+                  <span class="kc">CH3</span>
+                  <h3><span>Policy</span></h3>
+                  <p>Helping institutions decide how to adopt technology.</p>
+                </a>
+              </li>
+              <li>
+                <a class="jack" href="#" style="--c: var(--ch4)">
+                  <span class="bnc" aria-hidden="true"></span>
+                  <span class="kc">CH4</span>
+                  <h3><span>Teaching</span></h3>
+                  <p>Computing courses and AI literacy training.</p>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </section>
+      </div>
+
+      <div class="wrap lower">
+        <section aria-labelledby="bench-title">
+          <div class="sec-head">
+            <h2 id="bench-title">On the bench</h2>
+            <span class="label">Probes attached: 2</span>
+          </div>
+          <ul class="bench">
+            <li>
+              <span class="probe"><i aria-hidden="true"></i>P1</span>
+              <span class="todo">[Needs input: bench item 1 — what you're building now]</span>
+              <span class="state">Pending</span>
+            </li>
+            <li>
+              <span class="probe"><i aria-hidden="true"></i>P2</span>
+              <span class="todo">[Needs input: bench item 2 — what you're testing or reading]</span>
+              <span class="state">Pending</span>
+            </li>
+          </ul>
+        </section>
+
+        <section class="log" aria-labelledby="log-title">
+          <div class="log-head">
+            <span class="label" id="log-title">Latest log · saved trace REF-A</span>
+            <span class="label">Logs</span>
+          </div>
+          <div class="log-body">
+            <div class="row">
+              <span class="label">Date</span>
+              <span><span class="todo">[Needs input: log date]</span></span>
+            </div>
+            <div class="row">
+              <span class="label">Title</span>
+              <span><span class="todo">[Needs input: first build-log title]</span></span>
+            </div>
+            <div class="row">
+              <span class="label">Note</span>
+              <span><span class="todo">[Needs input: one-line summary — what worked, what broke]</span></span>
+            </div>
+          </div>
+          <div class="log-foot">
+            <a class="text-link" href="#">All build logs <span aria-hidden="true">↗</span></a>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      <div class="wrap">
+        <span class="mono" style="font-size: 13px; color: var(--muted)"
+          >8.23°N 124.24°E · ILIGAN CITY, PH · CAL 2026-10-11</span
+        >
+        <ul>
+          <li><a href="mailto:jomarifrancis.villanueva@g.msuiit.edu.ph">Email</a></li>
+          <li><a href="https://github.com/JomVill">GitHub</a></li>
+          <li><a href="https://www.linkedin.com/in/jomari-francis-villanueva-63a5a1aa/">LinkedIn</a></li>
+          <li>
+            <a href="https://scholar.google.com/citations?user=sddXKAgAAAAJ&amp;hl=en&amp;oi=ao"
+              >Google Scholar</a
+            >
+          </li>
+        </ul>
+      </div>
+    </footer>
+
+    <script>
+      (() => {
+        const ch = {
+          1: {
+            name: 'Automation',
+            ctx: 'Future AI Lab / BrandNat',
+            route: '/automation/',
+            scale: 'noise → structure → signal',
+          },
+          2: {
+            name: 'Research',
+            ctx: 'MSU-IIT · societal computing',
+            route: '/research/',
+            scale: 'sensing · periodic',
+          },
+          3: { name: 'Policy', ctx: 'PCETT · IPIL', route: '/policy/', scale: 'slow steps · settles' },
+          4: {
+            name: 'Teaching',
+            ctx: 'MSU-IIT · CCS',
+            route: '/teaching/',
+            scale: 'ramp · each cycle higher',
+          },
+        };
+        const display = document.getElementById('display');
+        const screen = document.getElementById('screen');
+        const tabs = [...document.querySelectorAll('[role="tab"]')];
+        const single = document.getElementById('single');
+        const runstop = document.getElementById('runstop');
+        const stateText = document.querySelector('#scr-state span');
+        const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+        let timers = [];
+        let cur = 1;
+        const $ = (id) => document.getElementById(id);
+
+        function clearRun() {
+          timers.forEach(clearTimeout);
+          timers = [];
+          delete screen.dataset.stage;
+          single.disabled = cur !== 1;
+          stateText.textContent = screen.dataset.run === 'stop' ? 'Hold' : 'Run';
+        }
+        function select(n) {
+          cur = n;
+          display.dataset.ch = n;
+          tabs.forEach((t) => {
+            const on = t.dataset.ch == n;
+            t.setAttribute('aria-selected', on);
+            t.tabIndex = on ? 0 : -1;
+            $('panel-' + t.dataset.ch).hidden = !on;
+          });
+          $('scr-ch').textContent = 'CH' + n;
+          $('scr-name').textContent = ch[n].name;
+          $('scr-ctx').textContent = ch[n].ctx;
+          $('scale').textContent = ch[n].scale;
+          $('gnd').textContent = n + '▸';
+          $('open-name').textContent = ch[n].name;
+          $('open-route').textContent = ch[n].route + ' ↗';
+          clearRun();
+        }
+        tabs.forEach((t, i) => {
+          t.addEventListener('click', () => select(+t.dataset.ch));
+          t.addEventListener('keydown', (e) => {
+            const k = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
+            if (!k) return;
+            e.preventDefault();
+            const next = (i + k + tabs.length) % tabs.length;
+            select(next + 1);
+            tabs[next].focus();
+          });
+        });
+        document.addEventListener('keydown', (e) => {
+          if (e.target.closest('input, textarea') || e.metaKey || e.ctrlKey || e.altKey) return;
+          if (/^[1-4]$/.test(e.key)) select(+e.key);
+        });
+        single.addEventListener('click', () => {
+          clearRun();
+          if (reduce.matches) {
+            screen.dataset.stage = '3';
+            stateText.textContent = 'Research → AI workflow → Content';
+            return;
+          }
+          single.disabled = true;
+          const steps = ['01 Input', '02 Process', '03 Output · ready for review'];
+          steps.forEach((s, i) =>
+            timers.push(
+              setTimeout(() => {
+                screen.dataset.stage = String(i + 1);
+                stateText.textContent = "Trig'd " + s;
+                if (i === 2) single.disabled = false;
+              }, i * 700),
+            ),
+          );
+        });
+        runstop.addEventListener('click', () => {
+          const hold = screen.dataset.run !== 'stop';
+          screen.dataset.run = hold ? 'stop' : 'run';
+          runstop.setAttribute('aria-pressed', hold);
+          runstop.querySelector('.kn').textContent = hold ? 'Resume' : 'Hold';
+          runstop.querySelector('.kc').textContent = hold ? '▶▶' : '❚❚';
+          if (!screen.dataset.stage) stateText.textContent = hold ? 'Hold' : 'Run';
+        });
+        const clock = $('clock');
+        const tick = () => {
+          const t = new Intl.DateTimeFormat('en-GB', {
+            timeZone: 'Asia/Manila',
+            hour: '2-digit',
+            minute: '2-digit',
+          }).format(new Date());
+          clock.textContent = 'UTC+8 · ' + t + ' PHT';
+        };
+        tick();
+        setInterval(tick, 30000);
+      })();
+    </script>
+  </body>
+</html>
