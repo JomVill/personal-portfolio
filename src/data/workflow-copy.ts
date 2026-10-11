@@ -10,7 +10,12 @@ export type WorkflowCopy = {
   mainPath?: string[];
   /** Node name → short plain-English label. */
   labels?: Record<string, string>;
-  beats?: { label: string; text: string }[];
+  /**
+   * Featured-diagram story beats, in order. `through` is the last main-path step (1-based)
+   * covered by the beat; the first beat starts at step 1 and each later beat starts right after
+   * the previous one. The last beat's `through` must equal the main path's length.
+   */
+  beats?: { label: string; text: string; through: number }[];
   /** Plain-English "How it runs" list on the detail page. */
   steps: string[];
   /** Node name → short label for the full diagram on the detail page. */
@@ -86,10 +91,10 @@ export const workflowCopy: Record<string, WorkflowCopy> = {
       'Create Invoice': 'Send invoice',
     },
     beats: [
-      { label: 'Inquiry comes in', text: 'A partner emails. No one has to watch the inbox.' },
-      { label: 'AI does the first read', text: 'Serious leads are sorted from the noise.' },
-      { label: 'You make the call', text: 'One click in Slack. Nothing moves without you.' },
-      { label: 'The rest runs itself', text: 'CRM, contract, reminders, and invoice.' },
+      { label: 'Inquiry comes in', text: 'A partner emails. No one has to watch the inbox.', through: 1 },
+      { label: 'AI does the first read', text: 'Serious leads are sorted from the noise.', through: 3 },
+      { label: 'You make the call', text: 'One click in Slack. Nothing moves without you.', through: 5 },
+      { label: 'The rest runs itself', text: 'CRM, contract, reminders, and invoice.', through: 10 },
     ],
   },
   'shift-timesheet-reminders-ai-validation': {
@@ -252,6 +257,143 @@ export const workflowCopy: Record<string, WorkflowCopy> = {
       'Find Contact In HubSpot': 'Find contact',
       'Schedule Google Meet': 'Book meeting',
       'Confirm In Slack': 'Confirm',
+    },
+  },
+  'content-pipeline-1-daily-story-scout-score-and-vote': {
+    title: 'Your best stories, found and scored every morning',
+    summary:
+      'AI pulls stories from Hacker News, Reddit, and the web, scores them, and you pick the keepers in Slack.',
+    tools: ['Hacker News', 'Reddit', 'OpenAI', 'Slack', 'Google Sheets'],
+    order: 9,
+    steps: [
+      'Every morning, it pulls new stories from Hacker News, Reddit, and a web search.',
+      'Duplicates are removed and the list is trimmed.',
+      'AI scores every story.',
+      'Only stories above your score threshold continue.',
+      'You get each one in Slack with Keep or Kill.',
+      'Your vote is logged in Google Sheets.',
+      'Kept stories are sent to the content generator.',
+    ],
+    fullLabels: {
+      'Every Morning': 'Every morning',
+      'Pipeline Settings': 'Settings',
+      'Fetch Hacker News': 'Hacker News',
+      'Fetch Reddit': 'Reddit',
+      'Fetch Web Search': 'Web search',
+      'Normalize Hacker News': 'Clean up',
+      'Normalize Reddit': 'Clean up',
+      'Normalize Web Search': 'Clean up',
+      'Combine Sources': 'Combine',
+      'Dedupe And Limit': 'Remove repeats',
+      'AI Score Story': 'AI scores it',
+      'Keep Stories Above Threshold': 'Worth it?',
+      'Ask Human To Vote In Slack': 'You vote',
+      'Log Vote': 'Log vote',
+      'Was It Kept?': 'Kept?',
+      'Send To Content Generator': 'Make content',
+    },
+    control: 'Nothing moves forward until you vote Keep in Slack.',
+    mainPath: [
+      'Every Morning',
+      'Fetch Hacker News',
+      'Combine Sources',
+      'Dedupe And Limit',
+      'AI Score Story',
+      'Keep Stories Above Threshold',
+      'Ask Human To Vote In Slack',
+      'Log Vote',
+      'Was It Kept?',
+      'Send To Content Generator',
+    ],
+    labels: {
+      'Every Morning': 'Every morning',
+      'Fetch Hacker News': 'Pull stories',
+      'Combine Sources': 'Combine',
+      'Dedupe And Limit': 'Remove repeats',
+      'AI Score Story': 'AI scores it',
+      'Keep Stories Above Threshold': 'Worth it?',
+      'Ask Human To Vote In Slack': 'You vote',
+      'Log Vote': 'Log vote',
+      'Was It Kept?': 'Kept?',
+      'Send To Content Generator': 'Make content',
+    },
+    beats: [
+      { label: 'Stories come in', text: 'Hacker News, Reddit, and the web, every morning.', through: 4 },
+      { label: 'AI does the first read', text: 'Each story gets a score. Weak ones drop out.', through: 6 },
+      { label: 'You make the call', text: 'Keep or Kill, one tap in Slack.', through: 7 },
+      {
+        label: 'The rest runs itself',
+        text: 'Kept stories become scripts. Your votes teach the AI.',
+        through: 10,
+      },
+    ],
+  },
+  'content-pipeline-2-content-package-generator': {
+    title: 'A story in, a ready-to-film script out',
+    summary:
+      'AI writes a research brief, a script with hook and captions, reviews it, and saves it to Notion.',
+    tools: ['OpenAI', 'Notion', 'Slack'],
+    order: 10,
+    steps: [
+      'A kept story arrives from the Story Scout.',
+      'Your brand voice and style are applied.',
+      'AI writes a deep-dive brief.',
+      'AI writes a script with a hook and captions.',
+      'A second AI pass reviews the script.',
+      'Everything is saved to a Notion page.',
+      'The team gets a Slack message.',
+    ],
+    fullLabels: {
+      'Kept Story Webhook': 'Kept story',
+      'Voice And Style': 'Your voice',
+      'AI Deep Dive': 'AI research',
+      'AI Write Script': 'AI writes script',
+      'AI Review Script': 'AI reviews',
+      'Save To Notion': 'Save to Notion',
+      'Tell Team In Slack': 'Tell the team',
+    },
+    control: "The team reviews every script in Notion before it's used.",
+  },
+  'content-pipeline-3-weekly-preference-learning': {
+    title: 'An AI that learns your taste',
+    summary: 'Every Sunday, AI studies your Keep and Kill votes and suggests better scoring rules.',
+    tools: ['Google Sheets', 'OpenAI', 'Slack'],
+    order: 11,
+    steps: [
+      "Every Sunday, it reads the week's votes.",
+      'The votes are summarized.',
+      'AI looks for patterns in what you kept and killed.',
+      'A learning report is posted in Slack.',
+      "If the scout's accuracy drops below 60%, you get an alert.",
+    ],
+    fullLabels: {
+      'Every Sunday 9 AM': 'Every Sunday',
+      'Read Vote Log': 'Read votes',
+      'Summarize Votes': 'Summarize',
+      'AI Find Patterns': 'AI finds patterns',
+      'Post Weekly Learning Report': 'Post report',
+      'Accuracy Below 60 Percent?': 'Accuracy low?',
+      'Send Accuracy Alert': 'Alert',
+    },
+    control: 'New scoring rules only go live after you approve them.',
+  },
+  'content-pipeline-4-monthly-performance-review': {
+    title: 'A monthly check-up on your content engine',
+    summary: "On the 1st of each month, AI reviews the month's votes and suggests changes to the scoring.",
+    tools: ['Google Sheets', 'OpenAI', 'Slack'],
+    order: 12,
+    steps: [
+      'On the 1st of each month, it reads the last 30 days of votes.',
+      'The month is summarized.',
+      "AI reviews what worked and what didn't.",
+      'Suggested scoring changes are posted in Slack.',
+    ],
+    fullLabels: {
+      '1st Of Month 9 AM': '1st of month',
+      'Read Vote Log': 'Read votes',
+      'Summarize Month': 'Summarize',
+      'AI Monthly Review': 'AI review',
+      'Post Monthly Review': 'Post review',
     },
   },
 };

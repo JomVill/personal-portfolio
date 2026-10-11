@@ -146,6 +146,488 @@
     ]
   },
   {
+    "id": "content-pipeline-1-daily-story-scout-score-and-vote",
+    "name": "Content Pipeline 1 - Daily Story Scout, Score and Vote",
+    "nodes": [
+      {
+        "name": "Every Morning",
+        "type": "scheduleTrigger",
+        "position": [0, 0]
+      },
+      {
+        "name": "Pipeline Settings",
+        "type": "set",
+        "position": [224, 0]
+      },
+      {
+        "name": "Fetch Hacker News",
+        "type": "httpRequest",
+        "position": [464, -160]
+      },
+      {
+        "name": "Fetch Reddit",
+        "type": "httpRequest",
+        "position": [464, 0]
+      },
+      {
+        "name": "Fetch Web Search",
+        "type": "httpRequest",
+        "position": [464, 160]
+      },
+      {
+        "name": "Normalize Hacker News",
+        "type": "code",
+        "position": [688, -160]
+      },
+      {
+        "name": "Normalize Reddit",
+        "type": "code",
+        "position": [688, 0]
+      },
+      {
+        "name": "Normalize Web Search",
+        "type": "code",
+        "position": [688, 160]
+      },
+      {
+        "name": "Combine Sources",
+        "type": "merge",
+        "position": [912, 0]
+      },
+      {
+        "name": "Dedupe And Limit",
+        "type": "code",
+        "position": [1120, 0]
+      },
+      {
+        "name": "Score AI Model",
+        "type": "lmChatOpenAi",
+        "position": [1344, 208]
+      },
+      {
+        "name": "AI Score Story",
+        "type": "agent",
+        "position": [1344, 0]
+      },
+      {
+        "name": "Score Output Parser",
+        "type": "outputParserStructured",
+        "position": [1552, 208]
+      },
+      {
+        "name": "Keep Stories Above Threshold",
+        "type": "filter",
+        "position": [1632, 0]
+      },
+      {
+        "name": "Ask Human To Vote In Slack",
+        "type": "slack",
+        "position": [1840, 0]
+      },
+      {
+        "name": "Log Vote",
+        "type": "googleSheets",
+        "position": [2064, 0]
+      },
+      {
+        "name": "Was It Kept?",
+        "type": "if",
+        "position": [2288, 0]
+      },
+      {
+        "name": "Send To Content Generator",
+        "type": "httpRequest",
+        "position": [2512, -64]
+      }
+    ],
+    "edges": [
+      {
+        "from": "Score AI Model",
+        "to": "AI Score Story",
+        "kind": "ai_languageModel"
+      },
+      {
+        "from": "Score Output Parser",
+        "to": "AI Score Story",
+        "kind": "ai_outputParser"
+      },
+      {
+        "from": "Every Morning",
+        "to": "Pipeline Settings",
+        "kind": "main"
+      },
+      {
+        "from": "Pipeline Settings",
+        "to": "Fetch Hacker News",
+        "kind": "main"
+      },
+      {
+        "from": "Pipeline Settings",
+        "to": "Fetch Reddit",
+        "kind": "main"
+      },
+      {
+        "from": "Pipeline Settings",
+        "to": "Fetch Web Search",
+        "kind": "main"
+      },
+      {
+        "from": "Fetch Hacker News",
+        "to": "Normalize Hacker News",
+        "kind": "main"
+      },
+      {
+        "from": "Fetch Reddit",
+        "to": "Normalize Reddit",
+        "kind": "main"
+      },
+      {
+        "from": "Fetch Web Search",
+        "to": "Normalize Web Search",
+        "kind": "main"
+      },
+      {
+        "from": "Normalize Hacker News",
+        "to": "Combine Sources",
+        "kind": "main"
+      },
+      {
+        "from": "Normalize Reddit",
+        "to": "Combine Sources",
+        "kind": "main"
+      },
+      {
+        "from": "Normalize Web Search",
+        "to": "Combine Sources",
+        "kind": "main"
+      },
+      {
+        "from": "Combine Sources",
+        "to": "Dedupe And Limit",
+        "kind": "main"
+      },
+      {
+        "from": "Dedupe And Limit",
+        "to": "AI Score Story",
+        "kind": "main"
+      },
+      {
+        "from": "AI Score Story",
+        "to": "Keep Stories Above Threshold",
+        "kind": "main"
+      },
+      {
+        "from": "Keep Stories Above Threshold",
+        "to": "Ask Human To Vote In Slack",
+        "kind": "main"
+      },
+      {
+        "from": "Ask Human To Vote In Slack",
+        "to": "Log Vote",
+        "kind": "main"
+      },
+      {
+        "from": "Log Vote",
+        "to": "Was It Kept?",
+        "kind": "main"
+      },
+      {
+        "from": "Was It Kept?",
+        "to": "Send To Content Generator",
+        "kind": "main"
+      }
+    ]
+  },
+  {
+    "id": "content-pipeline-2-content-package-generator",
+    "name": "Content Pipeline 2 - Content Package Generator",
+    "nodes": [
+      {
+        "name": "Kept Story Webhook",
+        "type": "webhook",
+        "position": [0, 0]
+      },
+      {
+        "name": "Voice And Style",
+        "type": "set",
+        "position": [224, 0]
+      },
+      {
+        "name": "Deep Dive AI Model",
+        "type": "lmChatOpenAi",
+        "position": [448, 208]
+      },
+      {
+        "name": "AI Deep Dive",
+        "type": "agent",
+        "position": [448, 0]
+      },
+      {
+        "name": "Script AI Model",
+        "type": "lmChatOpenAi",
+        "position": [720, 208]
+      },
+      {
+        "name": "AI Write Script",
+        "type": "agent",
+        "position": [720, 0]
+      },
+      {
+        "name": "Script Output Parser",
+        "type": "outputParserStructured",
+        "position": [928, 208]
+      },
+      {
+        "name": "Review AI Model",
+        "type": "lmChatOpenAi",
+        "position": [1008, 208]
+      },
+      {
+        "name": "AI Review Script",
+        "type": "agent",
+        "position": [1008, 0]
+      },
+      {
+        "name": "Review Output Parser",
+        "type": "outputParserStructured",
+        "position": [1200, 208]
+      },
+      {
+        "name": "Save To Notion",
+        "type": "notion",
+        "position": [1280, 0]
+      },
+      {
+        "name": "Tell Team In Slack",
+        "type": "slack",
+        "position": [1504, 0]
+      }
+    ],
+    "edges": [
+      {
+        "from": "Deep Dive AI Model",
+        "to": "AI Deep Dive",
+        "kind": "ai_languageModel"
+      },
+      {
+        "from": "Script AI Model",
+        "to": "AI Write Script",
+        "kind": "ai_languageModel"
+      },
+      {
+        "from": "Script Output Parser",
+        "to": "AI Write Script",
+        "kind": "ai_outputParser"
+      },
+      {
+        "from": "Review AI Model",
+        "to": "AI Review Script",
+        "kind": "ai_languageModel"
+      },
+      {
+        "from": "Review Output Parser",
+        "to": "AI Review Script",
+        "kind": "ai_outputParser"
+      },
+      {
+        "from": "Kept Story Webhook",
+        "to": "Voice And Style",
+        "kind": "main"
+      },
+      {
+        "from": "Voice And Style",
+        "to": "AI Deep Dive",
+        "kind": "main"
+      },
+      {
+        "from": "AI Deep Dive",
+        "to": "AI Write Script",
+        "kind": "main"
+      },
+      {
+        "from": "AI Write Script",
+        "to": "AI Review Script",
+        "kind": "main"
+      },
+      {
+        "from": "AI Review Script",
+        "to": "Save To Notion",
+        "kind": "main"
+      },
+      {
+        "from": "Save To Notion",
+        "to": "Tell Team In Slack",
+        "kind": "main"
+      }
+    ]
+  },
+  {
+    "id": "content-pipeline-3-weekly-preference-learning",
+    "name": "Content Pipeline 3 - Weekly Preference Learning",
+    "nodes": [
+      {
+        "name": "Every Sunday 9 AM",
+        "type": "scheduleTrigger",
+        "position": [0, 0]
+      },
+      {
+        "name": "Read Vote Log",
+        "type": "googleSheets",
+        "position": [224, 0]
+      },
+      {
+        "name": "Summarize Votes",
+        "type": "code",
+        "position": [448, 0]
+      },
+      {
+        "name": "Learning AI Model",
+        "type": "lmChatOpenAi",
+        "position": [672, 208]
+      },
+      {
+        "name": "AI Find Patterns",
+        "type": "agent",
+        "position": [672, 0]
+      },
+      {
+        "name": "Learning Output Parser",
+        "type": "outputParserStructured",
+        "position": [864, 208]
+      },
+      {
+        "name": "Post Weekly Learning Report",
+        "type": "slack",
+        "position": [912, 0]
+      },
+      {
+        "name": "Accuracy Below 60 Percent?",
+        "type": "if",
+        "position": [1120, 0]
+      },
+      {
+        "name": "Send Accuracy Alert",
+        "type": "slack",
+        "position": [1344, -64]
+      }
+    ],
+    "edges": [
+      {
+        "from": "Learning AI Model",
+        "to": "AI Find Patterns",
+        "kind": "ai_languageModel"
+      },
+      {
+        "from": "Learning Output Parser",
+        "to": "AI Find Patterns",
+        "kind": "ai_outputParser"
+      },
+      {
+        "from": "Every Sunday 9 AM",
+        "to": "Read Vote Log",
+        "kind": "main"
+      },
+      {
+        "from": "Read Vote Log",
+        "to": "Summarize Votes",
+        "kind": "main"
+      },
+      {
+        "from": "Summarize Votes",
+        "to": "AI Find Patterns",
+        "kind": "main"
+      },
+      {
+        "from": "AI Find Patterns",
+        "to": "Post Weekly Learning Report",
+        "kind": "main"
+      },
+      {
+        "from": "Post Weekly Learning Report",
+        "to": "Accuracy Below 60 Percent?",
+        "kind": "main"
+      },
+      {
+        "from": "Accuracy Below 60 Percent?",
+        "to": "Send Accuracy Alert",
+        "kind": "main"
+      }
+    ]
+  },
+  {
+    "id": "content-pipeline-4-monthly-performance-review",
+    "name": "Content Pipeline 4 - Monthly Performance Review",
+    "nodes": [
+      {
+        "name": "1st Of Month 9 AM",
+        "type": "scheduleTrigger",
+        "position": [0, 0]
+      },
+      {
+        "name": "Read Vote Log",
+        "type": "googleSheets",
+        "position": [224, 0]
+      },
+      {
+        "name": "Summarize Month",
+        "type": "code",
+        "position": [448, 0]
+      },
+      {
+        "name": "Monthly AI Model",
+        "type": "lmChatOpenAi",
+        "position": [672, 208]
+      },
+      {
+        "name": "AI Monthly Review",
+        "type": "agent",
+        "position": [672, 0]
+      },
+      {
+        "name": "Monthly Output Parser",
+        "type": "outputParserStructured",
+        "position": [864, 208]
+      },
+      {
+        "name": "Post Monthly Review",
+        "type": "slack",
+        "position": [912, 0]
+      }
+    ],
+    "edges": [
+      {
+        "from": "Monthly AI Model",
+        "to": "AI Monthly Review",
+        "kind": "ai_languageModel"
+      },
+      {
+        "from": "Monthly Output Parser",
+        "to": "AI Monthly Review",
+        "kind": "ai_outputParser"
+      },
+      {
+        "from": "1st Of Month 9 AM",
+        "to": "Read Vote Log",
+        "kind": "main"
+      },
+      {
+        "from": "Read Vote Log",
+        "to": "Summarize Month",
+        "kind": "main"
+      },
+      {
+        "from": "Summarize Month",
+        "to": "AI Monthly Review",
+        "kind": "main"
+      },
+      {
+        "from": "AI Monthly Review",
+        "to": "Post Monthly Review",
+        "kind": "main"
+      }
+    ]
+  },
+  {
     "id": "create-invoice-from-hubspot-to-quickbooks",
     "name": "Create Invoice from HubSpot to QuickBooks",
     "nodes": [

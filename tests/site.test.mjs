@@ -21,7 +21,7 @@ test('workflows.json is sanitized', async () => {
   for (const bad of ['credential', 'webhookId', 'apiKey', '@', 'parameters'])
     assert.ok(!raw.includes(bad), bad);
   const data = JSON.parse(raw);
-  assert.equal(data.length, 8);
+  assert.equal(data.length, 12);
   const values = [];
   const walk = (v) => {
     if (Array.isArray(v)) v.forEach(walk);
@@ -122,7 +122,7 @@ test('homepage: hero, terminal final state, marquee, featured, cards, no CDNs', 
   assert.doesNotMatch(html, /cdn\.jsdelivr|fonts\.googleapis|fonts\.gstatic/);
 });
 
-test('work index lists all 8 workflows', async () => {
+test('work index lists all 12 workflows', async () => {
   const html = await readPage('work');
   const h1s = [...html.matchAll(/<h1[^>]*>([\s\S]*?)<\/h1>/g)];
   assert.equal(h1s.length, 1);
@@ -134,14 +134,14 @@ test('work index lists all 8 workflows', async () => {
   const links = new Set(
     [...html.matchAll(new RegExp(`href="${base}work/([a-z0-9-]+)/"`, 'g'))].map((m) => m[1]),
   );
-  assert.equal(links.size, 8);
-  assert.equal([...html.matchAll(/<article class="card/g)].length, 8);
+  assert.equal(links.size, 12);
+  assert.equal([...html.matchAll(/<article class="card/g)].length, 12);
 });
 
 test('each workflow has a detail page', async () => {
   const data = JSON.parse(await readFile('src/data/workflows.json', 'utf8'));
   const copy = await readFile('src/data/workflow-copy.ts', 'utf8');
-  assert.equal(data.length, 8);
+  assert.equal(data.length, 12);
   for (const w of data) {
     const html = await readPage(`work/${w.id}`);
     const h1s = [...html.matchAll(/<h1[^>]*>([\s\S]*?)<\/h1>/g)];
@@ -169,7 +169,7 @@ test('each workflow has a detail page', async () => {
   assert.doesNotMatch(e, /Slack Technical Issue/);
   assert.doesNotMatch(p, /Mark Inquiry As Read/);
   assert.match(copy.slice(copy.indexOf("'ai-email-classifier'")), /steps: \[/);
-  assert.equal([...copy.matchAll(/^    steps: \[/gm)].length, 8);
+  assert.equal([...copy.matchAll(/^    steps: \[/gm)].length, 12);
 });
 
 test('about, academic, cv, and 404 pages', async () => {
