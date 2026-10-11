@@ -2,25 +2,24 @@
 import Layout from '../layouts/Layout.astro';
 import { profile, experience, teaching, education, training, presentations } from '../data/profile';
 import { publications } from '../data/publications';
-import PublicationItem from '../components/PublicationItem.astro';
+import '../styles/pages.css';
 ---
 
 <Layout title="Curriculum vitae">
-  <div class="wrap cv-page">
-    <section class="page-intro">
-      <p class="eyebrow">CURRICULUM VITAE</p>
+  <div class="wrap page">
+    <header>
       <h1>{profile.academicName}</h1>
-      <p>Assistant Professor · AI Automation · Technology Policy · Applied Research</p>
-      <div class="actions">
-        <button class="button print-button" id="print-profile">
+      <p class="lede">Assistant Professor · AI Automation · Technology Policy · Applied Research</p>
+      <div class="cv-actions">
+        <button class="key key-orange key-sm" id="print-profile" type="button">
           Print / save CV as PDF
         </button>
-        <a class="text-link" href={`mailto:${profile.email}`}>
-          Email ↗
+        <a class="textlink" href={`mailto:${profile.email}`}>
+          {profile.email}
         </a>
       </div>
-    </section>
-    <section class="section cv-section">
+    </header>
+    <section>
       <h2>Profile</h2>
       <p>
         Faculty member, researcher, and technology practitioner working across AI automation, IoT, education,
@@ -28,7 +27,7 @@ import PublicationItem from '../components/PublicationItem.astro';
         systems, applied computing, and emerging technology research.
       </p>
     </section>
-    <section class="section cv-section">
+    <section>
       <h2>Professional experience</h2>
       <div>
         {experience.map((e) => (
@@ -41,7 +40,7 @@ import PublicationItem from '../components/PublicationItem.astro';
         ))}
       </div>
     </section>
-    <section class="section cv-section">
+    <section>
       <h2>Education</h2>
       <div>
         {education.map((e) => (
@@ -57,13 +56,25 @@ import PublicationItem from '../components/PublicationItem.astro';
         ))}
       </div>
     </section>
-    <section class="section">
+    <section>
       <h2>Publications</h2>
-      {publications.map((publication) => (
-        <PublicationItem publication={publication} />
+      {publications.map((p) => (
+        <article class="experience">
+          <span class="meta">
+            {p.year} · {p.type}
+          </span>
+          <h3>{p.title}</h3>
+          <p>
+            {p.authors}
+            <br />
+            {p.venue}
+            <br />
+            <a href={`https://doi.org/${p.doi}`}>DOI: {p.doi}</a>
+          </p>
+        </article>
       ))}
     </section>
-    <section class="section cv-section">
+    <section>
       <h2>Conference presentation</h2>
       <div>
         {presentations.map((p) => (
@@ -79,9 +90,9 @@ import PublicationItem from '../components/PublicationItem.astro';
         ))}
       </div>
     </section>
-    <section class="section cv-section">
+    <section>
       <h2>Teaching & technical practice</h2>
-      <div class="prose">
+      <div>
         <p>{teaching.join(' · ')}</p>
         <p>
           Zapier · n8n · APIs · LLMs · AI agent workflows · Claude Code · Codex · embedded systems · IoT
@@ -89,7 +100,7 @@ import PublicationItem from '../components/PublicationItem.astro';
         </p>
       </div>
     </section>
-    <section class="section cv-section">
+    <section>
       <h2>Training & certifications</h2>
       <div>
         {training.map((t) => (
@@ -101,7 +112,7 @@ import PublicationItem from '../components/PublicationItem.astro';
         ))}
       </div>
     </section>
-    <section class="section cv-section">
+    <section>
       <h2>Contact</h2>
       <p>
         {profile.email}

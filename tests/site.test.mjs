@@ -156,3 +156,16 @@ test('each workflow has a detail page', async () => {
   assert.match(copy.slice(copy.indexOf("'ai-email-classifier'")), /steps: \[/);
   assert.equal([...copy.matchAll(/^    steps: \[/gm)].length, 8);
 });
+
+test('about, academic, cv, and 404 pages', async () => {
+  const academic = await readPage('academic');
+  for (const doi of ['10.1109/ACDSA67686.2026.11468017', '10.1007/978-3-032-06634-3_6'])
+    assert.ok(academic.includes(`https://doi.org/${doi}`), doi);
+  assert.match(academic, /PCETT/);
+  const about = await readPage('about');
+  assert.match(about, /Jom/);
+  assert.doesNotMatch(about.match(/<main[\s\S]*<\/main>/)[0], /Jomari/);
+  assert.match(await readPage('cv'), /id="print-profile"/);
+  const nf = await readFile('dist/404.html', 'utf8');
+  assert.equal((nf.match(/<h1[\s>]/g) || []).length, 1);
+});

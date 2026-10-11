@@ -102,3 +102,33 @@ export const presentations = [
     date: '5–7 February 2026',
   },
 ];
+export const engagements = [
+  {
+    title: 'AI Ready ASEAN National Policy Convening',
+    date: '29 April 2026',
+    role: 'Panelist · DICT Headquarters, Quezon City',
+    text: 'Contributed perspectives on AI literacy in education, community engagement, and AI adoption in Mindanao.',
+    url: 'https://www.msuiit.edu.ph/news/news-detail.php?id=2477',
+  },
+  {
+    title: 'ASEAN AHEAD & digital safety training',
+    date: '18 August 2026',
+    role: 'PCETT-IPIL · MSU-IIT',
+    text: 'Led PCETT-IPIL’s support for training implementation with SmartCT, CDIIS, and Master Trainers.',
+    url: 'https://www.msuiit.edu.ph/news/news-detail.php?id=2550',
+  },
+];
+export const researchInterests = [
+  {
+    title: 'Connected environments',
+    text: 'IoT, sensor networks, AIoT, and environmental data acquisition for smart communities.',
+  },
+  {
+    title: 'AI & society',
+    text: 'AI literacy, societal computing, and the relationship between technical capability and social context.',
+  },
+  {
+    title: 'Policy & futures',
+    text: 'Technology policy, digital governance, foresight, and emerging technology analysis.',
+  },
+];
