@@ -1,12 +1,108 @@
 ---
-// Placeholder until Task 7 builds the academic page; exists so footer links and redirects resolve.
 import Layout from '../layouts/Layout.astro';
+import { path } from '../lib/paths';
+import {
+  profile,
+  socialLinks,
+  teaching,
+  presentations,
+  engagements,
+  researchInterests,
+} from '../data/profile';
+import { publications } from '../data/publications';
+import '../styles/pages.css';
+
+const scholar = socialLinks.find((l) => l.label === 'Google Scholar')!.href;
 ---
 
 <Layout title="Academic work">
-  <div class="wrap">
-    <section>
-      <h1>Academic work</h1>
+  <div class="wrap page">
+    <h1>Academic work</h1>
+    <p class="lede">
+      {profile.fullName}. Assistant Professor at MSU-IIT and Head of PCETT, the Policy Center for Emerging
+      Trends & Technologies.
+    </p>
+
+    <section aria-labelledby="interests">
+      <h2 id="interests">Research interests</h2>
+      <ul class="plain">
+        {researchInterests.map((r) => (
+          <li>
+            <strong>{r.title}</strong> — {r.text}
+          </li>
+        ))}
+      </ul>
     </section>
+
+    <section aria-labelledby="publications">
+      <h2 id="publications">Publications</h2>
+      {publications.map((p) => (
+        <article class="item">
+          <p class="meta">
+            {p.year} · {p.type}
+          </p>
+          <h3>{p.title}</h3>
+          <p class="authors">{p.authors}</p>
+          <p>{p.venue}</p>
+          <a class="textlink" href={`https://doi.org/${p.doi}`}>
+            DOI: {p.doi}
+          </a>
+        </article>
+      ))}
+    </section>
+
+    <section aria-labelledby="conference">
+      <h2 id="conference">Conference presentation</h2>
+      {presentations.map((p) => (
+        <article class="item">
+          <p class="meta">{p.date}</p>
+          <h3>{p.title}</h3>
+          <p>
+            {p.type} · {p.event} · {p.location}
+          </p>
+        </article>
+      ))}
+    </section>
+
+    <section aria-labelledby="teaching">
+      <h2 id="teaching">Teaching</h2>
+      <p>Department of Computer Applications, MSU-IIT.</p>
+      <ul class="plain">
+        {teaching.map((t) => (
+          <li>{t}</li>
+        ))}
+      </ul>
+    </section>
+
+    <section aria-labelledby="engagements">
+      <h2 id="engagements">Policy & engagements</h2>
+      <article class="item">
+        <p class="meta">Jan 2025–Present</p>
+        <h3>Head of PCETT</h3>
+        <p>
+          Policy Center for Emerging Trends & Technologies, Institute for Policy Innovation and Leadership,
+          MSU-IIT. Work across AI policy, digital governance, technology foresight, and capacity building.
+        </p>
+      </article>
+      {engagements.map((e) => (
+        <article class="item">
+          <p class="meta">{e.date}</p>
+          <h3>
+            <a href={e.url}>{e.title}</a>
+          </h3>
+          <p>{e.text}</p>
+          <p class="meta">{e.role}</p>
+        </article>
+      ))}
+    </section>
+
+    <p class="links">
+      <a class="textlink" href={scholar}>
+        Google Scholar
+      </a>
+      <a class="textlink" href={path('cv/')}>
+        CV
+      </a>
+    </p>
   </div>
 </Layout>
