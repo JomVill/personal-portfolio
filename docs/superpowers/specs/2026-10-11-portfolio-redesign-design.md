@@ -1,80 +1,57 @@
-# Portfolio redesign — "Field instrument"
+# Portfolio redesign — AI automation portfolio
 
-Date: 2026-10-11 · Status: draft for owner review
+Date: 2026-10-11 · Status: v3, approved direction (owner chose "pure AI automation portfolio", option A)
+
+History: v1 "field instrument" (four channels) and v2 "career as workflow" were rejected by the owner as too busy / not him. Mockups a–d stay in `docs/mockups/` for reference only.
 
 ## Goal
 
-Reposition the portfolio so it wins **AI automation work** (clients/employers) first, while staying credible to **MSU-IIT** and to **societal computing PhD committees**. Show the owner's personality: the **curious tinkerer**.
+A focused portfolio that gets Jomari hired for **AI automation work**. Nothing else leads. Academic roles appear only as a one-line credibility note on About.
 
-Success: a visitor understands within one screen that Jomari builds AI automation systems; within one click they can reach clearly separate Research, Policy, and Teaching areas; a PhD reader finds a coherent societal-computing research direction.
+Success: within one screen a visitor knows he builds AI automations in n8n; within one click they see real workflows he built; contacting him takes one click.
 
-## Positioning
+Assumed audience: small and medium businesses and operations teams (sales, finance, HR, content). Owner may correct.
 
-One-line story: **"I build AI systems — and study and shape how they land in society."**
+## Content source
 
-| Channel        | Audience                      | Role in story                                                                       |
-| -------------- | ----------------------------- | ----------------------------------------------------------------------------------- |
-| CH1 Automation | Clients, employers            | Lead. What he builds.                                                               |
-| CH2 Research   | PhD committees, collaborators | Societal computing: sensing, AIoT, communities.                                     |
-| CH3 Policy     | Government, uni               | PCETT, Iligan ISSP, AI Ready ASEAN convenings. Separate from uni teaching/research. |
-| CH4 Teaching   | Uni, training partners        | MSU-IIT courses, AI READY ASEAN Master Trainer.                                     |
+The owner's local n8n instance. Eight workflows (all built in n8n, inactive, last saved 2026-10-10):
+
+1. Partnership Operations Automation — featured
+2. Shift Timesheet Reminders + AI Validation
+3. Article to Social Content
+4. AI Email Classifier
+5. Google Form to HubSpot with $10 Link and $1000 Contract
+6. Create Invoice from HubSpot to QuickBooks
+7. Slack Message to ClickUp
+8. Set a Meeting via Slack
+
+Excluded: the Faculty DTR generator (owner instruction), research/policy/teaching content, PhD material.
+
+Honesty rules: describe these as "workflows I built"; no client names, deployments, metrics, or outcomes unless the owner supplies them. Missing owner input renders as a visible placeholder, never invented text.
+
+Data hygiene: the site stores only a sanitized extract per workflow (name, node names, node types, node positions, connections, plain-language summary). Never credentials, credential names, IDs, webhook paths, emails, channel/list IDs, or prompts.
 
 ## Voice
 
-Curious tinkerer: first person, plain, specific, a little playful. Shows how things work and what broke. No hype words ("revolutionary", "leverage", "cutting-edge"). Short sentences. Honest: no invented clients, metrics, or outcomes (existing `docs/content-sources.md` rule stays).
+First person, plain, specific, a little playful. Short sentences. No "revolutionary", "leverage", "cutting-edge", "synergy", "passionate", "seamless".
 
 ## Visual direction
 
-**Revised 2026-10-11 after owner review of mockups:** the field-instrument mockups were too busy, and the oscilloscope theme does not fit the owner. Direction is now **"career as an automation workflow"**, calm and minimal.
+Minimal. Lots of whitespace, one accent color (orange), charcoal on warm off-white, Manrope + DM Sans. No decorative elements. The only graphics are **simplified drawings of the real n8n workflows**, rendered at build time as SVG from the sanitized node positions and connections (nodes as rounded boxes, AI steps marked with the accent, a human-approval step marked distinctly). Must pass WCAG 2.1 AA, reduced motion, 375px width with no horizontal scroll.
 
-- Homepage centrepiece: the owner's career drawn as an automation-workflow canvas (n8n/Zapier-like). Each role, degree, or milestone is a node, connected chronologically, with parallel branches where roles overlapped, ending in a "next: PhD" node. Clicking or focusing a node shows its details.
-- Calm: generous whitespace, few elements per screen, no textures, no live clocks, no gimmicks.
-- Warm off-white + charcoal base; orange is the single accent (the active connection or node).
-- Channel colors appear only as small tags on nodes (Automation, Research, Policy, Teaching), so the four areas stay distinguishable.
-- Monospace only for small labels (dates, node types).
-- Build logs: simple dated list.
-- Must pass WCAG 2.1 AA, reduced motion, 375px width (the workflow stacks vertically), print CV.
+## Pages
 
-One mockup is built in this direction for owner approval (plan Task 3).
+- `/` Home: headline about what he automates + one line about him → featured workflow (drawing + 3-line plain explanation: trigger, what AI does, where a human checks, outcome) → 3–4 other workflow cards → tools (n8n, OpenAI/LLM agents, HubSpot, Slack, Gmail, QuickBooks, ClickUp, Trello…, only those actually used) → how I work (3 steps) → contact button.
+- `/work/` all 8 workflows; `/work/<slug>/` per workflow: problem, how it runs (drawing + step list), tools, where the human stays in the loop.
+- `/about/` short personal intro, one credibility line (Assistant Professor at MSU-IIT · Head of PCETT · AI READY ASEAN Master Trainer · ex-Head of Technology & Research, Future AI Lab), CV link.
+- Contact: mailto link (header + footer + home).
 
-## Information architecture
-
-- `/` Home — headline, automation showcase instrument, four channel entry points, "on the bench now" strip, latest build log.
-- `/automation/` — workflows/projects built, stack, how to work with him, contact CTA.
-- `/research/` — societal computing research statement, publications, presentations, directions.
-- `/policy/` — PCETT, ISSP, convenings, policy engagements.
-- `/teaching/` — courses, AI READY ASEAN training.
-- `/logs/` + `/logs/<slug>/` — build logs (replaces `/writing/`; redirect old path).
-- `/about/` — personality, background, "outside the lab".
-- `/cv/` — printable, unchanged in function.
-- `/work/<slug>/` — case studies kept; each tagged with a channel.
-
-Nav: Automation · Research · Policy · Teaching · Logs · About. Contact = mailto CTA.
+Removed: research, policy, teaching, writing/logs pages; old `/work/<old-slug>/` case studies. Old URLs (`/research/`, `/teaching/`, `/writing/`, `/cv/` if removed, old work slugs) redirect to the closest new page.
 
 ## Architecture
 
-Static Astro, no client framework (unchanged). Data-driven:
-
-- `src/data/channels.ts` — channel id, name, color token, blurb.
-- Projects/engagements gain a `channel` field.
-- `src/content/logs/` collection replaces `writing`.
-- Shared components: `ChannelTag`, `Readout`, `StatusLight`, `LogEntry`, `ChannelHeader`.
-- CSS reformatted into readable files; tokens in one place.
-
-## Testing
-
-Existing `npm run check`, `lint`, `build`, `test`, and `scripts/browser-check.mjs` (route list updated). Plus a review agent pass and visual review at 375/768/1440.
-
-## Owner inputs required
-
-1. 2–4 automation workflows that can be shown publicly (what goes in, what the AI does, what comes out, tools).
-2. 2–3 personal details (hobby, habit, how a friend describes him).
-3. What's on the bench now (1–3 items).
-4. PhD timing and target programs/regions (optional, shapes research page).
-5. 1–2 seed build-log topics.
-
-Missing inputs ship as clearly marked TODO content in drafts, never invented.
+Static Astro, no client framework. `scripts/import-n8n.mjs` reads exported workflow JSON from a local folder (not committed) and writes sanitized `src/data/workflows.json`. A `WorkflowDiagram.astro` component renders the SVG. Existing tests and browser check are updated to the new routes.
 
 ## Out of scope
 
-Contact form, analytics, CMS, blog comments, i18n, custom domain.
+Contact form, analytics, CMS, blog, publishing workflow JSON files, live n8n embedding.
