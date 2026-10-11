@@ -116,3 +116,9 @@
     padding: 16px;
   }
 }
+
+.platform-note {
+  margin-top: 12px;
+  font-size: 14px;
+  color: var(--muted);
+}

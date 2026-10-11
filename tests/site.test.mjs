@@ -129,7 +129,7 @@ test('work index lists all 8 workflows', async () => {
   assert.equal(h1s[0][1].trim(), 'Workflows I built');
   assert.match(
     html,
-    /Each one is built in n8n, with AI doing the reading and a person approving what matters\./,
+    /Each one is built in Zapier and can be replicated in n8n, with AI doing the reading and a person approving what matters\./,
   );
   const links = new Set(
     [...html.matchAll(new RegExp(`href="${base}work/([a-z0-9-]+)/"`, 'g'))].map((m) => m[1]),
@@ -183,4 +183,10 @@ test('about, academic, cv, and 404 pages', async () => {
   assert.match(await readPage('cv'), /id="print-profile"/);
   const nf = await readFile('dist/404.html', 'utf8');
   assert.equal((nf.match(/<h1[\s>]/g) || []).length, 1);
+});
+
+test('workflow pages note Zapier build with n8n replication', async () => {
+  for (const slug of ['ai-email-classifier', 'partnership-operations-automation']) {
+    assert.match(await readPage(`work/${slug}/`), /Built in Zapier\. Can be replicated in n8n\./);
+  }
 });
