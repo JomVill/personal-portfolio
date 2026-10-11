@@ -19,6 +19,7 @@ const tag = (order: number) => `WF-${String(order).padStart(2, '0')}`;
 <Layout>
   <div class="wrap hero">
     <div class="hero-copy">
+      <p class="eyebrow hero-eyebrow">{profile.academicName} · AI automation</p>
       <h1>Hi, I’m Jom, and I automate repetitive tasks.</h1>
       <p class="lede">
         I connect your tools with Zapier, n8n, and AI so the busywork runs itself, saving you up to{' '}
@@ -76,6 +77,31 @@ const tag = (order: number) => `WF-${String(order).padStart(2, '0')}`;
           See the full workflow
         </a>
       </p>
+    </div>
+  </section>
+
+  <section class="wrap" aria-labelledby="lab-title">
+    <div class="panel lab">
+      <div class="lab-main">
+        <p class="eyebrow">Where I built this</p>
+        <h2 id="lab-title">Head of Technology &amp; Research, Future AI Lab / BrandNat</h2>
+        <p class="lab-meta">2022–2026</p>
+        <p class="lab-body">
+          For four years I led technology and research at Future AI Lab / BrandNat. I designed and built AI
+          workflows, multi-agent systems, and automation pipelines for content production and audience
+          intelligence, connecting applied AI research with real media work.
+        </p>
+        <p class="lab-link">
+          <a class="textlink" href={path('about/')}>
+            More about me
+          </a>
+        </p>
+      </div>
+      <ul class="lab-list">
+        <li>AI workflows and agents for content production</li>
+        <li>Automation pipelines connecting APIs and everyday tools</li>
+        <li>Audience intelligence and emerging AI research</li>
+      </ul>
     </div>
   </section>
 

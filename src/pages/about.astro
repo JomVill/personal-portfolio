@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { profile } from '../data/profile';
 import { path } from '../lib/paths';
 import '../styles/pages.css';
 ---
@@ -8,13 +9,15 @@ import '../styles/pages.css';
   <div class="wrap page">
     <h1>About Jom</h1>
     <div class="prose">
+      <p>I’m {profile.academicName}. Most people call me Jom.</p>
       <p>
         I build AI automations in Zapier and n8n. They take over the repeat work in a business: reading
         inquiries, sorting them, and passing the right ones to a person.
       </p>
       <p>
-        From 2022 to 2026 I was Head of Technology & Research at Future AI Lab / BrandNat, where I built AI
-        workflows and agents.
+        From 2022 to 2026 I was Head of Technology & Research at Future AI Lab / BrandNat. I designed and
+        built AI workflows, multi-agent systems, and automation pipelines for content production and audience
+        intelligence, connecting applied AI research with real media work.
       </p>
       <p>I'm based in Iligan City, Philippines.</p>
       <p class="also">Also: Assistant Professor at MSU-IIT · Head of PCETT · AI READY ASEAN Master Trainer</p>

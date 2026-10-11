@@ -65,7 +65,7 @@ test('site shell: header logo, Email me key, footer links', async () => {
   const html = await readPage('');
   const header = html.match(/<header[\s\S]*?<\/header>/)[0];
   assert.match(header, /<img[^>]+j-logo/);
-  assert.match(header, /class="brand-name">Jomari Villanueva</);
+  assert.match(header, /class="brand-name">Jom</);
   assert.match(header, /<a[^>]+href="mailto:jomarivillanueva83@gmail\.com"[^>]*>\s*Email me\s*<\/a>/);
   const footer = html.match(/<footer[\s\S]*?<\/footer>/)[0];
   assert.match(footer, /Academic work/);
@@ -252,7 +252,9 @@ test('about, academic, cv, and 404 pages', async () => {
   assert.match(academic, /PCETT/);
   const about = await readPage('about');
   assert.match(about, /Jom/);
-  assert.doesNotMatch(about.match(/<main[\s\S]*<\/main>/)[0], /Jomari/);
+  const aboutMain = about.match(/<main[\s\S]*<\/main>/)[0];
+  assert.match(aboutMain, /I’m Jomari Francis B\. Villanueva\. Most people call me Jom\./);
+  assert.match(aboutMain, /Future AI Lab \/ BrandNat/);
   assert.match(await readPage('cv'), /id="print-profile"/);
   const nf = await readFile('dist/404.html', 'utf8');
   assert.equal((nf.match(/<h1[\s>]/g) || []).length, 1);
@@ -275,4 +277,13 @@ test('pointer effects: follower is created by JS, script is bundled from the lay
   }
   assert.ok(found, 'pointer-fx module not bundled');
   assert.match(await readPage('about'), /<script type="module"/);
+});
+
+test('marquee: OpenAI and Slack render as inline SVG symbols', async () => {
+  const html = await readPage('');
+  const marquee = html.match(/<section[^>]+tools-strip[\s\S]*?<\/section>/)[0];
+  for (const slug of ['openai', 'slack']) {
+    assert.match(marquee, new RegExp(`<symbol id="si-${slug}"[^>]*><path d="[^"]+"`), slug);
+    assert.match(marquee, new RegExp(`<use href="#si-${slug}"`), slug);
+  }
 });

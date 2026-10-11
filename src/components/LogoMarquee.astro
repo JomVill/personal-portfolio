@@ -1,6 +1,6 @@
 ---
 // "Tools I build with" marquee. Logos are inlined from the simple-icons package at build time
-// (no CDN). Tools simple-icons does not carry (OpenAI, Slack) show their name only.
+// (no CDN). Tools current simple-icons dropped (OpenAI, Slack) come from simple-icons-legacy (13.21.0, the last release with them).
 // Three copies of the list scroll; only the first is exposed to assistive tech.
 import {
   siBuffer,
@@ -20,15 +20,16 @@ import {
   siZapier,
   type SimpleIcon,
 } from 'simple-icons';
+import { siOpenai, siSlack } from 'simple-icons-legacy';
 
 type Tool = { name: string; icon?: SimpleIcon; primary?: boolean };
 const tools: Tool[] = [
   { name: 'Zapier', icon: siZapier, primary: true },
   { name: 'n8n', icon: siN8n },
-  { name: 'OpenAI' },
+  { name: 'OpenAI', icon: siOpenai },
   { name: 'Claude', icon: siClaude },
   { name: 'HubSpot', icon: siHubspot },
-  { name: 'Slack' },
+  { name: 'Slack', icon: siSlack },
   { name: 'Gmail', icon: siGmail },
   { name: 'QuickBooks', icon: siQuickbooks },
   { name: 'Trello', icon: siTrello },
