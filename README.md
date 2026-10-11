@@ -1,58 +1,59 @@
-# Jom — AI automation portfolio
+<p align="center">
+  <img src="src/assets/brand/j-logo.png" alt="Jomari Villanueva logo" width="96" />
+</p>
 
-Static Astro site for Jomari "Jom" Villanueva: AI automations built with Zapier, n8n, and AI. Deployed to GitHub Pages. No client framework, no external runtime requests.
+<h1 align="center">Hi, I’m Jom 👋</h1>
 
-Live (after deploy): https://jomvill.github.io/personal-portfolio/ · Repository: `JomVill/personal-portfolio`
+<p align="center">
+  I automate repetitive tasks with <b>Zapier</b>, <b>n8n</b>, and <b>AI</b>, so the busywork runs itself and you get up to <b>60 hours a month</b> back.
+</p>
 
-## Develop
+<p align="center">
+  <a href="https://jomvill.github.io/personal-portfolio/"><b>→ See my portfolio</b></a>
+  &nbsp;·&nbsp;
+  <a href="mailto:jomarivillanueva83@gmail.com">Email me</a>
+  &nbsp;·&nbsp;
+  <a href="https://www.linkedin.com/in/jomari-francis-villanueva-63a5a1aa/">LinkedIn</a>
+</p>
 
-Node.js 24 LTS (minimum 22.12).
+---
 
-```sh
-npm install
-npm run dev
-```
+## What I do
 
-Checks (CI runs the same):
+I build AI automations that sit between the tools a team already uses. AI does the reading, sorting, and drafting. A person approves what matters. Nothing important moves without a human in the loop.
 
-```sh
-npm run format:check
-npm run check
-npm run lint
-BASE_PATH=/personal-portfolio/ npm run build
-npm test
-```
+Before going independent, I led technology and research at **Future AI Lab / BrandNat** (2022–2026), building AI workflows, agents, and automation pipelines. I’m also an Assistant Professor at MSU-IIT, Head of PCETT, and an AI READY ASEAN Master Trainer, based in Iligan City, Philippines.
 
-Browser checks (Playwright + axe) against a preview of the built site:
+## Featured workflow: Daily Story Scout
 
-```sh
-BASE_PATH=/personal-portfolio/ npm run preview
-BROWSER_CHANNEL=chrome PREVIEW_URL=http://localhost:4321/personal-portfolio/ npm run test:browser
-```
+**Your best stories, found and scored every morning.** It pulls stories from Hacker News, Reddit, and the web, AI scores each one, and you tap Keep or Kill in Slack. Kept stories go straight to a script writer, and your votes teach the AI what you like.
 
-## Pages
+[See how it works →](https://jomvill.github.io/personal-portfolio/work/content-pipeline-1-daily-story-scout-score-and-vote/)
 
-- `/` home: hero, Claude Code-style terminal, tool logo marquee, featured workflow, three workflow cards, contact.
-- `/work/` and `/work/<slug>/`: all eight n8n workflows with diagrams, plain-language steps, tools.
-- `/about/`, `/academic/` (research, publications, teaching, policy), `/cv/` (printable).
-- Old URLs (`/research/`, `/teaching/`, `/writing/`, old `/work/` slugs) redirect.
+## More workflows I’ve built
 
-## Content
+| Workflow                                                                                                                                  | What it does                                                                                     |
+| ----------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| [A story in, a ready-to-film script out](https://jomvill.github.io/personal-portfolio/work/content-pipeline-2-content-package-generator/) | AI writes a research brief, a script with hook and captions, reviews it, and saves it to Notion. |
+| [An AI that learns your taste](https://jomvill.github.io/personal-portfolio/work/content-pipeline-3-weekly-preference-learning/)          | Every Sunday, AI studies your Keep and Kill votes and suggests better scoring rules.             |
+| [Partnership inquiries, handled end to end](https://jomvill.github.io/personal-portfolio/work/partnership-operations-automation/)         | AI screens every inquiry, you approve, and the CRM, contract, and invoice follow.                |
+| [Every email reaches the right team](https://jomvill.github.io/personal-portfolio/work/ai-email-classifier/)                              | AI reads incoming mail and routes it to support, billing, or general.                            |
+| [Won deals invoice themselves](https://jomvill.github.io/personal-portfolio/work/create-invoice-from-hubspot-to-quickbooks/)              | When a deal closes, the invoice is created and finance is notified.                              |
 
-- `src/data/workflows.json`: sanitized n8n workflow structure (names, node types, positions, connections only). Regenerate from an n8n export:
-  ```sh
-  docker exec <n8n-container> n8n export:workflow --all --separate --output=/tmp/wf/
-  docker cp <n8n-container>:/tmp/wf/. ./n8n-export/   # keep outside git
-  npm run import:n8n -- ./n8n-export
-  ```
-  `tests/site.test.mjs` fails if credentials, IDs, emails, or parameters leak into the file.
-- `src/data/workflow-copy.ts`: titles, summaries, steps, labels, and tools for each workflow (plain, CEO-readable).
-- `src/data/profile.ts`, `src/data/publications.ts`: contact, roles, academic content.
-- `src/assets/brand/`: the owner-designed JOM logo and favicons. Use as supplied; do not redraw or recolor.
-- `src/styles/site.css`: tokens and shared components; page styles live beside it.
+[All 12 workflows →](https://jomvill.github.io/personal-portfolio/work/)
 
-## Deploy
+All workflows are built in Zapier and can be replicated in n8n.
 
-`.github/workflows/deploy.yml` builds and deploys on push to `master`. In the repository, set **Settings → Pages → Source: GitHub Actions**. The base path is derived from the repository name; override with the `BASE_PATH` / `SITE_URL` Actions variables.
+## Tools I build with
 
-Design history and decisions: `docs/superpowers/specs/2026-10-11-portfolio-redesign-design.md`, mockups in `docs/mockups/`.
+Zapier · n8n · OpenAI · Claude · HubSpot · Slack · Gmail · Google Sheets · Notion · QuickBooks · Trello · ClickUp · Buffer
+
+## Let’s talk
+
+Got a task that eats your week? Tell me what it is, and I’ll say honestly if it’s worth automating.
+
+📧 [jomarivillanueva83@gmail.com](mailto:jomarivillanueva83@gmail.com) · 💼 [LinkedIn](https://www.linkedin.com/in/jomari-francis-villanueva-63a5a1aa/) · 🎓 [Academic work](https://jomvill.github.io/personal-portfolio/academic/)
+
+---
+
+<sub>This repository is the source of the portfolio site. Development notes: [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md).</sub>
