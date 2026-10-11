@@ -200,6 +200,23 @@
         font-size: clamp(17px, 1.6vw, 20px);
         color: var(--muted);
       }
+      .hero .stat {
+        display: flex;
+        align-items: baseline;
+        gap: 14px;
+        margin: 28px 0 0;
+      }
+      .hero .stat b {
+        font: 700 clamp(40px, 6vw, 56px) / 1 var(--head, 'Manrope', sans-serif);
+        letter-spacing: -0.03em;
+        color: #ad3b0f;
+      }
+      .hero .stat span {
+        max-width: 240px;
+        font-size: 15px;
+        line-height: 1.4;
+        color: #4d4f48;
+      }
       .hero .actions {
         margin-top: 36px;
         display: flex;
@@ -713,6 +730,9 @@
         <p class="lede">
           I connect your apps with Zapier, n8n, and AI, so repetitive tasks run on their own and you save time
           for the work that matters.
+        </p>
+        <p class="stat">
+          <b>Up to 3 hrs</b><span>back every day to focus on the tasks that actually need you.</span>
         </p>
         <div class="actions">
           <a class="key key-orange" href="#work">See the workflows</a>
