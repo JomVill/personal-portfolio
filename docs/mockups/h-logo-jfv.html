@@ -99,6 +99,30 @@
           <rect x="20" y="8" width="32" height="32" rx="9" fill="#ee652b" />
           <circle class="dport" cx="13" cy="124" r="9.5" fill="currentColor" />
         </symbol>
+        <symbol id="e" viewBox="0 0 176 136">
+          <g fill="none" class="ink" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke-width="13" d="M38 46 V92 Q38 116 16 116" />
+            <path stroke-width="5" d="M52 24 H66" />
+            <path stroke-width="13" d="M72 116 V24 H100 M72 68 H94" />
+            <path stroke-width="13" d="M126 30 L146 116 M166 30 L146 116" />
+          </g>
+          <rect x="24" y="10" width="28" height="28" rx="8" fill="#ee652b" />
+          <g class="port" fill="currentColor">
+            <circle cx="106" cy="24" r="8" />
+            <circle cx="100" cy="68" r="8" />
+            <circle cx="126" cy="24" r="8" />
+            <circle cx="166" cy="24" r="8" />
+          </g>
+        </symbol>
+        <symbol id="e2" viewBox="0 0 176 136">
+          <g fill="none" class="ink" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke-width="13" d="M38 46 V92 Q38 116 16 116" />
+            <path stroke-width="5" d="M52 24 H66 M106 24 H120 M100 68 Q113 68 117 50 L121 34" />
+            <path stroke-width="13" d="M72 116 V24 H100 M72 68 H94" />
+            <path stroke-width="13" d="M126 30 L146 116 M166 30 L146 116" />
+          </g>
+          <rect x="24" y="10" width="28" height="28" rx="8" fill="#ee652b" />
+        </symbol>
         <symbol id="fav" viewBox="0 0 64 64">
           <rect width="64" height="64" rx="14" fill="#252623" />
           <g fill="none" stroke="#f8f8f5" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
@@ -109,6 +133,56 @@
       </defs>
     </svg>
 
+    <h2>E — branches: node → F splits into two ports, V merges</h2>
+    <div class="row">
+      <div class="tile">
+        <div>
+          <svg width="176" height="136"><use href="#e" /></svg><small>176</small>
+        </div>
+        <div>
+          <svg width="66" height="51"><use href="#e" /></svg><small>64</small>
+        </div>
+        <div>
+          <svg width="33" height="26"><use href="#e" /></svg><small>32</small>
+        </div>
+      </div>
+      <div class="tile dark">
+        <div>
+          <svg width="176" height="136"><use href="#e" /></svg><small>176</small>
+        </div>
+        <div>
+          <svg width="66" height="51"><use href="#e" /></svg><small>64</small>
+        </div>
+        <div>
+          <svg width="33" height="26"><use href="#e" /></svg><small>32</small>
+        </div>
+      </div>
+    </div>
+    <h2>E2 — fully wired: node → F, F's branches wire into the V</h2>
+    <div class="row">
+      <div class="tile">
+        <div>
+          <svg width="176" height="136"><use href="#e2" /></svg><small>176</small>
+        </div>
+        <div>
+          <svg width="66" height="51"><use href="#e2" /></svg><small>64</small>
+        </div>
+        <div>
+          <svg width="33" height="26"><use href="#e2" /></svg><small>32</small>
+        </div>
+      </div>
+      <div class="tile dark">
+        <div>
+          <svg width="176" height="136"><use href="#e2" /></svg><small>176</small>
+        </div>
+        <div>
+          <svg width="66" height="51"><use href="#e2" /></svg><small>64</small>
+        </div>
+        <div>
+          <svg width="33" height="26"><use href="#e2" /></svg><small>32</small>
+        </div>
+      </div>
+    </div>
     <h2>C — JFV with the orange node on the J</h2>
     <div class="row">
       <div class="tile">
