@@ -170,6 +170,37 @@ if ((await page.evaluate(() => getComputedStyle(document.documentElement).scroll
     await c.close();
   }
 }
+// Custom cursor: native cursor hidden only while the custom one is active.
+{
+  const ctx = await browser.newContext({ reducedMotion: 'no-preference' });
+  const cp = await ctx.newPage();
+  await cp.goto(base, { waitUntil: 'networkidle' });
+  await cp.mouse.move(300, 300);
+  await cp.mouse.move(320, 310);
+  await cp.waitForTimeout(300);
+  const hidden = await cp.evaluate(() => getComputedStyle(document.body).cursor === 'none');
+  const dotVisible = await cp.locator('.fx-dot.is-visible').count();
+  if (!hidden) failures.push('Custom cursor: native cursor not hidden with a mouse');
+  if (!dotVisible) failures.push('Custom cursor: dot not visible');
+  const toggle = cp.locator('.motion-toggle');
+  if (await toggle.isVisible()) {
+    await toggle.click();
+    if ((await cp.evaluate(() => getComputedStyle(document.body).cursor)) === 'none')
+      failures.push('Custom cursor: native cursor not restored while paused');
+    await toggle.click();
+  }
+  report.push({ customCursor: { nativeHidden: hidden, dotVisible: !!dotVisible } });
+  await ctx.close();
+}
+for (const opts of [{ reducedMotion: 'reduce' }, { hasTouch: true, isMobile: true }]) {
+  const ctx = await browser.newContext(opts);
+  const cp = await ctx.newPage();
+  await cp.goto(base, { waitUntil: 'networkidle' });
+  await cp.mouse.move(300, 300);
+  if ((await cp.evaluate(() => getComputedStyle(document.body).cursor)) === 'none')
+    failures.push(`Custom cursor: native cursor hidden under ${JSON.stringify(opts)}`);
+  await ctx.close();
+}
 await writeFile('test-results/browser-report.json', JSON.stringify({ report, failures }, null, 2));
 await browser.close();
 console.log(JSON.stringify({ report, failures }, null, 2));

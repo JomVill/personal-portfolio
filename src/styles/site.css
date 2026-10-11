@@ -405,8 +405,37 @@ section {
   background: #fff8f214;
   box-shadow: 0 0 8px #6b2a0c26;
 }
-html.motion-paused .fx-ring {
+html.motion-paused .fx-ring,
+html.motion-paused .fx-dot {
   display: none;
+}
+/* custom cursor: hide the native one only while ours is active */
+html.fx-cursor,
+html.fx-cursor * {
+  cursor: none !important;
+}
+.fx-dot {
+  position: fixed;
+  top: -3px;
+  left: -3px;
+  z-index: 51;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  pointer-events: none;
+  will-change: transform;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.fx-dot.is-visible {
+  opacity: 1;
+}
+.fx-dot.is-dark {
+  background: #ffa47a;
+}
+.fx-dot.is-accent {
+  background: #fff8f2;
 }
 
 /* sheen: a soft highlight on the silver surface, painted under the content */
