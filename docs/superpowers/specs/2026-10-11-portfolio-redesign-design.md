@@ -25,17 +25,17 @@ Curious tinkerer: first person, plain, specific, a little playful. Shows how thi
 
 ## Visual direction
 
-Teenage Engineering hardware language crossed with scientific field equipment (data loggers, oscilloscopes, survey notebooks).
+**Revised 2026-10-11 after owner review of mockups:** the field-instrument mockups were too busy, and the oscilloscope theme does not fit the owner. Direction is now **"career as an automation workflow"**, calm and minimal.
 
-- Warm off-white + charcoal base; orange stays the "live signal" accent.
-- Each channel has its own signal color, used for labels, traces, status lights — never large fills.
-- Monospace readouts: coordinates (8.23°N 124.24°E), timestamps, channel IDs, status LEDs.
-- Fine grid / graph-paper texture, used sparingly.
-- Homepage instrument panel evolves into the automation showcase (clickable workflows).
-- Build logs styled as dated notebook entries.
-- Guardrail: decoration must carry information. If an element is purely gimmick, cut it. Must pass WCAG 2.1 AA, reduced motion, 375px width, print CV.
+- Homepage centrepiece: the owner's career drawn as an automation-workflow canvas (n8n/Zapier-like). Each role, degree, or milestone is a node, connected chronologically, with parallel branches where roles overlapped, ending in a "next: PhD" node. Clicking or focusing a node shows its details.
+- Calm: generous whitespace, few elements per screen, no textures, no live clocks, no gimmicks.
+- Warm off-white + charcoal base; orange is the single accent (the active connection or node).
+- Channel colors appear only as small tags on nodes (Automation, Research, Policy, Teaching), so the four areas stay distinguishable.
+- Monospace only for small labels (dates, node types).
+- Build logs: simple dated list.
+- Must pass WCAG 2.1 AA, reduced motion, 375px width (the workflow stacks vertically), print CV.
 
-Final look chosen from 2–3 homepage mockups (plan phase 2).
+One mockup is built in this direction for owner approval (plan Task 3).
 
 ## Information architecture
 
