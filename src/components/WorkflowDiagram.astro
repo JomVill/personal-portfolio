@@ -5,8 +5,10 @@
 //   card:     light mini diagram, no labels; main path row if copy.mainPath is set, else node positions.
 //   full:     light, every node from its n8n position (AI sub-nodes folded into their agent), labelled.
 // Every node is a <g class="node"> with data-step={i} when on the main path, and
-// data-kind="ai" | "human" where applicable. Animation is left to the page (Tasks 5–6).
+// data-kind="ai" | "human" where applicable. Featured nodes also carry data-beat={beat index}
+// from the copy's beats[].through, which the homepage animation uses to sync the beat list. Animation is left to the page (Tasks 5–6).
 import {
+  beatIndexes,
   isAiNode,
   isDecisionNode,
   isHumanNode,
@@ -51,6 +53,7 @@ type Edge = { d: string; later: boolean };
 const path = mainPath(w);
 const byName = new Map(w.nodes.map((n) => [n.name, n]));
 const stepOf = new Map(path.map((name, i) => [name, i]));
+const beatOf = variant === 'featured' ? beatIndexes(w) : [];
 
 const wrap = (text: string, max: number) => {
   const lines: string[] = [];
@@ -257,6 +260,7 @@ const lineH = variant === 'full' ? 14 : 16;
           },
         ]}
         data-step={p.step}
+        data-beat={p.step !== undefined ? beatOf[p.step] : undefined}
         data-kind={kind}
       >
         {'d' in s ? <path class="n" d={s.d} /> : <rect class="n" {...s} />}

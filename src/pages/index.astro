@@ -5,14 +5,14 @@ import Terminal from '../components/Terminal.astro';
 import LogoMarquee from '../components/LogoMarquee.astro';
 import WorkflowCard from '../components/WorkflowCard.astro';
 import WorkflowDiagram from '../components/WorkflowDiagram.astro';
-import { featured, getWorkflows } from '../lib/workflows';
+import { featured, getWorkflows, homeCards } from '../lib/workflows';
 import { profile } from '../data/profile';
 import { path } from '../lib/paths';
 import '../styles/home.css';
 
 const all = getWorkflows();
 const feat = featured();
-const more = all.filter((w) => w.order >= 2 && w.order <= 4);
+const more = homeCards();
 const tag = (order: number) => `WF-${String(order).padStart(2, '0')}`;
 ---
 
@@ -36,7 +36,7 @@ const tag = (order: number) => `WF-${String(order).padStart(2, '0')}`;
   <LogoMarquee />
 
   <section id="work" class="wrap featured" aria-labelledby="feat-title">
-    <p class="eyebrow">Featured workflow · Partnerships</p>
+    <p class="eyebrow">Featured workflow · Content</p>
     <h2 id="feat-title" class="feature-title">
       {feat.title}
     </h2>
@@ -59,7 +59,7 @@ const tag = (order: number) => `WF-${String(order).padStart(2, '0')}`;
         <div class="flow flow-column">
           <WorkflowDiagram workflow={feat} variant="featured" layout="column" />
         </div>
-        <p class="screen-foot">Dashed line: after the contract is signed</p>
+        {feat.featuredNote && <p class="screen-foot">{feat.featuredNote}</p>}
       </div>
       {feat.beats && (
         <ol class="beats">

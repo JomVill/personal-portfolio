@@ -33,10 +33,13 @@ const all: Workflow[] = (data as RawWorkflow[])
 export const getWorkflows = (): Workflow[] => all;
 export const getWorkflow = (slug: string): Workflow | undefined => all.find((w) => w.slug === slug);
 export const featured = (): Workflow => {
-  const w = all.find((x) => x.featured);
-  if (!w) throw new Error('no featured workflow in workflow-copy.ts');
-  return w;
+  const list = all.filter((x) => x.featured);
+  if (list.length !== 1)
+    throw new Error(`workflow-copy.ts needs exactly one featured workflow, has ${list.length}`);
+  return list[0];
 };
+/** Cards under "More time-savers" on the homepage: copy entries flagged `homeCard`, in order. */
+export const homeCards = (): Workflow[] => all.filter((x) => x.homeCard);
 
 // ---- node classification ----
 
@@ -101,6 +104,23 @@ export const mainPath = (w: Workflow): string[] => {
     if (!next) return path;
     path.push(next.to);
   }
+};
+
+/**
+ * Beat index (0-based) for each main-path step, from the copy's `beats[].through`.
+ * Throws when the beats do not cover the main path exactly, so a stale mapping fails the build.
+ */
+export const beatIndexes = (w: Workflow): number[] => {
+  const beats = w.beats ?? [];
+  const steps = mainPath(w).length;
+  if (!beats.length) return [];
+  let prev = 0;
+  for (const b of beats) {
+    if (!(b.through > prev)) throw new Error(`${w.id}: beat "${b.label}" must run past step ${prev}`);
+    prev = b.through;
+  }
+  if (prev !== steps) throw new Error(`${w.id}: beats cover ${prev} steps, main path has ${steps}`);
+  return Array.from({ length: steps }, (_, i) => beats.findIndex((b) => i + 1 <= b.through));
 };
 
 /** Short display label for a node: the copy's CEO label when present, else the node name. */

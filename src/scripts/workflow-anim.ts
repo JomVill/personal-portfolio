@@ -59,8 +59,9 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
         (a, b) => Number(a.dataset.step) - Number(b.dataset.step),
       );
     const beats = [...document.querySelectorAll<HTMLElement>('.beats li')];
-    const BEAT = [0, 1, 1, 2, 2, 3, 3, 3, 3, 3];
-    const count = stepsOf(diagrams[0]).length;
+    // Step → beat comes from the markup (data-beat, set from the copy's beats[].through).
+    const BEAT = stepsOf(diagrams[0]).map((g) => Number(g.dataset.beat ?? -1));
+    const count = BEAT.length;
     const HUMAN = stepsOf(diagrams[0]).findIndex((g) => g.matches('[data-kind="human"]:not(.dec)'));
     const IN = 400;
     const MOVE = 490;
@@ -129,7 +130,7 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
         pk.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) scale(${sc.toFixed(3)})`;
         pk.style.opacity = op.toFixed(3);
         nodes.forEach((g, i) => g.classList.toggle('lit', t >= arrive[i] && t < depart[i] + LIT));
-        const b = BEAT[cur] ?? BEAT[BEAT.length - 1];
+        const b = BEAT[cur] ?? -1;
         if (b !== beat) {
           beat = b;
           beats.forEach((el, i) => el.classList.toggle('on', i === beat));

@@ -1,12 +1,17 @@
 ---
 // Hero terminal. Server-rendered in its final state (every step done + summary) so it reads
 // complete without JS or under reduced motion; src/scripts/terminal.ts replays the run.
-const prompt = 'automate: new partnership inquiry → screen → CRM';
+const prompt = "automate: find today's best stories → score → vote";
+// One spinner verb per step; the first step cycles through two sources before it completes.
 const steps = [
-  { verb: 'Reading inbox…', label: 'Gmail trigger', ms: 1300 },
-  { verb: 'Screening with AI…', label: 'AI screened inquiry', ms: 1700 },
-  { verb: 'Waiting for approval…', label: 'Approved in Slack', ms: 2100 },
-  { verb: 'Updating HubSpot…', label: 'Contact + deal in HubSpot', ms: 1500 },
+  {
+    verbs: ['Searching Hacker News…', 'Reading Reddit…'],
+    label: 'Pulled stories from Hacker News, Reddit, and the web',
+    ms: 1700,
+  },
+  { verbs: ['Scoring with AI…'], label: 'AI scored every story', ms: 1600 },
+  { verbs: ['Waiting for your vote…'], label: 'Sent the best to Slack: Keep or Kill', ms: 2100 },
+  { verbs: ['Sending to scripts…'], label: 'Kept stories sent to the script writer', ms: 1400 },
 ];
 ---
 
@@ -14,7 +19,7 @@ const steps = [
   <div class="screen">
     <div class="screen-top">
       <span aria-hidden="true">WF-01 · Example run</span>
-      <span aria-hidden="true">Partnership ops</span>
+      <span aria-hidden="true">Story scout</span>
       <button type="button" class="motion-toggle" aria-pressed="false" hidden>
         Pause motion
       </button>
@@ -22,7 +27,7 @@ const steps = [
     <div
       class="term-body"
       role="img"
-      aria-label="Example automation run: a new partnership inquiry arrives in Gmail, AI screens it, a person approves it in Slack, and the contact and deal are created in HubSpot."
+      aria-label="Example automation run: stories are pulled from Hacker News, Reddit, and the web, AI scores every story, the best are sent to Slack for a Keep or Kill vote, and kept stories go to the script writer."
     >
       <p class="t-prompt">
         <span class="t-caret">&gt;</span>
@@ -33,14 +38,14 @@ const steps = [
       </p>
       <ol class="t-steps">
         {steps.map((s) => (
-          <li class="t-done" data-verb={s.verb} data-label={s.label} data-ms={s.ms}>
+          <li class="t-done" data-verb={s.verbs.join('|')} data-label={s.label} data-ms={s.ms}>
             <span class="t-tree">⎿</span>
             <span class="t-ok">✓</span>
             {s.label}
           </li>
         ))}
         <li class="t-sum">
-          <b>Done</b> · 4 steps · contract next
+          <b>Done</b> · 4 steps · scripts next
         </li>
       </ol>
     </div>

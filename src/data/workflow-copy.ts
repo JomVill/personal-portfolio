@@ -5,6 +5,10 @@ export type WorkflowCopy = {
   summary: string;
   tools: string[];
   featured?: boolean;
+  /** Shown as a card under "More time-savers" on the homepage (in `order`). */
+  homeCard?: boolean;
+  /** Small note under the featured diagram (e.g. explaining a dashed edge). */
+  featuredNote?: string;
   order: number;
   /** Node names, in order, that make up the story shown on the featured diagram. */
   mainPath?: string[];
@@ -29,8 +33,9 @@ export const workflowCopy: Record<string, WorkflowCopy> = {
     title: 'Partnership inquiries, handled end to end',
     summary: 'AI screens every inquiry, you approve, and the CRM, contract, and invoice follow.',
     tools: ['Gmail', 'OpenAI', 'Slack', 'HubSpot', 'Trello', 'QuickBooks'],
-    featured: true,
-    order: 1,
+    order: 5,
+    homeCard: true,
+    featuredNote: 'Dashed line: after the contract is signed',
     steps: [
       'A partner emails you.',
       "AI reads the inquiry and checks if it's a good fit.",
@@ -101,7 +106,7 @@ export const workflowCopy: Record<string, WorkflowCopy> = {
     title: 'Timesheets that check themselves',
     summary: 'Staff get reminders before shifts end. Mistakes go straight to a manager.',
     tools: ['Clockify', 'Slack', 'Trello', 'OpenAI'],
-    order: 2,
+    order: 6,
     steps: [
       'Every 15 minutes, it checks who is still clocked in.',
       "If a shift is ending and there's no time entry, the person gets a Slack reminder.",
@@ -130,7 +135,7 @@ export const workflowCopy: Record<string, WorkflowCopy> = {
     title: 'Every email reaches the right team',
     summary: 'AI reads incoming mail and routes it to support, billing, or general.',
     tools: ['Gmail', 'OpenAI', 'Slack'],
-    order: 3,
+    order: 7,
     steps: [
       'A new email arrives.',
       "AI reads it and decides what it's about.",
@@ -151,7 +156,7 @@ export const workflowCopy: Record<string, WorkflowCopy> = {
     title: 'One article, ready-to-post social content',
     summary: 'AI writes the caption and image, then queues it for your review.',
     tools: ['OpenAI', 'Placid', 'Buffer', 'Slack'],
-    order: 4,
+    order: 8,
     steps: [
       'A new article is published.',
       'The workflow reads the article.',
@@ -174,7 +179,7 @@ export const workflowCopy: Record<string, WorkflowCopy> = {
     title: 'Sign-ups that route themselves',
     summary: 'New form entries land in your CRM and get the right offer or contract automatically.',
     tools: ['Google Sheets', 'HubSpot', 'Gmail', 'OpenAI'],
-    order: 5,
+    order: 9,
     steps: [
       'Someone fills in your sign-up form.',
       "They're added to HubSpot as a contact.",
@@ -200,7 +205,7 @@ export const workflowCopy: Record<string, WorkflowCopy> = {
     title: 'Won deals invoice themselves',
     summary: 'When a deal closes, the invoice is created and finance is notified.',
     tools: ['HubSpot', 'QuickBooks', 'Slack'],
-    order: 6,
+    order: 10,
     steps: [
       'A deal is marked as won.',
       'The workflow gathers the deal, company, and line items.',
@@ -223,7 +228,7 @@ export const workflowCopy: Record<string, WorkflowCopy> = {
     title: 'Chat messages become tasks',
     summary: 'AI turns a Slack message into a ClickUp task with a due date.',
     tools: ['Slack', 'OpenAI', 'ClickUp'],
-    order: 7,
+    order: 11,
     steps: [
       'Someone posts a request in Slack.',
       'AI turns it into a clear task.',
@@ -241,7 +246,7 @@ export const workflowCopy: Record<string, WorkflowCopy> = {
     title: 'Meetings booked from a chat message',
     summary: 'AI reads the request, finds the contact, and books a Google Meet.',
     tools: ['Slack', 'OpenAI', 'HubSpot', 'Google Calendar'],
-    order: 8,
+    order: 12,
     steps: [
       'Someone asks for a meeting in Slack.',
       'AI pulls out who, when, and what.',
@@ -264,7 +269,8 @@ export const workflowCopy: Record<string, WorkflowCopy> = {
     summary:
       'AI pulls stories from Hacker News, Reddit, and the web, scores them, and you pick the keepers in Slack.',
     tools: ['Hacker News', 'Reddit', 'OpenAI', 'Slack', 'Google Sheets'],
-    order: 9,
+    order: 1,
+    featured: true,
     steps: [
       'Every morning, it pulls new stories from Hacker News, Reddit, and a web search.',
       'Duplicates are removed and the list is trimmed.',
@@ -333,7 +339,8 @@ export const workflowCopy: Record<string, WorkflowCopy> = {
     summary:
       'AI writes a research brief, a script with hook and captions, reviews it, and saves it to Notion.',
     tools: ['OpenAI', 'Notion', 'Slack'],
-    order: 10,
+    order: 2,
+    homeCard: true,
     steps: [
       'A kept story arrives from the Story Scout.',
       'Your brand voice and style are applied.',
@@ -358,7 +365,8 @@ export const workflowCopy: Record<string, WorkflowCopy> = {
     title: 'An AI that learns your taste',
     summary: 'Every Sunday, AI studies your Keep and Kill votes and suggests better scoring rules.',
     tools: ['Google Sheets', 'OpenAI', 'Slack'],
-    order: 11,
+    order: 3,
+    homeCard: true,
     steps: [
       "Every Sunday, it reads the week's votes.",
       'The votes are summarized.',
@@ -381,7 +389,7 @@ export const workflowCopy: Record<string, WorkflowCopy> = {
     title: 'A monthly check-up on your content engine',
     summary: "On the 1st of each month, AI reviews the month's votes and suggests changes to the scoring.",
     tools: ['Google Sheets', 'OpenAI', 'Slack'],
-    order: 12,
+    order: 4,
     steps: [
       'On the 1st of each month, it reads the last 30 days of votes.',
       'The month is summarized.',

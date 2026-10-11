@@ -11,7 +11,8 @@ if (term && typed && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
   const sum = rows[rows.length - 1];
   const stepRows = rows.slice(0, -1);
   const steps = stepRows.map((r) => ({
-    verb: r.dataset.verb ?? '',
+    // data-verb holds one or more spinner verbs separated by "|", shown in turn.
+    verbs: (r.dataset.verb ?? '').split('|'),
     label: r.dataset.label ?? '',
     ms: Number(r.dataset.ms) || 1500,
   }));
@@ -49,7 +50,8 @@ if (term && typed && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
     ]);
   }
   plan.push([450, () => term.classList.remove('is-typing')]);
-  steps.forEach(({ verb, label, ms }, i) => {
+  steps.forEach(({ verbs, label, ms }, i) => {
+    let v: HTMLElement;
     plan.push([
       i ? 0 : 250,
       () => {
@@ -57,13 +59,15 @@ if (term && typed && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
           className: 't-glyph',
           textContent: '·',
         });
-        const v = Object.assign(document.createElement('span'), { className: 't-verb', textContent: verb });
+        v = Object.assign(document.createElement('span'), { className: 't-verb', textContent: verbs[0] });
         stepRows[i].replaceChildren(glyph, v);
         spin = glyph;
       },
     ]);
+    const each = ms / verbs.length;
+    for (const verb of verbs.slice(1)) plan.push([each, () => (v.textContent = verb)]);
     plan.push([
-      ms,
+      each,
       () => {
         spin = null;
         done(stepRows[i], label);
