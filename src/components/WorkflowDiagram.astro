@@ -9,6 +9,7 @@
 // from the copy's beats[].through, which the homepage animation uses to sync the beat list. Animation is left to the page (Tasks 5–6).
 import {
   beatIndexes,
+  flowOf,
   isAiNode,
   isDecisionNode,
   isHumanNode,
@@ -54,6 +55,8 @@ const path = mainPath(w);
 const byName = new Map(w.nodes.map((n) => [n.name, n]));
 const stepOf = new Map(path.map((name, i) => [name, i]));
 const beatOf = variant === 'featured' ? beatIndexes(w) : [];
+// Stream settings for the homepage animation (featured only).
+const flow = variant === 'featured' ? flowOf(w) : undefined;
 
 const wrap = (text: string, max: number) => {
   const lines: string[] = [];
@@ -234,6 +237,9 @@ const lineH = variant === 'full' ? 14 : 16;
   width={variant === 'featured' && !column ? undefined : f(W)}
   height={variant === 'featured' && !column ? undefined : f(H)}
   data-workflow={w.slug}
+  data-filter-at={flow && flow.filterStep >= 0 ? flow.filterStep : undefined}
+  data-keep-rate={flow?.keepRate}
+  data-vote-keep-rate={flow?.voteKeepRate}
   {...(decorative
     ? { 'aria-hidden': 'true', focusable: 'false' }
     : { role: 'img', 'aria-labelledby': `${uid}-t ${uid}-d` })}

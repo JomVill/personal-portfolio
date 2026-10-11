@@ -132,6 +132,10 @@
   border-top: 1px dashed #dce7ce26;
   color: var(--screen-muted);
 }
+.t-sum .t-seg {
+  /* the summary wraps between its parts, never inside one */
+  white-space: nowrap;
+}
 .t-sum b {
   font-weight: 400;
   color: var(--screen-ink);
@@ -312,8 +316,10 @@ html.motion-paused .track {
   margin: -4.5px 0 0 -4.5px;
   border-radius: 50%;
   background: #ff9361;
+  /* thin dark rim keeps the dot readable on the orange AI node */
   box-shadow:
-    0 0 0 3px #ee652b38,
+    0 0 0 1.5px #242a25b3,
+    0 0 0 4px #ee652b38,
     0 0 14px 3px #ee652b8c;
   opacity: 0;
   pointer-events: none;
@@ -445,4 +451,96 @@ html.motion-paused .track {
   .term .screen-top span:first-child {
     white-space: nowrap;
   }
+}
+
+/* ---- hero name label ---- */
+.hero-eyebrow {
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+/* ---- Future AI Lab / BrandNat highlight ---- */
+.lab {
+  display: grid;
+  gap: 28px;
+  padding: clamp(22px, 3vw, 36px);
+}
+@media (min-width: 900px) {
+  .lab {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 64px);
+    align-items: center;
+  }
+}
+.lab h2 {
+  font-size: clamp(24px, 2.6vw, 32px);
+  letter-spacing: -0.02em;
+  max-width: 24ch;
+}
+.lab-meta {
+  margin-top: 12px;
+  font: 500 12px/1.4 var(--mono);
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+.lab-body {
+  margin-top: 16px;
+  max-width: 38rem;
+  color: var(--muted);
+}
+.lab-link {
+  margin-top: 20px;
+  font-size: 15px;
+}
+.lab-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 22px;
+}
+.lab-list li {
+  position: relative;
+  display: grid;
+  gap: 2px;
+  padding-left: 30px;
+  font-size: 15px;
+  line-height: 1.45;
+}
+.lab-list li .stage {
+  font: 500 11px/1.4 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.lab-list li b {
+  font-weight: 650;
+}
+.lab-list li > span:last-child {
+  color: var(--muted);
+}
+/* nodes */
+.lab-list li::before {
+  content: '';
+  position: absolute;
+  left: 3px;
+  top: 4px;
+  width: 11px;
+  height: 11px;
+  border-radius: 4px;
+  background: #b9bab3;
+}
+.lab-list li.now::before {
+  background: var(--orange);
+  box-shadow: 0 0 0 4px #ee652b26;
+}
+/* wire to the next stage */
+.lab-list li:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 19px;
+  bottom: -18px;
+  width: 1.5px;
+  background: #cfd0c9;
 }

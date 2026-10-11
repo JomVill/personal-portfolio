@@ -6,11 +6,11 @@ const prompt = "automate: find today's best stories → score → vote";
 const steps = [
   {
     verbs: ['Searching Hacker News…', 'Reading Reddit…'],
-    label: 'Pulled stories from Hacker News, Reddit, and the web',
+    label: "Pulled today's stories from Hacker News, Reddit, and the web",
     ms: 1700,
   },
-  { verbs: ['Scoring with AI…'], label: 'AI scored every story', ms: 1600 },
-  { verbs: ['Waiting for your vote…'], label: 'Sent the best to Slack: Keep or Kill', ms: 2100 },
+  { verbs: ['Scoring with AI…'], label: 'AI kept the strongest few', ms: 1600 },
+  { verbs: ['Waiting for your vote…'], label: 'Sent them to Slack: Keep or Kill', ms: 2100 },
   { verbs: ['Sending to scripts…'], label: 'Kept stories sent to the script writer', ms: 1400 },
 ];
 ---
@@ -27,7 +27,7 @@ const steps = [
     <div
       class="term-body"
       role="img"
-      aria-label="Example automation run: stories are pulled from Hacker News, Reddit, and the web, AI scores every story, the best are sent to Slack for a Keep or Kill vote, and kept stories go to the script writer."
+      aria-label="Example automation run: today's stories are pulled from Hacker News, Reddit, and the web, AI keeps the strongest few, they are sent to Slack for a Keep or Kill vote, and kept stories go to the script writer. Finished in about 5 minutes, saving about 2 hours of manual work."
     >
       <p class="t-prompt">
         <span class="t-caret">&gt;</span>
@@ -45,7 +45,8 @@ const steps = [
           </li>
         ))}
         <li class="t-sum">
-          <b>Done</b> · 4 steps · scripts next
+          <b>Done</b> · <span class="t-seg">4 steps</span> · <span class="t-seg">~5 min</span> ·{' '}
+          <span class="t-seg">saves ~2 h of manual work</span>
         </li>
       </ol>
     </div>

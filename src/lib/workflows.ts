@@ -123,6 +123,19 @@ export const beatIndexes = (w: Workflow): number[] => {
   return Array.from({ length: steps }, (_, i) => beats.findIndex((b) => i + 1 <= b.through));
 };
 
+/**
+ * Stream settings for the featured animation: the main-path step where items are filtered
+ * (-1 when none) and the share kept there and at the vote. Throws when `filterAt` is off the path.
+ */
+export const flowOf = (w: Workflow) => {
+  const f = w.flow ?? {};
+  const filterStep = f.filterAt ? mainPath(w).indexOf(f.filterAt) : -1;
+  if (f.filterAt && filterStep < 0)
+    throw new Error(`${w.id}: flow.filterAt "${f.filterAt}" is not on the main path`);
+  const rate = (v: number | undefined) => Math.min(Math.max(v ?? 1, 0), 1);
+  return { filterStep, keepRate: rate(f.keepRate), voteKeepRate: rate(f.voteKeepRate) };
+};
+
 /** Short display label for a node: the copy's CEO label when present, else the node name. */
 export const nodeLabel = (w: Workflow, name: string) => w.labels?.[name] ?? name;
 

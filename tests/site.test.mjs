@@ -65,7 +65,7 @@ test('site shell: header logo, Email me key, footer links', async () => {
   const html = await readPage('');
   const header = html.match(/<header[\s\S]*?<\/header>/)[0];
   assert.match(header, /<img[^>]+j-logo/);
-  assert.match(header, /class="brand-name">Jomari Villanueva</);
+  assert.match(header, /class="brand-name">Jom</);
   assert.match(header, /<a[^>]+href="mailto:jomarivillanueva83@gmail\.com"[^>]*>\s*Email me\s*<\/a>/);
   const footer = html.match(/<footer[\s\S]*?<\/footer>/)[0];
   assert.match(footer, /Academic work/);
@@ -88,14 +88,31 @@ test('homepage: hero, terminal final state, marquee, featured, cards, no CDNs', 
   assert.doesNotMatch(html, /3 hours a day/);
   // terminal is server-rendered in its final state
   const term = html.match(/<div[^>]+class="[^"]*\bterm\b[\s\S]*?<\/ol>/)[0];
-  for (const line of [
-    'Pulled stories from Hacker News, Reddit, and the web',
-    'AI scored every story',
-    'Sent the best to Slack: Keep or Kill',
-    'Kept stories sent to the script writer',
-    'Done</b> · 4 steps · scripts next',
-  ])
-    assert.match(term, new RegExp(line), line);
+  const doneLines = [...term.matchAll(/<li class="t-done"[^>]*>([\s\S]*?)<\/li>/g)].map((m) =>
+    m[1]
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/&#39;/g, "'")
+      .replace(/\s+/g, ' ')
+      .trim(),
+  );
+  assert.deepEqual(doneLines, [
+    "⎿ ✓ Pulled today's stories from Hacker News, Reddit, and the web",
+    '⎿ ✓ AI kept the strongest few',
+    '⎿ ✓ Sent them to Slack: Keep or Kill',
+    '⎿ ✓ Kept stories sent to the script writer',
+  ]);
+  // done lines are words only; figures live in the summary line
+  for (const line of doneLines) assert.doesNotMatch(line, /\d/, line);
+  const summary = term
+    .match(/<li class="t-sum">([\s\S]*?)<\/li>/)[1]
+    .replace(/<[^>]+>/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+  assert.equal(summary, 'Done · 4 steps · ~5 min · saves ~2 h of manual work');
+  assert.match(
+    html,
+    /aria-label="Example automation run:[^"]*about 5 minutes, saving about 2 hours of manual work\."/,
+  );
   assert.match(html, /find today(&#39;|')s best stories → score → vote/);
   assert.match(html, />Story scout</);
   assert.doesNotMatch(term, /Partnership|HubSpot/);
@@ -139,6 +156,8 @@ test('homepage: hero, terminal final state, marquee, featured, cards, no CDNs', 
   );
   assert.match(row, /data-step="6" data-beat="2" data-kind="human"/);
   assert.match(row, /data-step="4" data-beat="1" data-kind="ai"/);
+  // stream settings from copy.flow: filter at "Worth it?" (step 5)
+  assert.match(row, /data-filter-at="5" data-keep-rate="0.35" data-vote-keep-rate="0.5"/);
   assert.match(row, /Pull stories/);
   assert.doesNotMatch(row, /Fetch Reddit|Web search/);
   assert.doesNotMatch(feat, /Dashed line/);
@@ -252,7 +271,9 @@ test('about, academic, cv, and 404 pages', async () => {
   assert.match(academic, /PCETT/);
   const about = await readPage('about');
   assert.match(about, /Jom/);
-  assert.doesNotMatch(about.match(/<main[\s\S]*<\/main>/)[0], /Jomari/);
+  const aboutMain = about.match(/<main[\s\S]*<\/main>/)[0];
+  assert.match(aboutMain, /I’m Jomari Francis B\. Villanueva\. Most people call me Jom\./);
+  assert.match(aboutMain, /Future AI Lab \/ BrandNat/);
   assert.match(await readPage('cv'), /id="print-profile"/);
   const nf = await readFile('dist/404.html', 'utf8');
   assert.equal((nf.match(/<h1[\s>]/g) || []).length, 1);
@@ -275,4 +296,27 @@ test('pointer effects: follower is created by JS, script is bundled from the lay
   }
   assert.ok(found, 'pointer-fx module not bundled');
   assert.match(await readPage('about'), /<script type="module"/);
+});
+
+test('marquee: OpenAI and Slack render as inline SVG symbols', async () => {
+  const html = await readPage('');
+  const marquee = html.match(/<section[^>]+tools-strip[\s\S]*?<\/section>/)[0];
+  for (const slug of ['openai', 'slack']) {
+    assert.match(marquee, new RegExp(`<symbol id="si-${slug}"[^>]*><path d="[^"]+"`), slug);
+    assert.match(marquee, new RegExp(`<use href="#si-${slug}"`), slug);
+  }
+});
+
+test('about page points to previous AI automation work', async () => {
+  const about = await readPage('about/');
+  assert.match(about, /Check out my previous AI\s+automation work/);
+  assert.match(about, new RegExp(`href="${base}work/"`));
+});
+
+test('lab section tells the manual → AI-assisted → agentic story', async () => {
+  const html = await readPage('');
+  const lab = html.match(/<ol class="lab-list"[\s\S]*?<\/ol>/)[0];
+  const stages = [...lab.matchAll(/<b>([^<]+)<\/b>/g)].map((m) => m[1]);
+  assert.deepEqual(stages, ['Manual automation', 'AI-assisted', 'Agentic']);
+  assert.match(html, /hand-wired Zapier automations to AI agents that plan their own steps/);
 });

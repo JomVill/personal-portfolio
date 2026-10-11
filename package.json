@@ -24,7 +24,8 @@
     "@fontsource-variable/dm-sans": "^5.3.0",
     "@fontsource-variable/manrope": "^5.3.0",
     "astro": "^7.3.3",
-    "simple-icons": "16.35.0"
+    "simple-icons": "16.35.0",
+    "simple-icons-legacy": "npm:simple-icons@13.21.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",

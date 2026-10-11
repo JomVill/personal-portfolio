@@ -1,18 +1,23 @@
 ---
 // "Tools I build with" marquee. Logos are inlined from the simple-icons package at build time
-// (no CDN). Tools simple-icons does not carry (OpenAI, Slack) show their name only.
+// (no CDN). Tools current simple-icons dropped (OpenAI, Slack) come from simple-icons-legacy (13.21.0, the last release with them).
 // Three copies of the list scroll; only the first is exposed to assistive tech.
 import {
+  siAirtable,
   siBuffer,
   siClaude,
   siClickup,
   siClockify,
+  siFeedly,
   siGmail,
+  siGoogleappsscript,
   siGooglecalendar,
   siGooglesheets,
   siHubspot,
   siN8n,
   siNotion,
+  siObsidian,
+  siPerplexity,
   siQuickbooks,
   siReddit,
   siTrello,
@@ -20,23 +25,29 @@ import {
   siZapier,
   type SimpleIcon,
 } from 'simple-icons';
+import { siOpenai, siSlack } from 'simple-icons-legacy';
 
 type Tool = { name: string; icon?: SimpleIcon; primary?: boolean };
 const tools: Tool[] = [
   { name: 'Zapier', icon: siZapier, primary: true },
   { name: 'n8n', icon: siN8n },
-  { name: 'OpenAI' },
+  { name: 'OpenAI', icon: siOpenai },
   { name: 'Claude', icon: siClaude },
+  { name: 'Perplexity', icon: siPerplexity },
   { name: 'HubSpot', icon: siHubspot },
-  { name: 'Slack' },
+  { name: 'Slack', icon: siSlack },
   { name: 'Gmail', icon: siGmail },
   { name: 'QuickBooks', icon: siQuickbooks },
   { name: 'Trello', icon: siTrello },
   { name: 'ClickUp', icon: siClickup },
   { name: 'Google Sheets', icon: siGooglesheets },
+  { name: 'Google Apps Script', icon: siGoogleappsscript },
+  { name: 'Airtable', icon: siAirtable },
   { name: 'Notion', icon: siNotion },
+  { name: 'Obsidian', icon: siObsidian },
   { name: 'Reddit', icon: siReddit },
   { name: 'Hacker News', icon: siYcombinator },
+  { name: 'Feedly', icon: siFeedly },
   { name: 'Google Calendar', icon: siGooglecalendar },
   { name: 'Clockify', icon: siClockify },
   { name: 'Buffer', icon: siBuffer },

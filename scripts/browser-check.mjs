@@ -73,9 +73,16 @@ if ((await page.evaluate(() => getComputedStyle(document.documentElement).scroll
         .filter((a) => a.playState === 'running').length ?? 0,
   );
   if (marqueeRunning !== 0) failures.push('Reduced motion: marquee is animating');
+  const rmPackets = await rm.evaluate(
+    () =>
+      [...document.querySelectorAll('.flow-screen .packet, .card .wfd .pk')].filter(
+        (e) => +getComputedStyle(e.closest('g') ?? e).opacity > 0.05,
+      ).length,
+  );
+  if (rmPackets !== 0) failures.push(`Reduced motion: ${rmPackets} workflow packets visible`);
   if (!(await rm.locator('.t-sum').isVisible()))
     failures.push('Reduced motion: terminal summary not visible');
-  report.push({ reducedMotion: { runningAnimations: running, marqueeRunning } });
+  report.push({ reducedMotion: { runningAnimations: running, marqueeRunning, packets: rmPackets } });
   await ctx.close();
 }
 // Motion allowed: terminal text must change over time.
@@ -118,6 +125,49 @@ if ((await page.evaluate(() => getComputedStyle(document.documentElement).scroll
   }
   if (!resumed) failures.push('Terminal did not resume after Play motion');
   report.push({ pauseControl: { frozen: p1 === p2, marqueeRunning, resumed } });
+  await ctx.close();
+}
+// Featured diagram: a stream of packets flows through; pausing freezes them in place.
+{
+  const ctx = await browser.newContext({
+    reducedMotion: 'no-preference',
+    viewport: { width: 1440, height: 1000 },
+  });
+  const fp = await ctx.newPage();
+  await fp.goto(base, { waitUntil: 'networkidle' });
+  const packets = () =>
+    fp.evaluate(() =>
+      [...document.querySelectorAll('.flow-screen .packet')]
+        .filter((e) => +getComputedStyle(e).opacity > 0.05)
+        .map((e) => e.style.transform),
+    );
+  await fp.locator('.flow-screen').scrollIntoViewIfNeeded();
+  await fp.waitForTimeout(4000);
+  let most = 0;
+  for (let i = 0; i < 5; i++) {
+    most = Math.max(most, (await packets()).length);
+    await fp.waitForTimeout(400);
+  }
+  if (most < 3) failures.push(`Featured diagram: at most ${most} packets visible at once (want ≥3)`);
+  const pool = await fp.locator('.flow-screen .packet').count();
+  if (pool > 8) failures.push(`Featured diagram: ${pool} packet elements (pool should cap at 8)`);
+  const btn = fp.locator('.motion-toggle');
+  await btn.scrollIntoViewIfNeeded();
+  await btn.click();
+  await fp.locator('.flow-screen').scrollIntoViewIfNeeded();
+  await fp.waitForTimeout(300);
+  const f1 = await packets();
+  await fp.waitForTimeout(1500);
+  const f2 = await packets();
+  const frozen = JSON.stringify(f1) === JSON.stringify(f2);
+  if (!frozen) failures.push('Featured diagram: packets moved while paused');
+  await btn.scrollIntoViewIfNeeded();
+  await btn.click();
+  await fp.locator('.flow-screen').scrollIntoViewIfNeeded();
+  await fp.waitForTimeout(1000);
+  const resumed = JSON.stringify(await packets()) !== JSON.stringify(f2);
+  if (!resumed) failures.push('Featured diagram: packets did not resume after Play motion');
+  report.push({ featuredFlow: { mostVisible: most, pool, frozen, resumed } });
   await ctx.close();
 }
 // Pointer effects: follower ring on fine pointers with motion allowed; none for reduced motion or touch.
