@@ -120,6 +120,56 @@ if ((await page.evaluate(() => getComputedStyle(document.documentElement).scroll
   report.push({ pauseControl: { frozen: p1 === p2, marqueeRunning, resumed } });
   await ctx.close();
 }
+// Pointer effects: follower ring on fine pointers with motion allowed; none for reduced motion or touch.
+{
+  const ringState = (pg) =>
+    pg.evaluate(() => {
+      const el = document.querySelector('.fx-ring');
+      if (!el) return { exists: false, visible: false, size: 0 };
+      const span = el.firstElementChild.getBoundingClientRect();
+      return { exists: true, visible: getComputedStyle(el).visibility === 'visible', size: span.width };
+    });
+  const moveAround = async (pg) => {
+    for (const [x, y] of [
+      [200, 200],
+      [420, 300],
+      [640, 260],
+    ])
+      await pg.mouse.move(x, y, { steps: 4 });
+    await pg.waitForTimeout(400);
+  };
+  const ctx = await browser.newContext({
+    reducedMotion: 'no-preference',
+    viewport: { width: 1440, height: 1000 },
+  });
+  const fp = await ctx.newPage();
+  await fp.goto(base, { waitUntil: 'networkidle' });
+  await moveAround(fp);
+  const idle = await ringState(fp);
+  if (!idle.exists || !idle.visible) failures.push('Follower missing or hidden on fine pointer');
+  const keyBox = await fp.getByRole('link', { name: 'See my workflows' }).boundingBox();
+  await fp.mouse.move(keyBox.x + keyBox.width / 2, keyBox.y + keyBox.height / 2, { steps: 6 });
+  await fp.waitForTimeout(500);
+  const hover = await ringState(fp);
+  if (!(hover.size > idle.size + 10))
+    failures.push(`Follower did not grow on key hover (${idle.size} -> ${hover.size})`);
+  report.push({ follower: { idle, hover } });
+  await ctx.close();
+
+  for (const [name, opts] of [
+    ['reduced motion', { reducedMotion: 'reduce' }],
+    ['touch', { hasTouch: true, isMobile: true, viewport: { width: 390, height: 844 } }],
+  ]) {
+    const c = await browser.newContext(opts);
+    const pg = await c.newPage();
+    await pg.goto(base, { waitUntil: 'networkidle' });
+    await moveAround(pg);
+    const state = await ringState(pg);
+    if (state.visible) failures.push(`Follower visible with ${name}`);
+    report.push({ [`follower (${name})`]: state });
+    await c.close();
+  }
+}
 await writeFile('test-results/browser-report.json', JSON.stringify({ report, failures }, null, 2));
 await browser.close();
 console.log(JSON.stringify({ report, failures }, null, 2));

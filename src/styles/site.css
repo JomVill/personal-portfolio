@@ -342,3 +342,96 @@ section {
     font-size: 13px;
   }
 }
+
+/* ---- pointer effects (src/scripts/pointer-fx.ts; html.fx-on only on fine pointers with motion allowed) ---- */
+.fx-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 50;
+  pointer-events: none;
+  will-change: transform;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.25s,
+    visibility 0s 0.25s;
+}
+.fx-ring.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.25s;
+}
+.fx-ring span {
+  position: absolute;
+  left: -9px;
+  top: -9px;
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--accent);
+  border-radius: 50%;
+  background: #ee652b00;
+  box-shadow: 0 0 6px #ee652b2e;
+  transition:
+    left 0.22s cubic-bezier(0.2, 0.8, 0.2, 1),
+    top 0.22s cubic-bezier(0.2, 0.8, 0.2, 1),
+    width 0.22s cubic-bezier(0.2, 0.8, 0.2, 1),
+    height 0.22s cubic-bezier(0.2, 0.8, 0.2, 1),
+    background-color 0.22s,
+    border-color 0.22s,
+    transform 0.12s;
+}
+.fx-ring.is-hover span {
+  left: -20px;
+  top: -20px;
+  width: 40px;
+  height: 40px;
+  border-color: #ee652b73;
+  background: #ee652b14;
+}
+.fx-ring.is-down span {
+  transform: scale(0.82);
+}
+.fx-ring.is-dark span {
+  border-color: #ffa47a;
+  box-shadow: 0 0 8px #ee652b59;
+}
+.fx-ring.is-dark.is-hover span {
+  border-color: #ffa47a99;
+  background: #ff9a6b1f;
+}
+.fx-ring.is-accent.is-hover span {
+  border-color: #fff8f2cc;
+  background: #fff8f214;
+  box-shadow: 0 0 8px #6b2a0c26;
+}
+html.motion-paused .fx-ring {
+  display: none;
+}
+
+/* sheen: a soft highlight on the silver surface, painted under the content */
+html.fx-on .panel,
+html.fx-on .device {
+  position: relative;
+  isolation: isolate;
+}
+html.fx-on .panel::after,
+html.fx-on .device::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(220px circle at var(--mx, 50%) var(--my, 50%), #ffffff9e, #ffffff00 70%);
+  opacity: 0;
+  transition: opacity 0.35s;
+}
+html.fx-on .panel:hover::after,
+html.fx-on .device:hover::after {
+  opacity: 1;
+}
+html.motion-paused .panel::after,
+html.motion-paused .device::after {
+  opacity: 0;
+}

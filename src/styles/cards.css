@@ -35,6 +35,9 @@
   font-size: 15px;
   align-self: flex-start;
 }
+.card .wfd .e {
+  transition: stroke 0.2s;
+}
 .card .wfd .n {
   transition:
     stroke 0.6s,
@@ -62,5 +65,40 @@
 @media (max-width: 760px) {
   .cards {
     grid-template-columns: 1fr;
+  }
+}
+
+/* hover / keyboard focus: a 2px lift and the mini diagram brightens a touch */
+.card {
+  transition: box-shadow 0.2s;
+}
+.card:focus-within,
+html.fx-on .card:hover {
+  box-shadow:
+    0 12px 24px -16px #555b4c80,
+    0 1px 2px #3331;
+}
+.card:focus-within .wfd .e,
+html.fx-on .card:hover .wfd .e {
+  stroke: #8f9188;
+}
+.card:focus-within .wfd .ai .n,
+html.fx-on .card:hover .wfd .ai .n {
+  filter: drop-shadow(0 0 3px #ee652b73);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .card {
+    transition:
+      box-shadow 0.2s,
+      transform 0.2s;
+  }
+  .card:focus-within,
+  html.fx-on .card:hover {
+    transform: translateY(-2px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: none;
   }
 }

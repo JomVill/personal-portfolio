@@ -190,3 +190,16 @@ test('workflow pages note Zapier build with n8n replication', async () => {
     assert.match(await readPage(`work/${slug}/`), /Built in Zapier\. Can be replicated in n8n\./);
   }
 });
+
+test('pointer effects: follower is created by JS, script is bundled from the layout', async () => {
+  const html = await readPage('');
+  assert.doesNotMatch(html, /class="fx-ring"/);
+  const scripts = [...html.matchAll(/<script type="module"(?: src="([^"]+)")?>([\s\S]*?)<\/script>/g)];
+  let found = false;
+  for (const [, src, inline] of scripts) {
+    const code = src ? await readFile(join('dist', src.slice(base.length - 1)), 'utf8') : inline;
+    if (code.includes('fx-ring')) found = true;
+  }
+  assert.ok(found, 'pointer-fx module not bundled');
+  assert.match(await readPage('about'), /<script type="module"/);
+});
