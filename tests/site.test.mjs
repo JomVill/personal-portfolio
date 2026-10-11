@@ -287,3 +287,9 @@ test('marquee: OpenAI and Slack render as inline SVG symbols', async () => {
     assert.match(marquee, new RegExp(`<use href="#si-${slug}"`), slug);
   }
 });
+
+test('about page points to previous AI automation work', async () => {
+  const about = await readPage('about/');
+  assert.match(about, /Check out my previous AI\s+automation work/);
+  assert.match(about, new RegExp(`href="${base}work/"`));
+});
