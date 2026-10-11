@@ -1,0 +1,1565 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mockup B — Notebook · Jomari Villanueva</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Manrope:wght@500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --paper: #f8f8f5;
+        --paper-2: #f1f1ea;
+        --ink: #252623;
+        --muted: #696b64;
+        --rule: #d9d9cf;
+        --grid: #e6e6dc;
+        --grid-major: #d6d6ca;
+        --signal: #ee652b;
+        --accent: #ad3b0f;
+        --ch1: #b33d0b;
+        --ch2: #1d6b85;
+        --ch3: #6d4aa8;
+        --ch4: #2e7539;
+        --mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+        --sans: 'DM Sans', system-ui, sans-serif;
+        --head: 'Manrope', system-ui, sans-serif;
+        --margin: 168px;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        -webkit-text-size-adjust: 100%;
+      }
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font: 400 17px/1.55 var(--sans);
+        overflow-x: hidden;
+      }
+      a {
+        color: inherit;
+      }
+      :focus-visible {
+        outline: 2px solid var(--signal);
+        outline-offset: 3px;
+      }
+      .mono {
+        font-family: var(--mono);
+      }
+      .skip {
+        position: absolute;
+        left: -999px;
+      }
+      .skip:focus {
+        left: 16px;
+        top: 8px;
+        background: var(--ink);
+        color: var(--paper);
+        padding: 6px 10px;
+        z-index: 9;
+      }
+
+      /* ---------- placeholder chips: obviously unfinished ---------- */
+      .need {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        max-width: 100%;
+        padding: 3px 8px;
+        border: 1px dashed var(--accent);
+        border-radius: 3px;
+        background: repeating-linear-gradient(-45deg, #fdf0e8 0 6px, #f9e3d6 6px 12px);
+        color: var(--accent);
+        font: 600 12.5px/1.35 var(--mono);
+        letter-spacing: 0.01em;
+        overflow-wrap: anywhere;
+      }
+      .need::before {
+        content: 'TODO';
+        font-size: 9.5px;
+        letter-spacing: 0.08em;
+        padding: 1px 4px;
+        background: var(--accent);
+        color: #fff;
+        border-radius: 2px;
+        flex: none;
+      }
+
+      /* ---------- masthead ---------- */
+      .masthead {
+        border-bottom: 1px solid var(--ink);
+        background: var(--paper);
+      }
+      .masthead-inner {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 14px 32px;
+        display: flex;
+        align-items: center;
+        gap: 24px;
+      }
+      .brand {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        text-decoration: none;
+        font: 800 17px/1 var(--head);
+        letter-spacing: -0.01em;
+      }
+      .brand small {
+        font: 500 11px/1 var(--mono);
+        color: var(--muted);
+        letter-spacing: 0.08em;
+      }
+      .nav {
+        display: flex;
+        gap: 22px;
+        margin-left: auto;
+      }
+      .nav a {
+        text-decoration: none;
+        font-size: 15px;
+        font-weight: 500;
+      }
+      .nav a:hover {
+        text-decoration: underline;
+        text-underline-offset: 4px;
+      }
+      .cta-mail {
+        font: 600 13px/1 var(--mono);
+        text-decoration: none;
+        border: 1px solid var(--ink);
+        padding: 9px 12px;
+        border-radius: 999px;
+        white-space: nowrap;
+      }
+      .cta-mail:hover {
+        background: var(--ink);
+        color: var(--paper);
+      }
+      .runhead {
+        border-bottom: 1px solid var(--rule);
+        font: 500 11.5px/1 var(--mono);
+        color: var(--muted);
+        letter-spacing: 0.06em;
+      }
+      .runhead-inner {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 9px 32px;
+        display: flex;
+        gap: 24px;
+        flex-wrap: wrap;
+      }
+      .runhead b {
+        color: var(--ink);
+        font-weight: 600;
+      }
+
+      /* ---------- sheet with margin column ---------- */
+      .sheet {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 32px;
+      }
+      .entry {
+        display: grid;
+        grid-template-columns: var(--margin) minmax(0, 1fr);
+        border-bottom: 1px solid var(--rule);
+      }
+      .entry:last-of-type {
+        border-bottom: 0;
+      }
+      .margin {
+        position: relative;
+        padding: 36px 20px 24px 0;
+        font: 500 11.5px/1.5 var(--mono);
+        color: var(--muted);
+        letter-spacing: 0.05em;
+        border-right: 1.5px solid var(--signal);
+      }
+      .margin .sec {
+        display: block;
+        color: var(--accent);
+        font-weight: 700;
+        font-size: 12px;
+      }
+      .margin .sec-name {
+        display: block;
+        color: var(--ink);
+        font-weight: 600;
+        margin-top: 2px;
+      }
+      .margin .note {
+        display: block;
+        margin-top: 10px;
+      }
+      .body {
+        padding: 36px 0 48px 40px;
+        min-width: 0;
+      }
+
+      /* ---------- §1 station ---------- */
+      .station {
+        display: grid;
+        grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+        gap: 48px;
+        align-items: center;
+      }
+      .kicker {
+        font: 600 12px/1 var(--mono);
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        margin: 0 0 22px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .led {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--signal);
+        box-shadow: 0 0 0 3px rgba(238, 101, 43, 0.18);
+        flex: none;
+        display: inline-block;
+      }
+      h1 {
+        font: 800 clamp(38px, 5.4vw, 74px)/1.02 var(--head);
+        letter-spacing: -0.035em;
+        margin: 0;
+        max-width: 13ch;
+      }
+      h1 .dash {
+        color: var(--signal);
+      }
+      .sub {
+        font-size: 20px;
+        line-height: 1.5;
+        max-width: 34ch;
+        margin: 22px 0 30px;
+        color: var(--ink);
+      }
+      .actions {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 13px 18px;
+        border-radius: 4px;
+        background: var(--ink);
+        color: var(--paper);
+        font: 600 15px/1 var(--sans);
+        text-decoration: none;
+      }
+      .btn:hover {
+        background: #000;
+      }
+      .btn .tag {
+        font: 600 11px/1 var(--mono);
+        color: #ffb08c;
+        letter-spacing: 0.06em;
+      }
+      .link {
+        font-weight: 600;
+        font-size: 15px;
+        text-underline-offset: 4px;
+      }
+
+      /* the survey plot: graph paper with real lat/long ticks */
+      .plot {
+        margin: 0;
+      }
+      .plot-frame {
+        position: relative;
+        aspect-ratio: 1 / 1;
+        width: 100%;
+        max-width: 420px;
+        margin-left: auto;
+        padding: 22px 0 0 46px;
+      }
+      .plot-grid {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        border: 1px solid var(--ink);
+        background-color: #fbfbf8;
+        background-image:
+          linear-gradient(var(--grid-major) 1px, transparent 1px),
+          linear-gradient(90deg, var(--grid-major) 1px, transparent 1px),
+          linear-gradient(var(--grid) 1px, transparent 1px),
+          linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+        background-size:
+          50% 50%,
+          50% 50%,
+          10% 10%,
+          10% 10%;
+        background-position: -1px -1px;
+      }
+      .tick {
+        position: absolute;
+        font: 500 10.5px/1 var(--mono);
+        color: var(--muted);
+        white-space: nowrap;
+      }
+      .tick.x {
+        top: 4px;
+        transform: translateX(-50%);
+      }
+      .tick.y {
+        left: 0;
+        transform: translateY(-50%);
+      }
+      .cross {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 0;
+        height: 0;
+      }
+      .cross::before,
+      .cross::after {
+        content: '';
+        position: absolute;
+        background: var(--ink);
+      }
+      .cross::before {
+        width: 44px;
+        height: 1.5px;
+        left: -22px;
+        top: -0.75px;
+      }
+      .cross::after {
+        height: 44px;
+        width: 1.5px;
+        top: -22px;
+        left: -0.75px;
+      }
+      .cross i {
+        position: absolute;
+        left: -9px;
+        top: -9px;
+        width: 18px;
+        height: 18px;
+        border: 1.5px solid var(--signal);
+        border-radius: 50%;
+        background: rgba(248, 248, 245, 0.6);
+      }
+      .ring {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 46%;
+        aspect-ratio: 1;
+        transform: translate(-50%, -50%);
+        border: 1px dashed var(--muted);
+        border-radius: 50%;
+        opacity: 0.55;
+      }
+      .stn-label {
+        position: absolute;
+        left: calc(50% + 18px);
+        top: calc(50% + 14px);
+        background: var(--paper);
+        border: 1px solid var(--ink);
+        padding: 6px 8px;
+        font: 600 11px/1.35 var(--mono);
+        letter-spacing: 0.03em;
+      }
+      .stn-label span {
+        display: block;
+        color: var(--muted);
+        font-weight: 500;
+      }
+      .plot figcaption {
+        font: 500 11px/1.5 var(--mono);
+        color: var(--muted);
+        margin: 10px 0 0 auto;
+        max-width: 420px;
+        padding-left: 46px;
+        letter-spacing: 0.03em;
+      }
+      .plot figcaption b {
+        color: var(--ink);
+        font-weight: 600;
+      }
+
+      /* ---------- §2 taped-in instrument ---------- */
+      .fig-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 16px;
+        flex-wrap: wrap;
+        margin-bottom: 26px;
+      }
+      h2 {
+        font: 700 30px/1.15 var(--head);
+        letter-spacing: -0.02em;
+        margin: 0;
+      }
+      .h2-note {
+        font: 500 12px/1.4 var(--mono);
+        color: var(--muted);
+        letter-spacing: 0.04em;
+      }
+      .taped {
+        position: relative;
+        padding: 14px 0 0;
+      }
+      .tape {
+        position: absolute;
+        top: 0;
+        z-index: 2;
+        padding: 7px 14px;
+        background: rgba(226, 214, 176, 0.72);
+        border-left: 1px dashed rgba(37, 38, 35, 0.2);
+        border-right: 1px dashed rgba(37, 38, 35, 0.2);
+        font: 600 11px/1 var(--mono);
+        letter-spacing: 0.08em;
+        color: var(--ink);
+      }
+      .tape.l {
+        left: 28px;
+        transform: rotate(-2deg);
+      }
+      .tape.r {
+        right: 28px;
+        transform: rotate(1.5deg);
+      }
+      .panel {
+        position: relative;
+        background: #fcfcfa;
+        border: 1px solid var(--ink);
+        border-radius: 6px;
+        box-shadow:
+          0 1px 0 var(--ink),
+          0 14px 30px -22px rgba(37, 38, 35, 0.45);
+      }
+      .panel-top {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px 22px;
+        align-items: center;
+        padding: 26px 24px 14px;
+        border-bottom: 1px solid var(--rule);
+        font: 600 11.5px/1 var(--mono);
+        letter-spacing: 0.07em;
+      }
+      .chlabel {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+      }
+      .chlabel .dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: currentColor;
+      }
+      .c1 {
+        color: var(--ch1);
+      }
+      .c2 {
+        color: var(--ch2);
+      }
+      .c3 {
+        color: var(--ch3);
+      }
+      .c4 {
+        color: var(--ch4);
+      }
+      .panel-top .ctx {
+        color: var(--muted);
+        font-weight: 500;
+      }
+      .panel-top .count {
+        margin-left: auto;
+        color: var(--ink);
+      }
+      .panel-main {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 280px;
+      }
+      .flow-wrap {
+        padding: 26px 24px 22px;
+        background-image:
+          linear-gradient(var(--grid) 1px, transparent 1px),
+          linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+        background-size: 20px 20px;
+        background-position: -1px -1px;
+        border-right: 1px solid var(--rule);
+      }
+      .wf-title {
+        font: 700 22px/1.2 var(--head);
+        margin: 0 0 4px;
+        letter-spacing: -0.015em;
+      }
+      .wf-desc {
+        margin: 0 0 26px;
+        color: var(--muted);
+        font-size: 15.5px;
+      }
+      .flow {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        grid-template-columns: 1fr 56px 1fr 56px 1fr;
+        align-items: stretch;
+      }
+      .node {
+        position: relative;
+        background: var(--paper);
+        border: 1px solid var(--ink);
+        border-radius: 5px;
+        padding: 14px 14px 14px;
+        transition:
+          border-color 0.25s,
+          box-shadow 0.25s;
+      }
+      .node .term {
+        font: 600 10.5px/1 var(--mono);
+        letter-spacing: 0.08em;
+        color: var(--muted);
+        display: flex;
+        justify-content: space-between;
+      }
+      .node .term .st {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        border: 1.5px solid var(--muted);
+      }
+      .node strong {
+        display: block;
+        font: 700 18px/1.2 var(--head);
+        margin: 18px 0 4px;
+        letter-spacing: -0.01em;
+      }
+      .node span.cap {
+        display: block;
+        font-size: 14.5px;
+        color: var(--muted);
+      }
+      .node.proc {
+        border-width: 1.5px;
+      }
+      .wire {
+        position: relative;
+        align-self: center;
+        height: 2px;
+        background: repeating-linear-gradient(90deg, var(--muted) 0 4px, transparent 4px 8px);
+      }
+      .wire::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        width: 0;
+        background: var(--ch1);
+        transition: width 0.55s ease;
+      }
+      .wire::before {
+        content: '';
+        position: absolute;
+        right: -1px;
+        top: -4px;
+        border: 5px solid transparent;
+        border-left: 7px solid var(--muted);
+        border-right: 0;
+      }
+      .panel[data-stage='2'] .wire.w1::after,
+      .panel[data-stage='3'] .wire::after {
+        width: 100%;
+      }
+      .panel[data-stage='2'] .wire.w1::before,
+      .panel[data-stage='3'] .wire::before {
+        border-left-color: var(--ch1);
+      }
+      .panel[data-stage='1'] .n1,
+      .panel[data-stage='2'] .n1,
+      .panel[data-stage='3'] .n1,
+      .panel[data-stage='2'] .n2,
+      .panel[data-stage='3'] .n2,
+      .panel[data-stage='3'] .n3 {
+        border-color: var(--ch1);
+        box-shadow: 0 0 0 3px rgba(179, 61, 11, 0.12);
+      }
+      .panel[data-stage='1'] .n1 .st,
+      .panel[data-stage='2'] .n1 .st,
+      .panel[data-stage='3'] .n1 .st,
+      .panel[data-stage='2'] .n2 .st,
+      .panel[data-stage='3'] .n2 .st,
+      .panel[data-stage='3'] .n3 .st {
+        background: var(--signal);
+        border-color: var(--signal);
+      }
+      .annot {
+        margin: 18px 0 0;
+        display: grid;
+        grid-template-columns: 1fr 56px 1fr 56px 1fr;
+        font: 500 11px/1.4 var(--mono);
+        color: var(--muted);
+        letter-spacing: 0.04em;
+      }
+      .annot span {
+        border-top: 1px solid var(--muted);
+        padding-top: 6px;
+        position: relative;
+      }
+      .annot span::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: -5px;
+        height: 9px;
+        border-left: 1px solid var(--muted);
+      }
+
+      /* run log column */
+      .runlog {
+        padding: 22px 22px 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      .runlog h3 {
+        margin: 0;
+        font: 600 11.5px/1 var(--mono);
+        letter-spacing: 0.08em;
+        color: var(--muted);
+      }
+      .checks {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        font: 500 13px/1.4 var(--mono);
+      }
+      .checks li {
+        display: grid;
+        grid-template-columns: 18px 28px 1fr;
+        gap: 6px;
+        padding: 9px 0;
+        border-bottom: 1px dashed var(--rule);
+        align-items: center;
+      }
+      .box {
+        width: 14px;
+        height: 14px;
+        border: 1.5px solid var(--ink);
+        border-radius: 2px;
+        position: relative;
+      }
+      .checks li.done .box {
+        background: var(--ink);
+      }
+      .checks li.done .box::after {
+        content: '';
+        position: absolute;
+        left: 3.5px;
+        top: 0.5px;
+        width: 4px;
+        height: 8px;
+        border: solid var(--paper);
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+      }
+      .checks .num {
+        color: var(--muted);
+      }
+      .status {
+        font: 600 12px/1.4 var(--mono);
+        letter-spacing: 0.05em;
+        padding: 10px 12px;
+        background: var(--ink);
+        color: #f3f3ee;
+        border-radius: 4px;
+        min-height: 40px;
+      }
+      .status .on {
+        color: #ff9a6b;
+      }
+      .run {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        border: 1px solid var(--ink);
+        background: var(--paper);
+        color: var(--ink);
+        padding: 12px 14px;
+        border-radius: 4px;
+        cursor: pointer;
+        font: 600 14px/1 var(--sans);
+      }
+      .run:hover {
+        background: var(--ink);
+        color: var(--paper);
+      }
+      .run:disabled {
+        opacity: 0.55;
+        cursor: progress;
+      }
+      .run svg {
+        width: 12px;
+        height: 12px;
+      }
+      .wf-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px 14px;
+        align-items: center;
+        padding: 14px 24px 16px;
+        border-top: 1px solid var(--rule);
+        font: 500 12px/1.3 var(--mono);
+      }
+      .wf-tabs .lbl {
+        color: var(--muted);
+        letter-spacing: 0.06em;
+      }
+      .wf-tab {
+        display: inline-flex;
+        gap: 8px;
+        align-items: center;
+        padding: 6px 10px;
+        border-radius: 3px;
+        border: 1px solid var(--ink);
+        background: var(--ink);
+        color: var(--paper);
+        font: 600 12px/1.2 var(--mono);
+      }
+      .panel-foot {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+        align-items: center;
+        padding: 14px 24px;
+        border-top: 1px solid var(--rule);
+      }
+      .panel-foot .link {
+        font-size: 14.5px;
+      }
+      .panel-foot .mono {
+        font-size: 11.5px;
+        color: var(--muted);
+        letter-spacing: 0.04em;
+      }
+
+      /* ---------- §3 channel dividers ---------- */
+      .dividers {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      .divider {
+        position: relative;
+        margin-top: 34px;
+        --tw: 210px;
+      }
+      .divider:first-child {
+        margin-top: 30px;
+      }
+      .divider a {
+        display: grid;
+        grid-template-columns: 92px minmax(0, 1fr) auto;
+        gap: 8px 24px;
+        align-items: center;
+        text-decoration: none;
+        padding: 20px 22px;
+        background: #fcfcfa;
+        border: 1px solid var(--ink);
+        border-radius: 0 6px 6px 6px;
+        position: relative;
+        transition:
+          transform 0.18s ease,
+          box-shadow 0.18s ease;
+      }
+      .divider:not(:first-child) a {
+        border-radius: 6px;
+      }
+      .divider .tab {
+        position: absolute;
+        top: -29px;
+        left: calc(var(--i) * (100% - var(--tw)) / 3);
+        width: var(--tw);
+        height: 30px;
+        padding: 0 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: #fcfcfa;
+        border: 1px solid var(--ink);
+        border-bottom: 0;
+        border-radius: 6px 6px 0 0;
+        font: 700 12px/1 var(--mono);
+        letter-spacing: 0.07em;
+        z-index: 1;
+      }
+      .divider .tab .dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: currentColor;
+        flex: none;
+      }
+      .divider .tab em {
+        font-style: normal;
+        font-weight: 500;
+        color: var(--muted);
+        margin-left: auto;
+        letter-spacing: 0.04em;
+      }
+      .divider .tab::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -2px;
+        height: 3px;
+        background: #fcfcfa;
+      }
+      .divider .code {
+        font: 700 28px/1 var(--mono);
+        letter-spacing: -0.02em;
+      }
+      .divider .name {
+        display: block;
+        font: 700 22px/1.15 var(--head);
+        letter-spacing: -0.015em;
+        color: var(--ink);
+      }
+      .divider .blurb {
+        display: block;
+        color: var(--muted);
+        font-size: 16px;
+        margin-top: 3px;
+      }
+      .divider .route {
+        font: 500 12.5px/1 var(--mono);
+        color: var(--ink);
+        white-space: nowrap;
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+      .divider .trace {
+        height: 2px;
+        width: 40px;
+        background: currentColor;
+        display: inline-block;
+      }
+      .divider a:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 0 -2px var(--ink);
+      }
+      .divider a:hover .name {
+        text-decoration: underline;
+        text-underline-offset: 4px;
+      }
+
+      /* ---------- §4 bench ---------- */
+      .bench {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0;
+        border: 1px solid var(--ink);
+        border-radius: 6px;
+        background: #fcfcfa;
+      }
+      .bench-item {
+        padding: 18px 20px 20px;
+        display: grid;
+        gap: 12px;
+      }
+      .bench-item + .bench-item {
+        border-left: 1px solid var(--rule);
+      }
+      .bench-meta {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        font: 600 11.5px/1 var(--mono);
+        letter-spacing: 0.07em;
+      }
+      .bench-meta .state {
+        color: var(--accent);
+        margin-left: auto;
+        display: inline-flex;
+        gap: 7px;
+        align-items: center;
+      }
+      .bench-meta .state .led {
+        width: 7px;
+        height: 7px;
+      }
+      .bench-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+        font: 500 12px/1.3 var(--mono);
+        color: var(--muted);
+      }
+
+      /* ---------- §5 log ---------- */
+      .log {
+        display: grid;
+        grid-template-columns: 220px minmax(0, 1fr);
+        border: 1px solid var(--ink);
+        border-radius: 6px;
+        background: #fcfcfa;
+        overflow: hidden;
+      }
+      .log-date {
+        padding: 20px;
+        border-right: 1px solid var(--rule);
+        font: 600 12px/1.5 var(--mono);
+        letter-spacing: 0.05em;
+        display: grid;
+        gap: 10px;
+        align-content: start;
+      }
+      .log-date .lbl {
+        color: var(--muted);
+        font-weight: 500;
+      }
+      .log-main {
+        padding: 20px 22px 22px;
+        display: grid;
+        gap: 12px;
+        justify-items: start;
+      }
+      .log-main .lbl {
+        font: 600 11.5px/1 var(--mono);
+        letter-spacing: 0.07em;
+        color: var(--muted);
+      }
+      .ruled {
+        width: 100%;
+        height: 56px;
+        background-image: linear-gradient(var(--rule) 1px, transparent 1px);
+        background-size: 100% 28px;
+        background-position: 0 27px;
+        position: relative;
+      }
+      .ruled span {
+        position: absolute;
+        left: 0;
+        top: 4px;
+        font: 500 12px/1 var(--mono);
+        color: var(--muted);
+      }
+
+      .sec-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 16px;
+        flex-wrap: wrap;
+        margin-bottom: 18px;
+      }
+
+      /* ---------- footer ---------- */
+      .foot {
+        border-top: 1px solid var(--ink);
+      }
+      .foot-inner {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 22px 32px 34px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px 28px;
+        align-items: center;
+        font: 500 12px/1.4 var(--mono);
+        color: var(--muted);
+        letter-spacing: 0.04em;
+      }
+      .foot-inner .end {
+        color: var(--ink);
+        font-weight: 700;
+      }
+      .foot-inner a {
+        color: var(--ink);
+      }
+      .foot-inner .right {
+        margin-left: auto;
+      }
+
+      /* ---------- responsive ---------- */
+      @media (max-width: 1100px) {
+        :root {
+          --margin: 128px;
+        }
+        .panel-main {
+          grid-template-columns: 1fr;
+        }
+        .flow-wrap {
+          border-right: 0;
+          border-bottom: 1px solid var(--rule);
+        }
+        .runlog {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          align-items: start;
+        }
+        .runlog h3,
+        .runlog .checks {
+          grid-column: 1;
+        }
+        .runlog .status,
+        .runlog .run {
+          grid-column: 2;
+        }
+        .runlog .checks {
+          grid-row: 2 / span 2;
+        }
+      }
+      @media (max-width: 860px) {
+        .nav {
+          display: none;
+        }
+        .cta-mail {
+          margin-left: auto;
+        }
+        .entry {
+          grid-template-columns: 1fr;
+        }
+        .margin {
+          border-right: 0;
+          border-bottom: 1.5px solid var(--signal);
+          padding: 22px 0 8px;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 4px 12px;
+          align-items: baseline;
+        }
+        .margin .sec-name,
+        .margin .note {
+          margin: 0;
+          display: inline;
+        }
+        .margin .note::before {
+          content: '· ';
+        }
+        .body {
+          padding: 22px 0 36px;
+        }
+        .station {
+          grid-template-columns: 1fr;
+          gap: 34px;
+        }
+        .plot-frame {
+          margin: 0;
+          max-width: 320px;
+        }
+        .plot figcaption {
+          margin-left: 0;
+        }
+        .log {
+          grid-template-columns: 1fr;
+        }
+        .log-date {
+          border-right: 0;
+          border-bottom: 1px solid var(--rule);
+          grid-auto-flow: column;
+          justify-content: start;
+          gap: 14px;
+          align-items: center;
+        }
+      }
+      @media (max-width: 640px) {
+        body {
+          font-size: 16px;
+        }
+        .masthead-inner,
+        .runhead-inner,
+        .sheet,
+        .foot-inner {
+          padding-left: 16px;
+          padding-right: 16px;
+        }
+        .brand small {
+          display: none;
+        }
+        .runhead-inner {
+          gap: 6px 14px;
+        }
+        .sub {
+          font-size: 18px;
+        }
+        h2 {
+          font-size: 25px;
+        }
+        .flow {
+          grid-template-columns: 1fr;
+        }
+        .flow .wire {
+          height: 28px;
+          width: 2px;
+          justify-self: start;
+          margin-left: 22px;
+          background: repeating-linear-gradient(180deg, var(--muted) 0 4px, transparent 4px 8px);
+        }
+        .flow .wire::after {
+          width: 100%;
+          height: 0;
+          transition: height 0.55s ease;
+        }
+        .panel[data-stage='2'] .wire.w1::after,
+        .panel[data-stage='3'] .wire::after {
+          height: 100%;
+          width: 100%;
+        }
+        .flow .wire::before {
+          right: auto;
+          left: -4px;
+          top: auto;
+          bottom: -1px;
+          border: 5px solid transparent;
+          border-top: 7px solid var(--muted);
+          border-bottom: 0;
+        }
+        .panel[data-stage='2'] .wire.w1::before,
+        .panel[data-stage='3'] .wire::before {
+          border-left-color: transparent;
+          border-top-color: var(--ch1);
+        }
+        .node strong {
+          margin-top: 10px;
+        }
+        .annot {
+          display: none;
+        }
+        .node .term .io {
+          color: var(--ink);
+        }
+        .panel-top,
+        .flow-wrap,
+        .wf-tabs,
+        .panel-foot {
+          padding-left: 16px;
+          padding-right: 16px;
+        }
+        .panel-top .count {
+          margin-left: 0;
+        }
+        .runlog {
+          display: flex;
+          padding: 18px 16px 20px;
+        }
+        .tape.l {
+          left: 12px;
+        }
+        .tape.r {
+          right: 12px;
+        }
+        .divider {
+          --tw: 142px;
+          margin-top: 32px;
+        }
+        .divider .tab em {
+          display: none;
+        }
+        .divider a {
+          grid-template-columns: minmax(0, 1fr);
+          gap: 6px;
+          padding: 16px;
+        }
+        .divider .code {
+          display: none;
+        }
+        .divider .route {
+          margin-top: 6px;
+        }
+        .bench {
+          grid-template-columns: 1fr;
+        }
+        .bench-item + .bench-item {
+          border-left: 0;
+          border-top: 1px solid var(--rule);
+        }
+        .foot-inner .right {
+          margin-left: 0;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          transition: none !important;
+          animation: none !important;
+        }
+        .divider a:hover {
+          transform: none;
+        }
+      }
+      @media (prefers-reduced-motion: no-preference) {
+        .live {
+          animation: blink 2.4s ease-in-out infinite;
+        }
+        @keyframes blink {
+          50% {
+            opacity: 0.35;
+          }
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+
+    <header class="masthead">
+      <div class="masthead-inner">
+        <a class="brand" href="#">Jomari Villanueva <small>FIELD NOTEBOOK No.&nbsp;01</small></a>
+        <nav class="nav" aria-label="Primary">
+          <a href="#ch1">Automation</a>
+          <a href="#ch2">Research</a>
+          <a href="#ch3">Policy</a>
+          <a href="#ch4">Teaching</a>
+          <a href="#log">Logs</a>
+          <a href="#">About</a>
+        </nav>
+        <a class="cta-mail" href="mailto:jomarifrancis.villanueva@g.msuiit.edu.ph">Email me ↗</a>
+      </div>
+      <div class="runhead">
+        <div class="runhead-inner" aria-label="Sheet details">
+          <span>SHEET <b>001</b> · HOME</span>
+          <span>STATION <b>8.23°N 124.24°E</b></span>
+          <span>UPDATED <b>2026-10-11</b></span>
+          <span>CHANNELS <b>4</b></span>
+        </div>
+      </div>
+    </header>
+
+    <main id="main" class="sheet">
+      <!-- §1 -->
+      <section class="entry" aria-labelledby="hero-title">
+        <div class="margin" aria-hidden="true">
+          <span class="sec">§1</span>
+          <span class="sec-name">STATION</span>
+          <span class="note">Who, what, where.</span>
+        </div>
+        <div class="body">
+          <div class="station">
+            <div>
+              <p class="kicker">
+                <span class="led live" aria-hidden="true"></span> CH1 · AI AUTOMATION · LEAD CHANNEL
+              </p>
+              <h1 id="hero-title">
+                I build AI systems <span class="dash">—</span> and study how they land in society.
+              </h1>
+              <p class="sub">I'm Jomari. I wire up workflows, sensors, and classrooms in Iligan City.</p>
+              <div class="actions">
+                <a class="btn" href="#ch1"><span class="tag">CH1</span> See what I automate →</a>
+                <a class="link" href="#fig1">Watch a workflow run</a>
+              </div>
+            </div>
+            <figure class="plot">
+              <div class="plot-frame">
+                <span class="tick x" style="left: calc(46px + 0%)">124.19°E</span>
+                <span class="tick x" style="left: calc(46px + (100% - 46px) * 0.5)">124.24°</span>
+                <span class="tick x" style="left: 100%; transform: translateX(-100%)">124.29°</span>
+                <span class="tick y" style="top: calc(22px + 0%)">8.28°N</span>
+                <span class="tick y" style="top: calc(22px + (100% - 22px) * 0.5)">8.23°</span>
+                <span class="tick y" style="top: 100%">8.18°</span>
+                <div
+                  class="plot-grid"
+                  role="img"
+                  aria-label="Survey grid centred on 8.23°N 124.24°E, Iligan City, Philippines"
+                >
+                  <div class="ring"></div>
+                  <div class="cross"><i></i></div>
+                  <div class="stn-label">
+                    STN 01<span>8.23°N 124.24°E<br />ILIGAN CITY, PH</span>
+                  </div>
+                </div>
+              </div>
+              <figcaption>
+                <b>Fig. 0</b> — Home station. 1 square = 0.01° (≈1.1 km). Dashed ring: 2.5 km radius.
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <!-- §2 -->
+      <section class="entry" id="fig1" aria-labelledby="fig1-title">
+        <div class="margin" aria-hidden="true">
+          <span class="sec">§2</span>
+          <span class="sec-name">FIG. 1</span>
+          <span class="note">Taped in: one workflow, traced end to end.</span>
+        </div>
+        <div class="body">
+          <div class="fig-head">
+            <h2 id="fig1-title">How one of my workflows runs</h2>
+            <span class="h2-note">INPUT → PROCESS → OUTPUT · press run</span>
+          </div>
+          <div class="taped">
+            <span class="tape l" aria-hidden="true">FIG. 1</span>
+            <span class="tape r" aria-hidden="true">TAPED IN 2026-10-11</span>
+            <div class="panel" id="panel" data-stage="0">
+              <div class="panel-top">
+                <span class="chlabel c1"><span class="dot" aria-hidden="true"></span>CH1 · AUTOMATION</span>
+                <span class="ctx">FUTURE AI LAB / BRANDNAT</span>
+                <span class="count">WORKFLOW 01 / 03</span>
+              </div>
+              <div class="panel-main">
+                <div class="flow-wrap">
+                  <p class="wf-title">From research to useful content.</p>
+                  <p class="wf-desc">Connecting research, AI agents, and content production.</p>
+                  <ol class="flow" aria-label="Workflow steps">
+                    <li class="node n1">
+                      <span class="term"
+                        ><span class="io">IN · 01</span><i class="st" aria-hidden="true"></i
+                      ></span>
+                      <strong>Research</strong><span class="cap">Gather context</span>
+                    </li>
+                    <li class="wire w1" aria-hidden="true"></li>
+                    <li class="node n2 proc">
+                      <span class="term"
+                        ><span class="io">PROC · 02</span><i class="st" aria-hidden="true"></i
+                      ></span>
+                      <strong>AI workflow</strong><span class="cap">Connect &amp; create</span>
+                    </li>
+                    <li class="wire w2" aria-hidden="true"></li>
+                    <li class="node n3">
+                      <span class="term"
+                        ><span class="io">OUT · 03</span><i class="st" aria-hidden="true"></i
+                      ></span>
+                      <strong>Content</strong><span class="cap">Ready for review</span>
+                    </li>
+                  </ol>
+                  <div class="annot" aria-hidden="true">
+                    <span>sources in</span><i></i><span>agents do the work</span><i></i
+                    ><span>a human checks it</span>
+                  </div>
+                </div>
+                <div class="runlog">
+                  <h3>RUN CHECKLIST</h3>
+                  <ol class="checks" id="checks">
+                    <li>
+                      <span class="box" aria-hidden="true"></span><span class="num">01</span
+                      ><span>Gather context</span>
+                    </li>
+                    <li>
+                      <span class="box" aria-hidden="true"></span><span class="num">02</span
+                      ><span>Connect &amp; create</span>
+                    </li>
+                    <li>
+                      <span class="box" aria-hidden="true"></span><span class="num">03</span
+                      ><span>Ready for review</span>
+                    </li>
+                  </ol>
+                  <p class="status" id="status" role="status">IDLE · 0 / 3 STEPS</p>
+                  <button class="run" id="run" type="button">
+                    <svg viewBox="0 0 16 16" aria-hidden="true">
+                      <path d="m4 2 10 6-10 6Z" fill="currentColor" />
+                    </svg>
+                    Run the trace
+                  </button>
+                </div>
+              </div>
+              <div class="wf-tabs">
+                <span class="lbl">OTHER WORKFLOWS</span>
+                <span class="wf-tab" aria-current="true">01 Research → Content</span>
+                <span class="need">[Needs input: workflow 02 — in, AI step, out, tools]</span>
+                <span class="need">[Needs input: workflow 03]</span>
+              </div>
+              <div class="panel-foot">
+                <a class="link" href="#ch1">All automation work →</a>
+                <span class="mono">FIG. 1 · 3 STEPS · 1 HUMAN CHECKPOINT</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- §3 -->
+      <section class="entry" aria-labelledby="index-title">
+        <div class="margin" aria-hidden="true">
+          <span class="sec">§3</span>
+          <span class="sec-name">INDEX</span>
+          <span class="note">Four channels. CH1 leads.</span>
+        </div>
+        <div class="body">
+          <div class="sec-head">
+            <h2 id="index-title">Four channels, one notebook</h2>
+            <span class="h2-note">PICK A DIVIDER</span>
+          </div>
+          <ol class="dividers">
+            <li class="divider c1" id="ch1" style="--i: 0">
+              <span class="tab"><span class="dot" aria-hidden="true"></span>CH1<em>LEAD</em></span>
+              <a href="#">
+                <span class="code" aria-hidden="true">CH1</span>
+                <span
+                  ><span class="name">Automation</span
+                  ><span class="blurb">AI workflows and agents I build for real work.</span></span
+                >
+                <span class="route"><i class="trace" aria-hidden="true"></i>/automation/ →</span>
+              </a>
+            </li>
+            <li class="divider c2" id="ch2" style="--i: 1">
+              <span class="tab"><span class="dot" aria-hidden="true"></span>CH2<em>RESEARCH</em></span>
+              <a href="#">
+                <span class="code" aria-hidden="true">CH2</span>
+                <span
+                  ><span class="name">Research</span
+                  ><span class="blurb"
+                    >Societal computing: how sensing and AI land in communities.</span
+                  ></span
+                >
+                <span class="route"><i class="trace" aria-hidden="true"></i>/research/ →</span>
+              </a>
+            </li>
+            <li class="divider c3" id="ch3" style="--i: 2">
+              <span class="tab"><span class="dot" aria-hidden="true"></span>CH3<em>POLICY</em></span>
+              <a href="#">
+                <span class="code" aria-hidden="true">CH3</span>
+                <span
+                  ><span class="name">Policy</span
+                  ><span class="blurb">Helping institutions decide how to adopt technology.</span></span
+                >
+                <span class="route"><i class="trace" aria-hidden="true"></i>/policy/ →</span>
+              </a>
+            </li>
+            <li class="divider c4" id="ch4" style="--i: 3">
+              <span class="tab"><span class="dot" aria-hidden="true"></span>CH4<em>TEACHING</em></span>
+              <a href="#">
+                <span class="code" aria-hidden="true">CH4</span>
+                <span
+                  ><span class="name">Teaching</span
+                  ><span class="blurb">Computing courses and AI literacy training.</span></span
+                >
+                <span class="route"><i class="trace" aria-hidden="true"></i>/teaching/ →</span>
+              </a>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- §4 -->
+      <section class="entry" aria-labelledby="bench-title">
+        <div class="margin" aria-hidden="true">
+          <span class="sec">§4</span>
+          <span class="sec-name">ON THE BENCH</span>
+          <span class="note">Open work, not finished.</span>
+        </div>
+        <div class="body">
+          <div class="sec-head">
+            <h2 id="bench-title">On the bench now</h2>
+            <span class="h2-note">2 OPEN ITEMS</span>
+          </div>
+          <div class="bench">
+            <div class="bench-item">
+              <div class="bench-meta">
+                BENCH 01
+                <span class="state"><span class="led live" aria-hidden="true"></span>IN PROGRESS</span>
+              </div>
+              <span class="need">[Needs input: bench item 1 — what it is, one line]</span>
+              <div class="bench-row">CHANNEL <span class="need">[Needs input: CH#]</span></div>
+            </div>
+            <div class="bench-item">
+              <div class="bench-meta">
+                BENCH 02
+                <span class="state"><span class="led live" aria-hidden="true"></span>IN PROGRESS</span>
+              </div>
+              <span class="need">[Needs input: bench item 2 — what it is, one line]</span>
+              <div class="bench-row">CHANNEL <span class="need">[Needs input: CH#]</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- §5 -->
+      <section class="entry" id="log" aria-labelledby="log-title">
+        <div class="margin" aria-hidden="true">
+          <span class="sec">§5</span>
+          <span class="sec-name">BUILD LOG</span>
+          <span class="note">Dated entries: what I tried, what broke.</span>
+        </div>
+        <div class="body">
+          <div class="sec-head">
+            <h2 id="log-title">Latest log entry</h2>
+            <a class="link" href="#">All logs →</a>
+          </div>
+          <article class="log">
+            <div class="log-date">
+              <span class="lbl">ENTRY 001</span>
+              <span class="need">[Needs input: date]</span>
+            </div>
+            <div class="log-main">
+              <span class="lbl">TITLE</span>
+              <span class="need">[Needs input: first build-log topic]</span>
+              <div class="ruled" aria-hidden="true"><span>— entry text goes here —</span></div>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <div class="foot-inner">
+        <span class="end">END OF SHEET 001</span>
+        <span>8.23°N 124.24°E · ILIGAN CITY, PH</span>
+        <a href="mailto:jomarifrancis.villanueva@g.msuiit.edu.ph">jomarifrancis.villanueva@g.msuiit.edu.ph</a>
+        <span class="right">MOCKUP B · NOTEBOOK</span>
+      </div>
+    </footer>
+
+    <script>
+      (function () {
+        var panel = document.getElementById('panel');
+        var run = document.getElementById('run');
+        var status = document.getElementById('status');
+        var checks = Array.prototype.slice.call(document.querySelectorAll('#checks li'));
+        var labels = ['IN · GATHER CONTEXT', 'PROC · CONNECT & CREATE', 'OUT · READY FOR REVIEW'];
+        var timers = [];
+        function stage(n) {
+          panel.dataset.stage = String(n);
+          checks.forEach(function (li, i) {
+            li.classList.toggle('done', i < n);
+          });
+          status.innerHTML =
+            n === 3
+              ? '<span class="on">●</span> DONE · 3 / 3 STEPS · HANDED TO A HUMAN'
+              : '<span class="on">●</span> ' + labels[n - 1] + ' · ' + n + ' / 3';
+        }
+        run.addEventListener('click', function () {
+          timers.forEach(clearTimeout);
+          timers = [];
+          if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            stage(3);
+            return;
+          }
+          run.disabled = true;
+          stage(1);
+          timers.push(
+            setTimeout(function () {
+              stage(2);
+            }, 800),
+          );
+          timers.push(
+            setTimeout(function () {
+              stage(3);
+              run.disabled = false;
+            }, 1700),
+          );
+        });
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,1638 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mockup A — Logger · Jomari Villanueva</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Manrope:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --paper: #f8f8f5;
+        --paper-2: #efefe9;
+        --ink: #252623;
+        --muted: #696b64;
+        --line: #d9d9d2;
+        --line-2: #e7e7e1;
+        --signal: #ee652b;
+        --accent: #ad3b0f;
+        --ch1: #b33d0b;
+        --ch2: #1d6b85;
+        --ch3: #6d4aa8;
+        --ch4: #2e7539;
+        --bezel: #2a2b28;
+        --bezel-2: #343531;
+        --silk: #c9cac2;
+        --mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
+        --sans: 'DM Sans', system-ui, sans-serif;
+        --head: 'Manrope', system-ui, sans-serif;
+        --gutter: clamp(16px, 3.4vw, 48px);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        -webkit-text-size-adjust: 100%;
+      }
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font: 400 17px/1.55 var(--sans);
+        overflow-x: hidden;
+      }
+      a {
+        color: inherit;
+      }
+      :focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 3px;
+        border-radius: 4px;
+      }
+      .wrap {
+        max-width: 1344px;
+        margin: 0 auto;
+        padding: 0 var(--gutter);
+      }
+      .mono {
+        font-family: var(--mono);
+        font-size: 12px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+      }
+
+      /* LEDs */
+      .led {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: currentColor;
+        flex: none;
+        box-shadow:
+          0 0 0 2px color-mix(in srgb, currentColor 18%, transparent),
+          0 0 8px color-mix(in srgb, currentColor 55%, transparent);
+      }
+      .led.off {
+        background: transparent;
+        box-shadow: inset 0 0 0 1.5px currentColor;
+      }
+      .led.rec {
+        color: var(--signal);
+        animation: blink 1.6s steps(1) infinite;
+      }
+      @keyframes blink {
+        50% {
+          opacity: 0.25;
+        }
+      }
+
+      /* Needs-input chip: deliberately unfinished */
+      .needs {
+        display: inline-flex;
+        align-items: baseline;
+        gap: 6px;
+        max-width: 100%;
+        padding: 4px 9px;
+        border: 1.5px dashed var(--accent);
+        border-radius: 4px;
+        background: repeating-linear-gradient(-45deg, #fbe9df 0 6px, #f8f8f5 6px 12px);
+        color: var(--ink);
+        font: 500 12.5px/1.45 var(--mono);
+        letter-spacing: 0.01em;
+        text-transform: none;
+      }
+      .needs::before {
+        content: 'TODO';
+        font-weight: 700;
+        font-size: 10px;
+        letter-spacing: 0.08em;
+        color: var(--accent);
+      }
+
+      /* Status bar */
+      .statusbar {
+        border-bottom: 1px solid var(--line);
+        background: var(--paper-2);
+      }
+      .statusbar .wrap {
+        display: flex;
+        gap: 24px;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 34px;
+        color: var(--muted);
+      }
+      .statusbar span {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        white-space: nowrap;
+      }
+      .statusbar strong {
+        color: var(--ink);
+        font-weight: 600;
+      }
+      .statusbar .chs {
+        display: inline-flex;
+        gap: 6px;
+      }
+      .statusbar .chs i {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+      }
+
+      /* Nav */
+      .nav .wrap {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        min-height: 76px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+      }
+      .brand-mark {
+        display: grid;
+        place-items: center;
+        width: 38px;
+        height: 38px;
+        border: 1.5px solid var(--ink);
+        border-radius: 8px;
+        font: 800 14px/1 var(--head);
+        letter-spacing: -0.02em;
+        position: relative;
+      }
+      .brand-mark::after {
+        content: '';
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--signal);
+      }
+      .brand b {
+        font: 700 16px/1.1 var(--head);
+        display: block;
+      }
+      .brand small {
+        font: 400 11px/1.3 var(--mono);
+        color: var(--muted);
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+      .nav ul {
+        display: flex;
+        gap: 4px;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      .nav li a {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 8px 12px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 15px;
+      }
+      .nav li a:hover {
+        background: var(--paper-2);
+      }
+      .nav li a i {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+      }
+      .nav li a[data-ch] i {
+        display: inline-block;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 11px 18px;
+        border-radius: 8px;
+        border: 1.5px solid var(--ink);
+        background: var(--ink);
+        color: var(--paper);
+        font: 600 15px/1 var(--sans);
+        text-decoration: none;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      .btn.ghost {
+        background: transparent;
+        color: var(--ink);
+      }
+      .btn:hover {
+        background: #000;
+      }
+      .btn.ghost:hover {
+        background: var(--paper-2);
+      }
+
+      /* Hero */
+      .hero .wrap {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 340px;
+        gap: 64px;
+        align-items: end;
+        padding-top: 72px;
+        padding-bottom: 56px;
+      }
+      .eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--accent);
+        margin: 0 0 22px;
+      }
+      .eyebrow .led {
+        color: var(--signal);
+      }
+      h1 {
+        font: 800 clamp(40px, 6.1vw, 84px)/0.98 var(--head);
+        letter-spacing: -0.045em;
+        margin: 0;
+        max-width: 15ch;
+        text-wrap: balance;
+      }
+      h1 .then {
+        color: var(--muted);
+      }
+      .lede {
+        font-size: clamp(18px, 1.6vw, 21px);
+        max-width: 40ch;
+        margin: 28px 0 0;
+      }
+      .cta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 32px;
+      }
+
+      .readout {
+        border: 1.5px solid var(--ink);
+        border-radius: 12px;
+        background: var(--paper);
+        overflow: hidden;
+      }
+      .readout header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 14px;
+        border-bottom: 1px solid var(--line);
+        color: var(--muted);
+      }
+      .readout .coord {
+        padding: 18px 14px 6px;
+        font: 600 22px/1.25 var(--mono);
+        letter-spacing: -0.01em;
+      }
+      .readout .coord span {
+        display: block;
+        font-size: 12px;
+        font-weight: 500;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+        margin-top: 6px;
+      }
+      .readout dl {
+        margin: 0;
+        padding: 8px 14px 14px;
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 6px 16px;
+        font: 12px/1.5 var(--mono);
+        letter-spacing: 0.04em;
+      }
+      .readout dt {
+        color: var(--muted);
+        text-transform: uppercase;
+      }
+      .readout dd {
+        margin: 0;
+        text-align: right;
+        text-transform: uppercase;
+      }
+      .readout .bars {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        border-top: 1px solid var(--line);
+      }
+      .readout .bars span {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        padding: 9px 0;
+        font: 600 11px/1 var(--mono);
+        letter-spacing: 0.06em;
+      }
+      .readout .bars span + span {
+        border-left: 1px solid var(--line);
+      }
+
+      /* Channel recorder */
+      .recorder {
+        padding: 8px 0 0;
+      }
+      .rec-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        gap: 16px;
+        padding-bottom: 12px;
+        border-bottom: 1.5px solid var(--ink);
+      }
+      .rec-head h2 {
+        font: 700 13px/1 var(--mono);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin: 0;
+      }
+      .rec-head p {
+        margin: 0;
+        color: var(--muted);
+      }
+      .channels {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      .ch {
+        --c: var(--ink);
+        border-bottom: 1px solid var(--line);
+      }
+      .ch a {
+        display: grid;
+        grid-template-columns: 92px 300px minmax(0, 1fr) 112px;
+        align-items: stretch;
+        text-decoration: none;
+        min-height: 112px;
+      }
+      .ch a:hover {
+        background: color-mix(in srgb, var(--c) 4%, var(--paper));
+      }
+      .ch a:hover .trace svg path {
+        stroke-width: 2.6;
+      }
+      .ch-id {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 10px;
+        color: var(--c);
+        padding-right: 12px;
+      }
+      .ch-id b {
+        font: 700 15px/1 var(--mono);
+        letter-spacing: 0.04em;
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+      .ch-id small {
+        font: 500 10.5px/1 var(--mono);
+        letter-spacing: 0.08em;
+        color: var(--muted);
+      }
+      .ch-label {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 16px 24px 16px 0;
+      }
+      .ch-label h3 {
+        font: 700 22px/1.1 var(--head);
+        letter-spacing: -0.02em;
+        margin: 0 0 6px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .ch-label h3 .tag {
+        font: 700 10px/1 var(--mono);
+        letter-spacing: 0.1em;
+        color: var(--c);
+        border: 1.5px solid var(--c);
+        border-radius: 3px;
+        padding: 3px 5px;
+      }
+      .ch-label p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.45;
+      }
+      .trace {
+        position: relative;
+        overflow: hidden;
+        border-left: 1px solid var(--line);
+        border-right: 1px solid var(--line);
+        background-image:
+          linear-gradient(var(--line-2) 1px, transparent 1px),
+          linear-gradient(90deg, var(--line-2) 1px, transparent 1px);
+        background-size:
+          100% 25%,
+          48px 100%;
+        background-position:
+          0 -1px,
+          -1px 0;
+      }
+      .trace svg {
+        position: absolute;
+        inset: 14px 0 14px 0;
+        width: 200%;
+        height: calc(100% - 28px);
+        animation: scroll var(--speed, 60s) linear infinite;
+      }
+      .trace svg path {
+        fill: none;
+        stroke: var(--c);
+        stroke-width: 2;
+        stroke-linejoin: round;
+        vector-effect: non-scaling-stroke;
+        transition: stroke-width 0.2s;
+      }
+      .trace .wave {
+        position: absolute;
+        left: 10px;
+        top: 8px;
+        z-index: 2;
+        padding: 2px 6px;
+        background: var(--paper);
+        color: var(--c);
+        font: 600 10.5px/1.3 var(--mono);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        border-radius: 3px;
+      }
+      .trace .pen {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        width: 56px;
+        z-index: 1;
+        background: linear-gradient(90deg, transparent, var(--paper) 70%);
+      }
+      .trace .pen::after {
+        content: '';
+        position: absolute;
+        right: 22px;
+        top: 6px;
+        bottom: 6px;
+        width: 1.5px;
+        background: var(--c);
+        opacity: 0.5;
+      }
+      @keyframes scroll {
+        to {
+          transform: translateX(-50%);
+        }
+      }
+      .ch-go {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-end;
+        gap: 8px;
+        color: var(--c);
+        padding-left: 16px;
+      }
+      .ch-go b {
+        font: 700 13px/1 var(--mono);
+        letter-spacing: 0.06em;
+      }
+      .ch-go small {
+        font: 500 10.5px/1 var(--mono);
+        color: var(--muted);
+        letter-spacing: 0.08em;
+      }
+      .ch1 {
+        --c: var(--ch1);
+        --speed: 38s;
+      }
+      .ch2 {
+        --c: var(--ch2);
+        --speed: 90s;
+      }
+      .ch3 {
+        --c: var(--ch3);
+        --speed: 140s;
+      }
+      .ch4 {
+        --c: var(--ch4);
+        --speed: 70s;
+      }
+      .ch1 .ch-label h3 {
+        font-size: 26px;
+      }
+
+      /* Zoom bracket from CH1 into showcase */
+      .zoom {
+        display: grid;
+        grid-template-columns: 92px 300px minmax(0, 1fr) 112px;
+        height: 56px;
+      }
+      .zoom .bracket {
+        grid-column: 3;
+        position: relative;
+        border-left: 1.5px dashed var(--ch1);
+        border-right: 1.5px dashed var(--ch1);
+        margin: 0 18% 0 46%;
+      }
+      .zoom .bracket span {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        background: var(--paper);
+        padding: 2px 8px;
+        color: var(--ch1);
+        white-space: nowrap;
+      }
+
+      /* Showcase bezel */
+      .bezel {
+        background: var(--bezel);
+        border-radius: 22px;
+        padding: 14px;
+        color: var(--paper);
+        box-shadow:
+          inset 0 1px 0 #44453f,
+          0 1px 0 #fff,
+          0 24px 48px -28px rgba(37, 38, 35, 0.6);
+      }
+      .silk {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        padding: 4px 10px 14px;
+        color: var(--silk);
+      }
+      .silk .left {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .silk .left b {
+        color: var(--paper);
+        font-weight: 700;
+      }
+      .silk .led {
+        color: var(--signal);
+      }
+      .screen {
+        position: relative;
+        background: var(--paper);
+        color: var(--ink);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow:
+          inset 0 0 0 1px #000,
+          inset 0 2px 10px rgba(0, 0, 0, 0.25);
+        background-image:
+          linear-gradient(var(--line-2) 1px, transparent 1px),
+          linear-gradient(90deg, var(--line-2) 1px, transparent 1px);
+        background-size: 24px 24px;
+      }
+      .screen-top,
+      .screen-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 20px;
+        color: var(--muted);
+        background: color-mix(in srgb, var(--paper) 88%, transparent);
+      }
+      .screen-top {
+        border-bottom: 1px solid var(--line);
+      }
+      .screen-bottom {
+        border-top: 1px solid var(--line);
+      }
+      .screen-top .ctx {
+        color: var(--ink);
+        font-weight: 600;
+      }
+      .screen-top .ind {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--ch1);
+      }
+      .flow {
+        display: grid;
+        grid-template-columns: 1fr 120px 1.15fr 120px 1fr;
+        align-items: center;
+        padding: 48px 32px;
+      }
+      .node {
+        position: relative;
+        background: var(--paper);
+        border: 1.5px solid var(--ink);
+        border-radius: 12px;
+        padding: 18px 18px 20px;
+        transition:
+          border-color 0.3s,
+          box-shadow 0.3s,
+          transform 0.3s;
+      }
+      .node .idx {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: var(--muted);
+        margin-bottom: 26px;
+      }
+      .node .idx .led {
+        color: var(--line);
+        box-shadow: none;
+        transition:
+          color 0.2s,
+          box-shadow 0.2s;
+      }
+      .node strong {
+        display: block;
+        font: 700 24px/1.1 var(--head);
+        letter-spacing: -0.02em;
+      }
+      .node span.cap {
+        display: block;
+        margin-top: 6px;
+        color: var(--muted);
+        font-size: 15px;
+      }
+      .node.proc {
+        border-width: 2px;
+        box-shadow: 4px 4px 0 var(--ink);
+      }
+      .node svg {
+        width: 28px;
+        height: 28px;
+        position: absolute;
+        right: 16px;
+        bottom: 18px;
+        fill: none;
+        stroke: var(--muted);
+        stroke-width: 2.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .wire {
+        position: relative;
+        height: 40px;
+      }
+      .wire svg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+      }
+      .wire path {
+        fill: none;
+        stroke: var(--ink);
+        stroke-width: 1.5;
+        vector-effect: non-scaling-stroke;
+      }
+      .wire path.lit {
+        stroke: var(--ch1);
+        stroke-width: 2.5;
+        stroke-dasharray: 1;
+        stroke-dashoffset: 1;
+        transition: stroke-dashoffset 0.6s ease-out;
+      }
+      .screen[data-stage='1'] .n0,
+      .screen[data-stage='2'] .n0,
+      .screen[data-stage='3'] .n0,
+      .screen[data-stage='2'] .n1,
+      .screen[data-stage='3'] .n1,
+      .screen[data-stage='3'] .n2 {
+        border-color: var(--ch1);
+      }
+      .screen[data-stage='1'] .n0 .led,
+      .screen[data-stage='2'] .n0 .led,
+      .screen[data-stage='3'] .n0 .led,
+      .screen[data-stage='2'] .n1 .led,
+      .screen[data-stage='3'] .n1 .led,
+      .screen[data-stage='3'] .n2 .led {
+        color: var(--signal);
+        box-shadow:
+          0 0 0 2px rgba(238, 101, 43, 0.2),
+          0 0 8px rgba(238, 101, 43, 0.6);
+      }
+      .screen[data-stage='2'] .w0 .lit,
+      .screen[data-stage='3'] .w0 .lit,
+      .screen[data-stage='3'] .w1 .lit {
+        stroke-dashoffset: 0;
+      }
+      .screen[data-stage='2'] .n1.proc,
+      .screen[data-stage='3'] .n1.proc {
+        box-shadow: 4px 4px 0 var(--ch1);
+      }
+      #status {
+        color: var(--ink);
+        font-weight: 600;
+      }
+      .play {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        padding: 9px 14px;
+        border-radius: 7px;
+        border: 1.5px solid var(--ink);
+        background: var(--ink);
+        color: var(--paper);
+        font: 700 12px/1 var(--mono);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+      .play:disabled {
+        opacity: 0.55;
+        cursor: progress;
+      }
+      .play svg {
+        width: 12px;
+        height: 12px;
+      }
+
+      .deck {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 14px;
+        padding: 14px 0 0;
+      }
+      .keys {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+      }
+      .key {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 18px;
+        min-height: 104px;
+        text-align: left;
+        padding: 12px 14px;
+        border-radius: 10px;
+        border: 0;
+        background: var(--bezel-2);
+        color: var(--silk);
+        font: inherit;
+        cursor: pointer;
+        box-shadow:
+          inset 0 1px 0 #4a4b46,
+          0 2px 0 #151614;
+      }
+      .key .num {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font: 700 12px/1 var(--mono);
+        letter-spacing: 0.06em;
+      }
+      .key .num .led {
+        color: #5a5b55;
+        box-shadow: none;
+      }
+      .key[aria-selected='true'] {
+        background: var(--paper);
+        color: var(--ink);
+        box-shadow:
+          inset 0 -3px 0 var(--ch1),
+          0 2px 0 #151614;
+      }
+      .key[aria-selected='true'] .num .led {
+        color: var(--signal);
+        box-shadow: 0 0 8px rgba(238, 101, 43, 0.8);
+      }
+      .key .name {
+        font: 600 15px/1.25 var(--sans);
+        color: inherit;
+      }
+      .key .needs {
+        background: repeating-linear-gradient(-45deg, #3d3e39 0 6px, #343531 6px 12px);
+        color: #ecece6;
+        border-color: #e58a62;
+        font-size: 11.5px;
+      }
+      .key .needs::before {
+        color: #f2a07c;
+      }
+      .key[aria-disabled='true'] {
+        cursor: not-allowed;
+      }
+      .caption {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 14px 16px;
+        border-radius: 10px;
+        border: 1px solid #44453f;
+      }
+      .caption h2 {
+        font: 700 26px/1.1 var(--head);
+        letter-spacing: -0.025em;
+        margin: 0 0 6px;
+        color: var(--paper);
+      }
+      .caption p {
+        margin: 0;
+        color: var(--silk);
+      }
+      .caption .row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .caption a {
+        color: var(--paper);
+        font-weight: 600;
+        text-underline-offset: 4px;
+      }
+      .caption .mono {
+        color: var(--silk);
+      }
+
+      /* Bench + log */
+      .lower {
+        display: grid;
+        grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+        gap: 56px;
+        padding-top: 112px;
+      }
+      .panel-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        gap: 16px;
+        padding-bottom: 12px;
+        border-bottom: 1.5px solid var(--ink);
+      }
+      .panel-head h2 {
+        font: 700 13px/1 var(--mono);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .panel-head p {
+        margin: 0;
+        color: var(--muted);
+      }
+      .bench {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      .bench li {
+        display: grid;
+        grid-template-columns: 72px minmax(0, 1fr) auto;
+        gap: 16px;
+        align-items: center;
+        padding: 22px 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .bench .slot {
+        color: var(--muted);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .bench .slot .led {
+        color: var(--muted);
+      }
+      .bench .what {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start;
+      }
+      .bench .state {
+        color: var(--accent);
+      }
+      .bench-note {
+        margin: 14px 0 0;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .log {
+        border: 1.5px solid var(--ink);
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--paper);
+      }
+      .log .entry {
+        display: grid;
+        grid-template-columns: 112px minmax(0, 1fr);
+      }
+      .log .margin {
+        border-right: 1.5px solid #e9b8a3;
+        padding: 18px 14px;
+        color: var(--muted);
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .log .margin b {
+        color: var(--ink);
+        font-weight: 700;
+      }
+      .log .body {
+        padding: 18px 20px 22px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+        background-image: linear-gradient(transparent 31px, var(--line-2) 31px);
+        background-size: 100% 32px;
+      }
+      .log .kicker {
+        color: var(--muted);
+      }
+      .log footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 20px;
+        border-top: 1px solid var(--line);
+        background: var(--paper-2);
+      }
+      .log footer a {
+        font-weight: 600;
+        text-underline-offset: 4px;
+      }
+
+      /* Footer */
+      .foot {
+        margin-top: 96px;
+        border-top: 1.5px solid var(--ink);
+      }
+      .foot .wrap {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 24px;
+        flex-wrap: wrap;
+        padding-top: 24px;
+        padding-bottom: 40px;
+        color: var(--muted);
+      }
+      .foot a {
+        color: var(--ink);
+        font-weight: 600;
+        text-underline-offset: 4px;
+      }
+
+      .mockup-tag {
+        position: fixed;
+        left: 12px;
+        bottom: 12px;
+        z-index: 10;
+        background: var(--ink);
+        color: var(--paper);
+        padding: 6px 10px;
+        border-radius: 6px;
+      }
+
+      /* ---------- Tablet ---------- */
+      @media (max-width: 1100px) {
+        .hero .wrap {
+          grid-template-columns: 1fr;
+          gap: 40px;
+        }
+        .readout {
+          max-width: 520px;
+        }
+        .ch a,
+        .zoom {
+          grid-template-columns: 80px 240px minmax(0, 1fr) 96px;
+        }
+        .nav ul {
+          display: none;
+        }
+        .lower {
+          grid-template-columns: 1fr;
+          gap: 64px;
+        }
+      }
+      /* ---------- Phone ---------- */
+      @media (max-width: 760px) {
+        body {
+          font-size: 16px;
+        }
+        .statusbar .hide-sm {
+          display: none;
+        }
+        .statusbar .wrap {
+          gap: 12px;
+        }
+        .nav .wrap {
+          min-height: 64px;
+        }
+        .brand small {
+          display: none;
+        }
+        .nav .btn {
+          padding: 9px 12px;
+          font-size: 14px;
+        }
+        .hero .wrap {
+          padding-top: 40px;
+          padding-bottom: 40px;
+          gap: 32px;
+        }
+        h1 {
+          font-size: 42px;
+          letter-spacing: -0.04em;
+        }
+        .lede {
+          margin-top: 20px;
+        }
+        .cta .btn {
+          flex: 1 1 auto;
+          justify-content: center;
+        }
+        .readout .coord {
+          font-size: 19px;
+        }
+        .rec-head {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 6px;
+        }
+        .ch a {
+          grid-template-columns: minmax(0, 1fr) auto;
+          grid-template-areas: 'id go' 'label label' 'trace trace';
+          min-height: 0;
+          padding: 16px 0 18px;
+          row-gap: 10px;
+        }
+        .ch-id {
+          grid-area: id;
+          flex-direction: row;
+          align-items: center;
+          justify-content: flex-start;
+          gap: 12px;
+          padding: 0;
+        }
+        .ch-label {
+          grid-area: label;
+          padding: 0;
+        }
+        .ch-label h3,
+        .ch1 .ch-label h3 {
+          font-size: 22px;
+        }
+        .ch-go {
+          grid-area: go;
+          flex-direction: row;
+          align-items: center;
+          padding: 0;
+        }
+        .trace svg {
+          width: 400%;
+        }
+        .trace {
+          grid-area: trace;
+          height: 72px;
+          border: 1px solid var(--line);
+          border-radius: 6px;
+        }
+        .zoom {
+          grid-template-columns: 1fr;
+          height: 44px;
+        }
+        .zoom .bracket {
+          grid-column: 1;
+          margin: 0 16% 0 40%;
+        }
+        .bezel {
+          border-radius: 16px;
+          padding: 8px;
+          margin: 0 calc(var(--gutter) * -0.5);
+        }
+        .silk {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 4px;
+          padding: 6px 8px 10px;
+        }
+        .screen-top,
+        .screen-bottom {
+          padding: 12px 14px;
+          flex-wrap: wrap;
+        }
+        .flow {
+          grid-template-columns: 1fr;
+          padding: 20px 16px;
+        }
+        .wire {
+          height: 36px;
+        }
+        .wire svg {
+          transform: rotate(90deg);
+          width: 36px;
+          left: calc(50% - 18px);
+        }
+        .node strong {
+          font-size: 21px;
+        }
+        .node .idx {
+          margin-bottom: 14px;
+        }
+        .deck {
+          grid-template-columns: 1fr;
+          padding-top: 8px;
+          gap: 8px;
+        }
+        .keys {
+          grid-template-columns: 1fr;
+          gap: 8px;
+        }
+        .key {
+          min-height: 0;
+          gap: 10px;
+        }
+        .caption h2 {
+          font-size: 22px;
+        }
+        .lower {
+          padding-top: 72px;
+        }
+        .bench li {
+          grid-template-columns: 1fr;
+          gap: 10px;
+        }
+        .log .entry {
+          grid-template-columns: 1fr;
+        }
+        .log .margin {
+          border-right: 0;
+          border-bottom: 1.5px solid #e9b8a3;
+          flex-direction: row;
+          flex-wrap: wrap;
+          gap: 6px 14px;
+          padding: 12px 16px;
+        }
+        .log .body {
+          padding: 16px;
+        }
+        .log footer {
+          padding: 12px 16px;
+          flex-wrap: wrap;
+        }
+        .foot {
+          margin-top: 72px;
+        }
+        .mockup-tag {
+          display: none;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation: none !important;
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="statusbar">
+      <div class="wrap mono">
+        <span
+          ><span class="led rec" aria-hidden="true"></span><strong>JV-01</strong
+          ><span class="hide-sm">FIELD LOGGER · REC</span></span
+        >
+        <span class="hide-sm">8.23°N 124.24°E · ILIGAN CITY, PH</span>
+        <span><span class="hide-sm">LOCAL</span> <strong id="clock">— PHT</strong></span>
+        <span class="chs hide-sm" aria-label="Four channels recording"
+          ><i style="color: var(--ch1)"></i><i style="color: var(--ch2)"></i><i style="color: var(--ch3)"></i
+          ><i style="color: var(--ch4)"></i> 4 CH</span
+        >
+      </div>
+    </div>
+
+    <header class="nav">
+      <div class="wrap">
+        <a class="brand" href="#">
+          <span class="brand-mark" aria-hidden="true">JV</span>
+          <span><b>Jomari Villanueva</b><small>AI automation · MSU-IIT</small></span>
+        </a>
+        <nav aria-label="Main">
+          <ul>
+            <li>
+              <a href="#ch1" data-ch style="--c: var(--ch1)"><i style="color: var(--ch1)"></i>Automation</a>
+            </li>
+            <li>
+              <a href="#ch2"><i style="color: var(--ch2)"></i>Research</a>
+            </li>
+            <li>
+              <a href="#ch3"><i style="color: var(--ch3)"></i>Policy</a>
+            </li>
+            <li>
+              <a href="#ch4"><i style="color: var(--ch4)"></i>Teaching</a>
+            </li>
+            <li><a href="#log">Logs</a></li>
+            <li><a href="#">About</a></li>
+          </ul>
+        </nav>
+        <a class="btn" href="mailto:jomarifrancis.villanueva@g.msuiit.edu.ph">Contact</a>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="wrap">
+          <div>
+            <p class="eyebrow mono"><span class="led" aria-hidden="true"></span>CH1 lead · AI automation</p>
+            <h1 id="hero-title">
+              I build AI systems <span class="then">— and study how they land in society.</span>
+            </h1>
+            <p class="lede">I'm Jomari. I wire up workflows, sensors, and classrooms in Iligan City.</p>
+            <div class="cta">
+              <a class="btn" href="#showcase">See a workflow <span aria-hidden="true">↓</span></a>
+              <a class="btn ghost" href="mailto:jomarifrancis.villanueva@g.msuiit.edu.ph">Work with me</a>
+            </div>
+          </div>
+          <aside class="readout" aria-label="Station readout">
+            <header class="mono"><span>Station</span><span>JV-01</span></header>
+            <p class="coord">8.23°N 124.24°E<span>· ILIGAN CITY, PH</span></p>
+            <dl>
+              <dt>Local time</dt>
+              <dd id="clock2">— PHT</dd>
+              <dt>Log date</dt>
+              <dd>2026-10-11</dd>
+              <dt>Lead channel</dt>
+              <dd style="color: var(--ch1)">CH1 Automation</dd>
+            </dl>
+            <div class="bars" aria-hidden="true">
+              <span style="color: var(--ch1)"><i class="led"></i>CH1</span>
+              <span style="color: var(--ch2)"><i class="led"></i>CH2</span>
+              <span style="color: var(--ch3)"><i class="led"></i>CH3</span>
+              <span style="color: var(--ch4)"><i class="led"></i>CH4</span>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="recorder" aria-labelledby="rec-title">
+        <div class="wrap">
+          <div class="rec-head">
+            <h2 id="rec-title">Input channels</h2>
+            <p class="mono">4 / 4 recording · trace shape = how the work moves</p>
+          </div>
+          <ul class="channels">
+            <li class="ch ch1" id="ch1">
+              <a href="#">
+                <span class="ch-id"
+                  ><b><span class="led rec" style="color: var(--ch1)" aria-hidden="true"></span>CH1</b
+                  ><small>REC · LEAD</small></span
+                >
+                <span class="ch-label"
+                  ><h3>Automation <span class="tag">LEAD</span></h3>
+                  <p>AI workflows and agents I build for real work.</p></span
+                >
+                <span class="trace" aria-hidden="true"
+                  ><span class="wave">Pulse · runs on a trigger</span
+                  ><svg viewBox="0 0 2400 64" preserveAspectRatio="none">
+                    <path
+                      d="M0 50L30 50L30 30.5L57.9 30.5L57.9 50L91 50L91 28.2L135.5 28.2L135.5 50L201.7 50L201.7 26.7L230.4 26.7L230.4 50L280.1 50L280.1 20.9L298.8 20.9L298.8 50L338.7 50L338.7 23.9L363.9 23.9L363.9 50L451.8 50L451.8 36L477.1 36L477.1 50L522.3 50L522.3 23.8L561.7 23.8L561.7 50L630.5 50L630.5 32.4L659.7 32.4L659.7 50L711.2 50L711.2 37.7L753.1 37.7L753.1 50L796.6 50L796.6 20.9L829.6 20.9L829.6 50L860.6 50L860.6 16.7L885.9 16.7L885.9 50L952.5 50L952.5 23.3L966.4 23.3L966.4 50L1063.5 50L1063.5 16.4L1086.3 16.4L1086.3 50L1117.6 50L1117.6 18.6L1156.3 18.6L1156.3 50L1200 50L1200 50L1230 50L1230 30.5L1257.9 30.5L1257.9 50L1291 50L1291 28.2L1335.5 28.2L1335.5 50L1401.7 50L1401.7 26.7L1430.4 26.7L1430.4 50L1480.1 50L1480.1 20.9L1498.8 20.9L1498.8 50L1538.7 50L1538.7 23.9L1563.9 23.9L1563.9 50L1651.8 50L1651.8 36L1677.1 36L1677.1 50L1722.3 50L1722.3 23.8L1761.7 23.8L1761.7 50L1830.5 50L1830.5 32.4L1859.7 32.4L1859.7 50L1911.2 50L1911.2 37.7L1953.1 37.7L1953.1 50L1996.6 50L1996.6 20.9L2029.6 20.9L2029.6 50L2060.6 50L2060.6 16.7L2085.9 16.7L2085.9 50L2152.5 50L2152.5 23.3L2166.4 23.3L2166.4 50L2263.5 50L2263.5 16.4L2286.3 16.4L2286.3 50L2317.6 50L2317.6 18.6L2356.3 18.6L2356.3 50L2400 50"
+                    /></svg
+                  ><span class="pen"></span
+                ></span>
+                <span class="ch-go"><b>OPEN →</b><small>/automation</small></span>
+              </a>
+            </li>
+            <li class="ch ch2" id="ch2">
+              <a href="#">
+                <span class="ch-id"
+                  ><b><span class="led" style="color: var(--ch2)" aria-hidden="true"></span>CH2</b
+                  ><small>ON</small></span
+                >
+                <span class="ch-label"
+                  ><h3>Research</h3>
+                  <p>Societal computing: how sensing and AI land in communities.</p></span
+                >
+                <span class="trace" aria-hidden="true"
+                  ><span class="wave">Analog · continuous readings</span
+                  ><svg viewBox="0 0 2400 64" preserveAspectRatio="none">
+                    <path
+                      d="M0 33.5L5 32.7L10 38.8L15 40L20 40.5L25 41.8L30 38.3L35 37.5L40 40.1L45 40.4L50 36.3L55 34.4L60 36.2L65 34.7L70 36.1L75 35.3L80 35.3L85 34.7L90 36.4L95 37.1L100 37.9L105 39.7L110 36.9L115 37.8L120 35.8L125 35.3L130 37.5L135 37.3L140 39.9L145 40L150 43.9L155 45.3L160 43.9L165 44L170 43.3L175 42L180 48.6L185 50.1L190 45.2L195 44.2L200 42.9L205 40.6L210 43.1L215 41.8L220 43.6L225 44L230 39.5L235 38.7L240 34.6L245 32.4L250 34.4L255 33.8L260 31.4L265 30.4L270 28.9L275 27.5L280 27L285 25.3L290 29L295 29.2L300 29.6L305 30.1L310 31.6L315 33.1L320 29.7L325 29.4L330 30L335 29.3L340 32.8L345 33.5L350 32.5L355 32.8L360 29.3L365 27.5L370 31.4L375 31.6L380 30.5L385 31.1L390 27.7L395 27.7L400 22.1L405 20L410 23.5L415 24L420 19.9L425 19.5L430 19.3L435 19.8L440 15.8L445 14.8L450 16.4L455 16.2L460 16L465 15.4L470 18.9L475 19.5L480 20.5L485 21.1L490 21.7L495 21.7L500 27.4L505 29.7L510 27L515 27.5L520 27.6L525 27L530 29.6L535 29.5L540 32.4L545 33.5L550 32.5L555 33.5L560 29.8L565 29.2L570 29.3L575 28.9L580 28.9L585 28.7L590 26.9L595 26.1L600 27.9L605 28.1L610 28.3L615 28.8L620 29.6L625 30.6L630 31.3L635 32.7L640 35.3L645 38.1L650 35.3L655 36.5L660 37.3L665 38L670 40.5L675 41.5L680 44.3L685 46.1L690 44L695 44.1L700 45.7L705 45.9L710 48.2L715 49.5L720 44.8L725 43.9L730 44.6L735 44.1L740 43.5L745 43.2L750 40L755 38.4L760 40.3L765 40.3L770 36.4L775 34.9L780 38.3L785 39.1L790 38.1L795 39.3L800 34.3L805 33.2L810 37.4L815 38.3L820 35.4L825 34.4L830 38.4L835 38.7L840 38.8L845 38.7L850 38.5L855 37.4L860 41.5L865 42L870 40.8L875 40.7L880 41.6L885 42.5L890 36.8L895 35.4L900 32.9L905 30.4L910 32.1L915 30.8L920 30.5L925 30L930 26.7L935 25.7L940 26.5L945 27.2L950 20.8L955 19.2L960 18.8L965 16.9L970 19.2L975 18.2L980 20.2L985 20L990 19.6L995 18.7L1000 24.1L1005 25.4L1010 23.6L1015 23.6L1020 25.3L1025 25.6L1030 28.7L1035 30.4L1040 28.4L1045 29.4L1050 28.8L1055 29.8L1060 23.6L1065 21.3L1070 23.3L1075 21.5L1080 24.7L1085 24.6L1090 22.3L1095 21.6L1100 22.5L1105 23L1110 21.5L1115 22.1L1120 21.4L1125 22.5L1130 20.1L1135 20.4L1140 19.4L1145 18.9L1150 21.7L1155 21.8L1160 27.3L1165 29.7L1170 26.1L1175 25.9L1180 31.6L1185 33.3L1190 34.7L1195 36.5L1200 33.5L1200 33.5L1205 32.7L1210 38.8L1215 40L1220 40.5L1225 41.8L1230 38.3L1235 37.5L1240 40.1L1245 40.4L1250 36.3L1255 34.4L1260 36.2L1265 34.7L1270 36.1L1275 35.3L1280 35.3L1285 34.7L1290 36.4L1295 37.1L1300 37.9L1305 39.7L1310 36.9L1315 37.8L1320 35.8L1325 35.3L1330 37.5L1335 37.3L1340 39.9L1345 40L1350 43.9L1355 45.3L1360 43.9L1365 44L1370 43.3L1375 42L1380 48.6L1385 50.1L1390 45.2L1395 44.2L1400 42.9L1405 40.6L1410 43.1L1415 41.8L1420 43.6L1425 44L1430 39.5L1435 38.7L1440 34.6L1445 32.4L1450 34.4L1455 33.8L1460 31.4L1465 30.4L1470 28.9L1475 27.5L1480 27L1485 25.3L1490 29L1495 29.2L1500 29.6L1505 30.1L1510 31.6L1515 33.1L1520 29.7L1525 29.4L1530 30L1535 29.3L1540 32.8L1545 33.5L1550 32.5L1555 32.8L1560 29.3L1565 27.5L1570 31.4L1575 31.6L1580 30.5L1585 31.1L1590 27.7L1595 27.7L1600 22.1L1605 20L1610 23.5L1615 24L1620 19.9L1625 19.5L1630 19.3L1635 19.8L1640 15.8L1645 14.8L1650 16.4L1655 16.2L1660 16L1665 15.4L1670 18.9L1675 19.5L1680 20.5L1685 21.1L1690 21.7L1695 21.7L1700 27.4L1705 29.7L1710 27L1715 27.5L1720 27.6L1725 27L1730 29.6L1735 29.5L1740 32.4L1745 33.5L1750 32.5L1755 33.5L1760 29.8L1765 29.2L1770 29.3L1775 28.9L1780 28.9L1785 28.7L1790 26.9L1795 26.1L1800 27.9L1805 28.1L1810 28.3L1815 28.8L1820 29.6L1825 30.6L1830 31.3L1835 32.7L1840 35.3L1845 38.1L1850 35.3L1855 36.5L1860 37.3L1865 38L1870 40.5L1875 41.5L1880 44.3L1885 46.1L1890 44L1895 44.1L1900 45.7L1905 45.9L1910 48.2L1915 49.5L1920 44.8L1925 43.9L1930 44.6L1935 44.1L1940 43.5L1945 43.2L1950 40L1955 38.4L1960 40.3L1965 40.3L1970 36.4L1975 34.9L1980 38.3L1985 39.1L1990 38.1L1995 39.3L2000 34.3L2005 33.2L2010 37.4L2015 38.3L2020 35.4L2025 34.4L2030 38.4L2035 38.7L2040 38.8L2045 38.7L2050 38.5L2055 37.4L2060 41.5L2065 42L2070 40.8L2075 40.7L2080 41.6L2085 42.5L2090 36.8L2095 35.4L2100 32.9L2105 30.4L2110 32.1L2115 30.8L2120 30.5L2125 30L2130 26.7L2135 25.7L2140 26.5L2145 27.2L2150 20.8L2155 19.2L2160 18.8L2165 16.9L2170 19.2L2175 18.2L2180 20.2L2185 20L2190 19.6L2195 18.7L2200 24.1L2205 25.4L2210 23.6L2215 23.6L2220 25.3L2225 25.6L2230 28.7L2235 30.4L2240 28.4L2245 29.4L2250 28.8L2255 29.8L2260 23.6L2265 21.3L2270 23.3L2275 21.5L2280 24.7L2285 24.6L2290 22.3L2295 21.6L2300 22.5L2305 23L2310 21.5L2315 22.1L2320 21.4L2325 22.5L2330 20.1L2335 20.4L2340 19.4L2345 18.9L2350 21.7L2355 21.8L2360 27.3L2365 29.7L2370 26.1L2375 25.9L2380 31.6L2385 33.3L2390 34.7L2395 36.5L2400 33.5"
+                    /></svg
+                  ><span class="pen"></span
+                ></span>
+                <span class="ch-go"><b>OPEN →</b><small>/research</small></span>
+              </a>
+            </li>
+            <li class="ch ch3" id="ch3">
+              <a href="#">
+                <span class="ch-id"
+                  ><b><span class="led" style="color: var(--ch3)" aria-hidden="true"></span>CH3</b
+                  ><small>ON</small></span
+                >
+                <span class="ch-label"
+                  ><h3>Policy</h3>
+                  <p>Helping institutions decide how to adopt technology.</p></span
+                >
+                <span class="trace" aria-hidden="true"
+                  ><span class="wave">Step · decisions hold</span
+                  ><svg viewBox="0 0 2400 64" preserveAspectRatio="none">
+                    <path
+                      d="M0 44L136 44L150 36L150 36L286 36L300 36L300 36L436 36L450 24L450 24L586 24L600 30L600 30L736 30L750 18L750 18L886 18L900 26L900 26L1036 26L1050 44L1050 44L1186 44L1200 44L1200 44L1336 44L1350 36L1350 36L1486 36L1500 36L1500 36L1636 36L1650 24L1650 24L1786 24L1800 30L1800 30L1936 30L1950 18L1950 18L2086 18L2100 26L2100 26L2236 26L2250 44L2250 44L2386 44L2400 44"
+                    /></svg
+                  ><span class="pen"></span
+                ></span>
+                <span class="ch-go"><b>OPEN →</b><small>/policy</small></span>
+              </a>
+            </li>
+            <li class="ch ch4" id="ch4">
+              <a href="#">
+                <span class="ch-id"
+                  ><b><span class="led" style="color: var(--ch4)" aria-hidden="true"></span>CH4</b
+                  ><small>ON</small></span
+                >
+                <span class="ch-label"
+                  ><h3>Teaching</h3>
+                  <p>Computing courses and AI literacy training.</p></span
+                >
+                <span class="trace" aria-hidden="true"
+                  ><span class="wave">Cycle · by semester</span
+                  ><svg viewBox="0 0 2400 64" preserveAspectRatio="none">
+                    <path
+                      d="M0 50L20 50L40 22L200 26L230 50L300 50L320 50L340 22L500 26L530 50L600 50L620 50L640 22L800 26L830 50L900 50L920 50L940 22L1100 26L1130 50L1200 50L1200 50L1220 50L1240 22L1400 26L1430 50L1500 50L1520 50L1540 22L1700 26L1730 50L1800 50L1820 50L1840 22L2000 26L2030 50L2100 50L2120 50L2140 22L2300 26L2330 50L2400 50"
+                    /></svg
+                  ><span class="pen"></span
+                ></span>
+                <span class="ch-go"><b>OPEN →</b><small>/teaching</small></span>
+              </a>
+            </li>
+          </ul>
+          <div class="zoom" aria-hidden="true">
+            <div class="bracket"><span class="mono">CH1 ▾ zoom in</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="showcase" aria-labelledby="wf-title">
+        <div class="wrap">
+          <div class="bezel">
+            <div class="silk mono">
+              <span class="left"
+                ><span class="led" aria-hidden="true"></span><b>CH1 · Automation</b
+                ><span>Workflow study</span></span
+              >
+              <span>Workflow 01 / 03</span>
+            </div>
+            <div class="screen" id="screen" role="tabpanel" aria-labelledby="key-0" tabindex="0">
+              <div class="screen-top mono">
+                <span class="ctx">Future AI Lab / Brandnat</span>
+                <span class="ind"><span class="led" aria-hidden="true"></span>Input → Process → Output</span>
+              </div>
+              <div class="flow">
+                <div class="node n0">
+                  <div class="idx mono">
+                    <span>01 · Input</span><span class="led" aria-hidden="true"></span>
+                  </div>
+                  <strong>Research</strong><span class="cap">Gather context</span>
+                  <svg viewBox="0 0 48 48" aria-hidden="true">
+                    <rect x="12" y="9" width="24" height="30" rx="3" />
+                    <path d="M18 18h12M18 24h12M18 30h7" />
+                  </svg>
+                </div>
+                <div class="wire w0" aria-hidden="true">
+                  <svg viewBox="0 0 120 40" preserveAspectRatio="none">
+                    <path d="M0 20H40l8-12 8 24 8-12H120" />
+                    <path class="lit" pathLength="1" d="M0 20H40l8-12 8 24 8-12H120" />
+                  </svg>
+                </div>
+                <div class="node n1 proc">
+                  <div class="idx mono">
+                    <span>02 · Process</span><span class="led" aria-hidden="true"></span>
+                  </div>
+                  <strong>AI workflow</strong><span class="cap">Connect &amp; create</span>
+                  <svg viewBox="0 0 48 48" aria-hidden="true">
+                    <rect x="12" y="12" width="24" height="24" rx="6" />
+                    <path d="M19 4v8m10-8v8M19 36v8m10-8v8M4 19h8m-8 10h8m24-10h8m-8 10h8" />
+                    <rect x="20" y="20" width="8" height="8" rx="1" />
+                  </svg>
+                </div>
+                <div class="wire w1" aria-hidden="true">
+                  <svg viewBox="0 0 120 40" preserveAspectRatio="none">
+                    <path d="M0 20H40l8-12 8 24 8-12H120" />
+                    <path class="lit" pathLength="1" d="M0 20H40l8-12 8 24 8-12H120" />
+                  </svg>
+                </div>
+                <div class="node n2">
+                  <div class="idx mono">
+                    <span>03 · Output</span><span class="led" aria-hidden="true"></span>
+                  </div>
+                  <strong>Content</strong><span class="cap">Ready for review</span>
+                  <svg viewBox="0 0 48 48" aria-hidden="true">
+                    <path d="M10 28v9h28v-9M24 8v21m-8-8 8 8 8-8" />
+                  </svg>
+                </div>
+              </div>
+              <div class="screen-bottom mono">
+                <span id="status" role="status">Standby · press run</span>
+                <button class="play" id="run" type="button">
+                  <svg viewBox="0 0 16 16" aria-hidden="true">
+                    <path d="m4 2 10 6-10 6Z" fill="currentColor" /></svg
+                  >Run flow
+                </button>
+              </div>
+            </div>
+            <div class="deck">
+              <div class="keys" role="tablist" aria-label="Workflows">
+                <button class="key" id="key-0" role="tab" aria-selected="true" aria-controls="screen">
+                  <span class="num"><span>01</span><span class="led" aria-hidden="true"></span></span>
+                  <span class="name">AI workflows</span>
+                </button>
+                <button
+                  class="key"
+                  id="key-1"
+                  role="tab"
+                  aria-selected="false"
+                  aria-disabled="true"
+                  tabindex="-1"
+                >
+                  <span class="num"><span>02</span><span class="led off" aria-hidden="true"></span></span>
+                  <span class="needs">[Needs input: public workflow 2]</span>
+                </button>
+                <button
+                  class="key"
+                  id="key-2"
+                  role="tab"
+                  aria-selected="false"
+                  aria-disabled="true"
+                  tabindex="-1"
+                >
+                  <span class="num"><span>03</span><span class="led off" aria-hidden="true"></span></span>
+                  <span class="needs">[Needs input: public workflow 3]</span>
+                </button>
+              </div>
+              <div class="caption">
+                <div>
+                  <h2 id="wf-title">From research to useful content.</h2>
+                  <p>Connecting research, AI agents, and content production.</p>
+                </div>
+                <div class="row">
+                  <a href="#">View project <span aria-hidden="true">↗</span></a>
+                  <span class="mono">Tools: <span class="needs">[Needs input: stack]</span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="wrap lower">
+          <div aria-labelledby="bench-title">
+            <div class="panel-head">
+              <h2 id="bench-title"><span class="led rec" aria-hidden="true"></span>On the bench</h2>
+              <p class="mono">Now · 2 slots</p>
+            </div>
+            <ul class="bench">
+              <li>
+                <span class="slot mono"><span class="led off" aria-hidden="true"></span>B-01</span>
+                <span class="what"
+                  ><span class="needs">[Needs input: bench item 1 — what you're building now]</span></span
+                >
+                <span class="state mono">Awaiting input</span>
+              </li>
+              <li>
+                <span class="slot mono"><span class="led off" aria-hidden="true"></span>B-02</span>
+                <span class="what"
+                  ><span class="needs">[Needs input: bench item 2 — channel + one-line status]</span></span
+                >
+                <span class="state mono">Awaiting input</span>
+              </li>
+            </ul>
+            <p class="bench-note">
+              Half-built things, listed honestly. Each slot gets a channel tag and a status once filled.
+            </p>
+          </div>
+          <div id="log" aria-labelledby="log-title">
+            <div class="panel-head">
+              <h2 id="log-title">Latest build log</h2>
+              <p class="mono">Entry 001</p>
+            </div>
+            <article class="log" style="margin-top: 20px">
+              <div class="entry">
+                <div class="margin mono"><b>LOG-001</b><span>2026-10-—</span><span>Channel —</span></div>
+                <div class="body">
+                  <span class="kicker mono">What I built · what broke · what I'd change</span>
+                  <span class="needs">[Needs input: channel tag + date]</span>
+                  <span class="needs">[Needs input: first build log title]</span>
+                  <span class="needs">[Needs input: two-line summary of the log]</span>
+                </div>
+              </div>
+              <footer>
+                <span class="mono" style="color: var(--muted)">All logs</span
+                ><a href="#">Read the log <span aria-hidden="true">→</span></a>
+              </footer>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <div class="wrap mono">
+        <span>Jomari Villanueva · MSU-IIT · 8.23°N 124.24°E · ILIGAN CITY, PH</span>
+        <a href="mailto:jomarifrancis.villanueva@g.msuiit.edu.ph">Email me →</a>
+      </div>
+    </footer>
+    <span class="mockup-tag mono">Mockup A · Logger</span>
+
+    <script>
+      // Live local time in Iligan (carries info: when he's awake to reply)
+      const fmt = new Intl.DateTimeFormat('en-GB', {
+        timeZone: 'Asia/Manila',
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+      const tick = () => {
+        const t = fmt.format(new Date()) + ' PHT';
+        document.getElementById('clock').textContent = t;
+        document.getElementById('clock2').textContent = t;
+      };
+      tick();
+      setInterval(tick, 15000);
+
+      // Showcase: run the flow one stage at a time
+      const screen = document.getElementById('screen');
+      const run = document.getElementById('run');
+      const status = document.getElementById('status');
+      let timers = [];
+      run.addEventListener('click', () => {
+        timers.forEach(clearTimeout);
+        timers = [];
+        if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          screen.dataset.stage = '3';
+          status.textContent = 'Research → AI workflow → Content';
+          return;
+        }
+        run.disabled = true;
+        const steps = [
+          ['1', '01 / Input · gather context'],
+          ['2', '02 / Process · connect & create'],
+          ['3', '03 / Output · ready for review'],
+        ];
+        steps.forEach(([stage, text], i) =>
+          timers.push(
+            setTimeout(() => {
+              screen.dataset.stage = stage;
+              status.textContent = text;
+              if (i === steps.length - 1) run.disabled = false;
+            }, i * 750),
+          ),
+        );
+      });
+    </script>
+  </body>
+</html>
