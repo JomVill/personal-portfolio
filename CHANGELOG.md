@@ -6,6 +6,23 @@ This project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-10-11
+
+### Changed
+
+- Repositioned as an AI automation portfolio for "Jom": new homepage with a Claude Code-style terminal animation, tool logo marquee, and animated workflow diagrams.
+- Owner-designed JOM logo and favicons.
+- Contact email is now jomarivillanueva83@gmail.com.
+
+### Added
+
+- Eight real n8n workflows (sanitized import) with work index and per-workflow pages in plain, CEO-readable language.
+- Academic page collecting research, publications, teaching, and policy work.
+
+### Removed
+
+- Research, teaching, and writing pages (redirected to `/academic/`); old case studies (redirected to `/work/`).
+
 ## [1.0.0] - 2026-09-22
 
 ### Added

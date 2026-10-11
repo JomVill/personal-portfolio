@@ -1,98 +1,58 @@
-# Jomari Francis Villanueva — personal portfolio
+# Jom — AI automation portfolio
 
-A static Astro portfolio connecting applied AI, research, education, technology policy, and IoT. Built for GitHub Pages with no client framework and no runtime service dependencies.
+Static Astro site for Jomari "Jom" Villanueva: AI automations built with Zapier, n8n, and AI. Deployed to GitHub Pages. No client framework, no external runtime requests.
 
-## Local development
+Live (after deploy): https://jomvill.github.io/personal-portfolio/ · Repository: `JomVill/personal-portfolio`
 
-Use Node.js 24 LTS (minimum 22.12).
+## Develop
+
+Node.js 24 LTS (minimum 22.12).
 
 ```sh
 npm install
 npm run dev
 ```
 
-Open the local URL printed by Astro. Production checks:
+Checks (CI runs the same):
 
 ```sh
+npm run format:check
 npm run check
 npm run lint
-npm run build
-npm test
-npm run preview
-```
-
-`npm test` validates generated HTML routes and local assets; run it after the build. The lockfile is included for reproducible installs (`npm ci`).
-
-## GitHub Pages
-
-1. Create a repository under `JomVill`, and push this project to its `master` branch, including `package-lock.json`.
-2. In **Settings → Pages → Build and deployment**, choose **GitHub Actions**.
-3. The included `.github/workflows/deploy.yml` installs, checks, lints, builds, validates internal links, and deploys `dist/`.
-4. For `JomVill/jomvill.github.io`, the workflow automatically uses `/`. For `JomVill/personal-portfolio`, it automatically uses `/personal-portfolio/`. This is derived from GitHub's `GITHUB_REPOSITORY` variable.
-
-Optional repository Actions variables:
-
-- `SITE_URL`: origin, default `https://jomvill.github.io`. Do not include a project path here.
-- `BASE_PATH`: overrides the automatic repository path, e.g. `/personal-portfolio/` or `/`.
-
-Local project-path build:
-
-```sh
 BASE_PATH=/personal-portfolio/ npm run build
 npm test
-BASE_PATH=/personal-portfolio/ npm run preview
 ```
 
-Browser checks (Playwright, axe) run against a built site:
+Browser checks (Playwright + axe) against a preview of the built site:
 
 ```sh
-BROWSER_CHANNEL=chrome npm run test:browser
+BASE_PATH=/personal-portfolio/ npm run preview
+BROWSER_CHANNEL=chrome PREVIEW_URL=http://localhost:4321/personal-portfolio/ npm run test:browser
 ```
 
-For a custom domain, set `SITE_URL=https://your-domain.example` and `BASE_PATH=/`, and add `public/CNAME` containing the actual domain. Configure DNS and GitHub Pages accordingly. Do not add CNAME for the normal github.io deployment.
+## Pages
 
-Repository: JomVill/personal-portfolio → https://jomvill.github.io/personal-portfolio/
+- `/` home: hero, Claude Code-style terminal, tool logo marquee, featured workflow, three workflow cards, contact.
+- `/work/` and `/work/<slug>/`: all eight n8n workflows with diagrams, plain-language steps, tools.
+- `/about/`, `/academic/` (research, publications, teaching, policy), `/cv/` (printable).
+- Old URLs (`/research/`, `/teaching/`, `/writing/`, old `/work/` slugs) redirect.
 
-## Content editing
+## Content
 
-- `src/data/profile.ts`: identity, email, social links, roles, teaching, themes, engagements.
-- `src/data/projects.ts`: selected work and case studies; each slug creates `/work/<slug>/`.
-- `src/data/publications.ts`: full authorship, venue, publication year/type, DOI.
-- `src/pages/about.astro`: short professional narrative.
-- `src/pages/cv.astro`: printable professional profile.
-- `src/styles/global.css`: design tokens, grids, breakpoints, print styles.
-- `src/lib/paths.ts`: prefixes all internal routes and public assets with the deployment base.
+- `src/data/workflows.json`: sanitized n8n workflow structure (names, node types, positions, connections only). Regenerate from an n8n export:
+  ```sh
+  docker exec <n8n-container> n8n export:workflow --all --separate --output=/tmp/wf/
+  docker cp <n8n-container>:/tmp/wf/. ./n8n-export/   # keep outside git
+  npm run import:n8n -- ./n8n-export
+  ```
+  `tests/site.test.mjs` fails if credentials, IDs, emails, or parameters leak into the file.
+- `src/data/workflow-copy.ts`: titles, summaries, steps, labels, and tools for each workflow (plain, CEO-readable).
+- `src/data/profile.ts`, `src/data/publications.ts`: contact, roles, academic content.
+- `src/assets/brand/`: the owner-designed JOM logo and favicons. Use as supplied; do not redraw or recolor.
+- `src/styles/site.css`: tokens and shared components; page styles live beside it.
 
-The CV page uses the two supplied CV documents and verified publication metadata. It supports printing or saving as PDF.
+## Deploy
 
-### Writing in Markdown
+`.github/workflows/deploy.yml` builds and deploys on push to `master`. In the repository, set **Settings → Pages → Source: GitHub Actions**. The base path is derived from the repository name; override with the `BASE_PATH` / `SITE_URL` Actions variables.
 
-Create `src/content/writing/your-title.md`:
-
-```md
----
-title: 'Your actual article title'
-description: 'A concise description of the article.'
-date: 2026-09-18
-draft: true
-tags: [AI, technology policy]
----
-
-Write the article here.
-```
-
-Set `draft: false` to publish. The collection validates frontmatter; the index sorts published posts newest first. Markdown is supported directly. No sample articles are published. If MDX becomes necessary, add the official Astro MDX integration and extend the collection glob.
-
-## Design system
-
-A restrained, instrument-inspired interface: warm white, silver surfaces, charcoal, and an orange accent. The homepage presents three selected projects through a tactile workflow display. Each selector updates the stages, summary, and project link. Preview flow animates an illustrative sequence; it does not execute an AI service or process user data. Keyboard navigation supports Left/Right, Home, and End. Reduced motion presents the completed sequence immediately.
-
-DM Sans and Manrope are self-hosted. Project illustrations are lightweight HTML/CSS/SVG. The homepage has no image downloads, external scripts, analytics, or contact form. Contact links open email. Details live on secondary pages.
-
-## Sources and assumptions
-
-The supplied AI Automation and Philippines CVs inform career details. Publication metadata was checked through Crossref. No client performance metrics or confidential implementations are inferred. The workflow stages are explanatory illustrations, not live integrations. See `docs/content-sources.md` for source references.
-
-## SEO and performance
-
-Each route has a title, description, canonical URL, Open Graph fields, X summary-card metadata, and Person structured data. Astro creates the sitemap; robots.txt uses the selected site/base. A custom SVG favicon is included. No social-preview image was supplied, so no image URL is invented. Fonts and styles are served locally; there are no third-party scripts or image requests. Do not advertise a Lighthouse score until measuring the deployed site.
+Design history and decisions: `docs/superpowers/specs/2026-10-11-portfolio-redesign-design.md`, mockups in `docs/mockups/`.
