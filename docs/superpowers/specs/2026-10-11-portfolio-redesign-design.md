@@ -41,15 +41,16 @@ Minimal. Lots of whitespace, one accent color (orange), charcoal on warm off-whi
 
 ## Pages
 
-Owner decisions after mockup E (approved as base): less text; no "How I work"; no tools list; add academic button; photo + logo.
+**Approved homepage = `docs/mockups/e2-automation.html` (final state, commit 85dec26).** It is the visual and copy source of truth; port it, don't redesign it.
 
-- `/` Home: header (logo mark + name, Work · About, Email me) → hero: headline + one short line + small round photo + "See the workflows" + secondary "Academic work" → logo marquee of tools (Zapier first and visually primary, then n8n, OpenAI, HubSpot, Slack, Gmail, QuickBooks, Trello, ClickUp, Google Sheets, Google Calendar, Clockify, Buffer; static row under reduced motion) → featured workflow (main path only, 8–10 nodes, readable) with 4 short beats → 3 other workflow cards → contact → footer (LinkedIn, GitHub, Email, Academic work).
+- `/` Home: header (JOM logo only, Work · About, "Email me") → hero, two columns ≥1024px: h1 "Hi, I’m Jom, and I automate repetitive tasks.", subheading with "up to 3 hours a day" highlighted, one "See my workflows" button | Claude Code-style terminal animation → brand-logo marquee (Zapier first) → featured workflow (animated packet, 10 CEO-language nodes, 4 synced beats) → "More time-savers" (3 animated cards) → contact → footer (Academic work, LinkedIn, GitHub, Email). No photo, no name beside the logo.
 - `/work/` all 8 workflows; `/work/<slug>/` per workflow: problem, diagram + step list, tools, where the human stays in the loop. Short.
-- `/academic/` one simple page: role line, publications, research interests, teaching, PCETT/policy engagements, CV link. Linked from the hero secondary button and footer only (not main nav).
-- `/about/` short intro, photo, one credibility line, CV link.
+- `/academic/` one simple page: role line, publications, research interests, teaching, PCETT/policy engagements, CV link. Linked from the footer only (not main nav, not hero).
+- `/about/` short intro (as Jom), one credibility line, CV link. No photo unless the owner supplies one he wants.
+- Contact email: jomarivillanueva83@gmail.com.
 - Contact: mailto.
 
-Brand (final, owner-designed): the bold "JOM" logo, used exactly as supplied — never redrawn or recolored without the owner. Files in `src/assets/brand/`: `jom-logo-original.webp` (source), `jom-logo-black.png` / `jom-logo-white.png` (trimmed, transparent, for light/dark), `favicon-32/180/512.png`. Owner's detailed "JOM as an n8n canvas" artwork is a candidate hero illustration once supplied as SVG. Photo: refined headshot in `src/assets/portrait/` until a posed photo is chosen.
+Brand (final, owner-designed): the bold "JOM" logo, used exactly as supplied — never redrawn or recolored without the owner. Files in `src/assets/brand/`: `jom-logo-original.webp` (source), `jom-logo-black.png` / `jom-logo-white.png` (trimmed, transparent, for light/dark), `favicon-32/180/512.png`. Owner's detailed "JOM as an n8n canvas" artwork is a candidate hero illustration once supplied as SVG. Photo: not used (owner removed it); refined headshot kept in `src/assets/portrait/` for later.
 
 Removed: research, policy, teaching, writing/logs pages, "How I work", tools list, FDTR generator. Old URLs (`/research/`, `/teaching/`, `/writing/`) redirect to `/academic/`; old work slugs redirect to `/work/`.
 
