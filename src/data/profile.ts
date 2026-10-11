@@ -133,3 +133,6 @@ export const presentations = [
     date: '5–7 February 2026',
   },
 ];
+
+export const bench: { title: string; note: string }[] = [];
+export const personal: string[] = [];

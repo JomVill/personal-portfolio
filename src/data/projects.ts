@@ -1,6 +1,9 @@
+import type { ChannelId } from './channels';
+
 export const projects = [
   {
     slug: 'applied-ai',
+    channel: 'automation' as ChannelId,
     number: '01',
     category: 'AI AUTOMATION',
     title: 'AI workflows that connect research and operations.',
@@ -19,6 +22,7 @@ export const projects = [
   },
   {
     slug: 'ai-literacy-policy',
+    channel: 'teaching' as ChannelId,
     number: '02',
     category: 'TECHNOLOGY & SOCIETY',
     title: 'AI literacy for an informed society.',
@@ -37,6 +41,7 @@ export const projects = [
   },
   {
     slug: 'digital-government',
+    channel: 'policy' as ChannelId,
     number: '03',
     category: 'DIGITAL GOVERNANCE',
     title: 'A digital direction for Iligan City.',
@@ -48,12 +53,13 @@ export const projects = [
       'Spearheaded development of Iligan City’s Information Systems Strategic Plan through work at PCETT, connecting digital governance with information systems planning.',
     methods: ['ISSP', 'Digital government', 'Technology strategy'],
     result:
-      'Spearheaded the development of the Information Systems Strategic Plan for the City Government of Iligan.',
+      'The plan is the city’s roadmap for information systems. Implementation status is not documented here.',
     visual: 'governance',
     link: null,
   },
   {
     slug: 'environmental-sensing',
+    channel: 'research' as ChannelId,
     number: '04',
     category: 'IoT & APPLIED COMPUTING',
     title: 'Low-cost sensing. Connected environments.',
