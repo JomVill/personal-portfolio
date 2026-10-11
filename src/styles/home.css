@@ -497,21 +497,50 @@ html.motion-paused .track {
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 14px;
+  gap: 22px;
 }
 .lab-list li {
   position: relative;
-  padding-left: 22px;
+  display: grid;
+  gap: 2px;
+  padding-left: 30px;
   font-size: 15px;
-  line-height: 1.5;
+  line-height: 1.45;
 }
+.lab-list li .stage {
+  font: 500 11px/1.4 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.lab-list li b {
+  font-weight: 650;
+}
+.lab-list li > span:last-child {
+  color: var(--muted);
+}
+/* nodes */
 .lab-list li::before {
   content: '';
   position: absolute;
-  left: 0;
-  top: 0.5em;
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
+  left: 3px;
+  top: 4px;
+  width: 11px;
+  height: 11px;
+  border-radius: 4px;
+  background: #b9bab3;
+}
+.lab-list li.now::before {
   background: var(--orange);
+  box-shadow: 0 0 0 4px #ee652b26;
+}
+/* wire to the next stage */
+.lab-list li:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 19px;
+  bottom: -18px;
+  width: 1.5px;
+  background: #cfd0c9;
 }

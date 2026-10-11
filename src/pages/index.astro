@@ -87,9 +87,10 @@ const tag = (order: number) => `WF-${String(order).padStart(2, '0')}`;
         <h2 id="lab-title">Head of Technology &amp; Research, Future AI Lab / BrandNat</h2>
         <p class="lab-meta">2022–2026</p>
         <p class="lab-body">
-          For four years I led technology and research at Future AI Lab / BrandNat. I designed and built AI
-          workflows, multi-agent systems, and automation pipelines for content production and audience
-          intelligence, connecting applied AI research with real media work.
+          I joined Future AI Lab / BrandNat in 2022, just as AI went from a curiosity to a working tool. Over
+          four years as Head of Technology &amp; Research, I built through every stage of that shift, from
+          hand-wired Zapier automations to AI agents that plan their own steps, for content production and
+          audience intelligence.
         </p>
         <p class="lab-link">
           <a class="textlink" href={path('about/')}>
@@ -97,11 +98,23 @@ const tag = (order: number) => `WF-${String(order).padStart(2, '0')}`;
           </a>
         </p>
       </div>
-      <ul class="lab-list">
-        <li>AI workflows and agents for content production</li>
-        <li>Automation pipelines connecting APIs and everyday tools</li>
-        <li>Audience intelligence and emerging AI research</li>
-      </ul>
+      <ol class="lab-list" aria-label="How automation changed, 2022 to 2026">
+        <li>
+          <span class="stage">First</span>
+          <b>Manual automation</b>
+          <span>Zapier workflows built by hand, with fixed rules for every step.</span>
+        </li>
+        <li>
+          <span class="stage">Then</span>
+          <b>AI-assisted</b>
+          <span>AI inside the workflow, reading, sorting, and drafting.</span>
+        </li>
+        <li class="now">
+          <span class="stage">Now</span>
+          <b>Agentic</b>
+          <span>AI agents that plan steps and use tools, with a person approving what matters.</span>
+        </li>
+      </ol>
     </div>
   </section>
 

@@ -312,3 +312,11 @@ test('about page points to previous AI automation work', async () => {
   assert.match(about, /Check out my previous AI\s+automation work/);
   assert.match(about, new RegExp(`href="${base}work/"`));
 });
+
+test('lab section tells the manual → AI-assisted → agentic story', async () => {
+  const html = await readPage('');
+  const lab = html.match(/<ol class="lab-list"[\s\S]*?<\/ol>/)[0];
+  const stages = [...lab.matchAll(/<b>([^<]+)<\/b>/g)].map((m) => m[1]);
+  assert.deepEqual(stages, ['Manual automation', 'AI-assisted', 'Agentic']);
+  assert.match(html, /hand-wired Zapier automations to AI agents that plan their own steps/);
+});
