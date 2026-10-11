@@ -1,0 +1,332 @@
+---
+// Inline-SVG workflow diagram.
+//   featured: dark display, main path in one row with CEO labels (from copy.labels).
+//   card:     light mini diagram, no labels; main path row if copy.mainPath is set, else node positions.
+//   full:     light, every node from its n8n position (AI sub-nodes folded into their agent), labelled.
+// Every node is a <g class="node"> with data-step={i} when on the main path, and
+// data-kind="ai" | "human" where applicable. Animation is left to the page (Tasks 5–6).
+import {
+  isAiNode,
+  isDecisionNode,
+  isHumanNode,
+  isTriggerNode,
+  mainEdges,
+  mainPath,
+  nodeLabel,
+  reachable,
+  visibleNodes,
+  type Workflow,
+  type WorkflowNode,
+} from '../lib/workflows';
+
+interface Props {
+  workflow: Workflow;
+  variant: 'featured' | 'card' | 'full';
+  /** Hide from assistive tech when the surrounding markup already names the workflow. */
+  decorative?: boolean;
+  class?: string;
+}
+
+const { workflow: w, variant, decorative = false, class: className } = Astro.props;
+
+type Placed = {
+  node: WorkflowNode;
+  cx: number;
+  cy: number;
+  h: number;
+  width: number;
+  step?: number;
+  label?: string[];
+};
+type Edge = { d: string; later: boolean };
+
+const path = mainPath(w);
+const byName = new Map(w.nodes.map((n) => [n.name, n]));
+const stepOf = new Map(path.map((name, i) => [name, i]));
+
+const wrap = (text: string, max: number) => {
+  const lines: string[] = [];
+  for (const word of text.split(/\s+/)) {
+    const last = lines[lines.length - 1];
+    if (last !== undefined && (last + ' ' + word).length <= max) lines[lines.length - 1] = last + ' ' + word;
+    else lines.push(word);
+  }
+  return lines;
+};
+
+const nodeWidth = (n: WorkflowNode, h: number) => (isAiNode(n) ? h * 1.7 : isDecisionNode(n) ? h * 1.15 : h);
+
+const edgePath = (a: Placed, b: Placed) => {
+  const x1 = a.cx + a.width / 2;
+  const x2 = b.cx - b.width / 2;
+  const { cy: y1 } = a;
+  const { cy: y2 } = b;
+  const f = (v: number) => v.toFixed(1);
+  if (Math.abs(y1 - y2) < 0.5 && x2 >= x1) return `M${f(x1)} ${f(y1)}H${f(x2)}`;
+  const bend = Math.max(Math.abs(x2 - x1) / 2, 24);
+  return `M${f(x1)} ${f(y1)}C${f(x1 + bend)} ${f(y1)} ${f(x2 - bend)} ${f(y2)} ${f(x2)} ${f(y2)}`;
+};
+
+let W = 0;
+let H = 0;
+let placed: Placed[] = [];
+let edges: Edge[] = [];
+const rowLayout = variant === 'featured' || (variant === 'card' && !!w.mainPath?.length);
+
+if (rowLayout) {
+  // One row along the main path. Edges join consecutive steps; dashed when the next
+  // step is not reachable from the previous one (it starts from a separate trigger).
+  const nodes = path.map((name) => byName.get(name)).filter((n): n is WorkflowNode => !!n);
+  const featuredView = variant === 'featured';
+  W = featuredView ? 1000 : 320;
+  const pad = featuredView ? 0 : 6;
+  const col = (W - 2 * pad) / nodes.length;
+  const h = featuredView ? 38 : Math.min(22, col * 0.55);
+  const cy = featuredView ? 30 : h / 2 + 4;
+  placed = nodes.map((node, i) => ({
+    node,
+    cx: pad + col * (i + 0.5),
+    cy,
+    h,
+    width: nodeWidth(node, h),
+    step: i,
+    label: featuredView ? wrap(nodeLabel(w, node.name), 14) : undefined,
+  }));
+  edges = placed.slice(1).map((b, i) => ({
+    d: edgePath(placed[i], b),
+    later: !reachable(w, placed[i].node.name, b.node.name),
+  }));
+  const lines = Math.max(1, ...placed.map((p) => p.label?.length ?? 0));
+  H = featuredView ? cy + h / 2 + 16 + lines * 16 + 4 : cy * 2;
+} else {
+  // Positions from the n8n canvas, normalised. AI sub-nodes are already excluded.
+  const nodes = visibleNodes(w);
+  const full = variant === 'full';
+  const h = full ? 36 : 22;
+  const padX = full ? 64 : 6;
+  const padY = full ? 8 : 6;
+  const xs = nodes.map((n) => n.position[0]);
+  // n8n lifts AI agent nodes ~112 units to make room for their (folded) sub-nodes;
+  // put them back on their predecessor's row so the main line stays straight.
+  const rowY = new Map(nodes.map((n) => [n.name, n.position[1]]));
+  for (const n of nodes) {
+    const preds = mainEdges(w).filter((e) => e.to === n.name);
+    const pred = preds.length === 1 ? byName.get(preds[0].from) : undefined;
+    if (isAiNode(n) && pred && Math.abs(pred.position[1] - n.position[1]) <= 120)
+      rowY.set(n.name, pred.position[1]);
+  }
+  const ys = nodes.map((n) => rowY.get(n.name)!);
+  const minX = Math.min(...xs);
+  const minY = Math.min(...ys);
+  const rangeX = Math.max(...xs) - minX;
+  const rangeY = Math.max(...ys) - minY;
+  const half = h * 0.85; // half of the widest (AI) node
+  const s = full ? 0.5 : rangeX ? (320 - 2 * (padX + half)) / rangeX : 1;
+  W = full ? rangeX * s + 2 * (padX + half) : 320;
+  const top = padY + h / 2;
+  placed = nodes.map((node) => ({
+    node,
+    cx: rangeX ? padX + half + (node.position[0] - minX) * s : W / 2,
+    cy: top + (rowY.get(node.name)! - minY) * s,
+    h,
+    width: nodeWidth(node, h),
+    step: stepOf.get(node.name),
+    label: full ? wrap(nodeLabel(w, node.name), 16) : undefined,
+  }));
+  const at = new Map(placed.map((p) => [p.node.name, p]));
+  edges = mainEdges(w)
+    .filter((e) => at.has(e.from) && at.has(e.to))
+    .map((e) => ({ d: edgePath(at.get(e.from)!, at.get(e.to)!), later: false }));
+  const lines = Math.max(0, ...placed.map((p) => p.label?.length ?? 0));
+  const labelRoom = full ? 15 + lines * 14 : 0;
+  H = top + rangeY * s + h / 2 + labelRoom + padY;
+}
+
+const f = (v: number) => v.toFixed(1);
+const shape = (p: Placed) => {
+  const { cx, cy, h, width, node } = p;
+  const x = cx - width / 2;
+  const y = cy - h / 2;
+  if (isDecisionNode(node)) {
+    const r = width / 2;
+    return { d: `M${f(cx)} ${f(cy - r)}L${f(cx + r)} ${f(cy)}L${f(cx)} ${f(cy + r)}L${f(cx - r)} ${f(cy)}Z` };
+  }
+  const rx = h * 0.22;
+  if (isTriggerNode(w, node)) {
+    const r = h / 2;
+    return {
+      d:
+        `M${f(x + r)} ${f(y)}H${f(x + width - rx)}Q${f(x + width)} ${f(y)} ${f(x + width)} ${f(y + rx)}` +
+        `V${f(y + h - rx)}Q${f(x + width)} ${f(y + h)} ${f(x + width - rx)} ${f(y + h)}H${f(x + r)}` +
+        `A${f(r)} ${f(r)} 0 0 1 ${f(x + r)} ${f(y)}Z`,
+    };
+  }
+  return { x: f(x), y: f(y), width: f(width), height: f(h), rx: f(rx) };
+};
+
+const kindOf = (n: WorkflowNode) => (isAiNode(n) ? 'ai' : isHumanNode(n) ? 'human' : undefined);
+
+// Deterministic ids: unique as long as a page renders each workflow+variant pair once.
+const uid = `wfd-${w.slug}-${variant}`;
+const onPath = placed
+  .filter((p) => p.step !== undefined)
+  .sort((a, b) => a.step! - b.step!)
+  .map((p, i, list) => {
+    const later = i > 0 && !reachable(w, list[i - 1].node.name, p.node.name);
+    return nodeLabel(w, p.node.name) + (later ? ' (starts later, from a separate trigger)' : '');
+  });
+const desc =
+  variant === 'card'
+    ? `${w.summary}`
+    : `Main path, ${onPath.length} steps: ${onPath.join(', ')}.` +
+      (variant === 'full' ? ` ${placed.length} steps in total.` : '');
+const labelY = (p: Placed) =>
+  p.cy + (isDecisionNode(p.node) ? p.width / 2 : p.h / 2) + (variant === 'full' ? 15 : 20);
+const lineH = variant === 'full' ? 14 : 16;
+---
+
+<svg
+  class:list={['wfd', `wfd--${variant}`, className]}
+  viewBox={`0 0 ${f(W)} ${f(H)}`}
+  width={variant === 'featured' ? undefined : f(W)}
+  height={variant === 'featured' ? undefined : f(H)}
+  data-workflow={w.slug}
+  {...(decorative
+    ? { 'aria-hidden': 'true', focusable: 'false' }
+    : { role: 'img', 'aria-labelledby': `${uid}-t ${uid}-d` })}
+>
+  <title id={`${uid}-t`}>{w.title}</title>
+  <desc id={`${uid}-d`}>{desc}</desc>
+  <g class="edges">
+    {edges.map((e) => (
+      <path class:list={['e', { later: e.later }]} d={e.d} />
+    ))}
+  </g>
+  {placed.map((p) => {
+    const s = shape(p);
+    const kind = kindOf(p.node);
+    return (
+      <g
+        class:list={[
+          'node',
+          {
+            ai: kind === 'ai',
+            hu: kind === 'human',
+            dec: isDecisionNode(p.node),
+            trig: isTriggerNode(w, p.node),
+          },
+        ]}
+        data-step={p.step}
+        data-kind={kind}
+      >
+        {'d' in s ? <path class="n" d={s.d} /> : <rect class="n" {...s} />}
+        {p.label && (
+          <text x={f(p.cx)} y={f(labelY(p))} text-anchor="middle">
+            {p.label.map((line, i) => (
+              <tspan x={f(p.cx)} dy={i ? lineH : 0}>
+                {line}
+              </tspan>
+            ))}
+          </text>
+        )}
+      </g>
+    );
+  })}
+</svg>
+
+<style>
+  .wfd {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    font-family: var(--body, system-ui, sans-serif);
+  }
+  .e {
+    fill: none;
+    stroke-width: 1.5;
+    vector-effect: non-scaling-stroke;
+  }
+  .n {
+    stroke-width: 1.5;
+    vector-effect: non-scaling-stroke;
+  }
+
+  /* featured: dark display */
+  .wfd--featured {
+    background: var(--screen, #242a25);
+    font-size: 13px;
+  }
+  .wfd--featured .e {
+    stroke: var(--screen-wire, #6c795f);
+  }
+  .wfd--featured .e.later {
+    stroke: var(--screen-muted, #b2beac);
+    stroke-dasharray: 4 4;
+  }
+  .wfd--featured .n {
+    fill: #30382e;
+    stroke: #8d9a80;
+  }
+  .wfd--featured text {
+    fill: var(--screen-muted, #b2beac);
+  }
+  .wfd--featured .ai .n {
+    fill: var(--orange, #ee652b);
+    stroke: var(--orange, #ee652b);
+  }
+  .wfd--featured .ai text {
+    fill: #f8b08b;
+    font-weight: 600;
+  }
+  .wfd--featured .hu .n {
+    fill: var(--screen-ink, #e6eddb);
+    stroke: var(--screen-ink, #e6eddb);
+  }
+  .wfd--featured .hu text {
+    fill: var(--screen-ink, #e6eddb);
+    font-weight: 600;
+  }
+
+  /* card: fits its box (width and height), like the mockup's .wf */
+  .wfd--card {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  /* card + full: light */
+  .wfd--card .e,
+  .wfd--full .e {
+    stroke: #a9aba2;
+  }
+  .wfd--card .n,
+  .wfd--full .n {
+    fill: #fff;
+    stroke: var(--ink, #252623);
+  }
+  .wfd--card .ai .n,
+  .wfd--full .ai .n {
+    fill: var(--orange, #ee652b);
+    stroke: var(--orange, #ee652b);
+  }
+  .wfd--card .hu .n,
+  .wfd--full .hu .n {
+    fill: var(--ink, #252623);
+  }
+  .wfd--full {
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    font-size: 12px;
+  }
+  .wfd--full text {
+    fill: var(--muted, #696b64);
+  }
+  .wfd--full .ai text,
+  .wfd--full .hu text {
+    fill: var(--ink, #252623);
+    font-weight: 600;
+  }
+</style>

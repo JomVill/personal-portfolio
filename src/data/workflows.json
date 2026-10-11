@@ -1,0 +1,881 @@
+[
+  {
+    "id": "ai-email-classifier",
+    "name": "AI Email Classifier",
+    "nodes": [
+      {
+        "name": "New Email",
+        "type": "gmailTrigger",
+        "position": [0, 192]
+      },
+      {
+        "name": "AI Classify Email",
+        "type": "textClassifier",
+        "position": [224, 192]
+      },
+      {
+        "name": "Classifier AI Model",
+        "type": "lmChatOpenAi",
+        "position": [304, 416]
+      },
+      {
+        "name": "Slack Technical Issue",
+        "type": "slack",
+        "position": [576, 0]
+      },
+      {
+        "name": "Slack Billing",
+        "type": "slack",
+        "position": [576, 192]
+      },
+      {
+        "name": "Slack Other",
+        "type": "slack",
+        "position": [576, 384]
+      }
+    ],
+    "edges": [
+      {
+        "from": "New Email",
+        "to": "AI Classify Email",
+        "kind": "main"
+      },
+      {
+        "from": "AI Classify Email",
+        "to": "Slack Technical Issue",
+        "kind": "main"
+      },
+      {
+        "from": "AI Classify Email",
+        "to": "Slack Billing",
+        "kind": "main"
+      },
+      {
+        "from": "AI Classify Email",
+        "to": "Slack Other",
+        "kind": "main"
+      },
+      {
+        "from": "Classifier AI Model",
+        "to": "AI Classify Email",
+        "kind": "ai_languageModel"
+      }
+    ]
+  },
+  {
+    "id": "article-to-social-content",
+    "name": "Article to Social Content",
+    "nodes": [
+      {
+        "name": "Article Pushed",
+        "type": "webhook",
+        "position": [0, 112]
+      },
+      {
+        "name": "Fetch Article Page",
+        "type": "httpRequest",
+        "position": [224, 112]
+      },
+      {
+        "name": "AI Write Caption And Headline",
+        "type": "agent",
+        "position": [448, 112]
+      },
+      {
+        "name": "Social AI Model",
+        "type": "lmChatOpenAi",
+        "position": [464, 336]
+      },
+      {
+        "name": "Social Content Parser",
+        "type": "outputParserStructured",
+        "position": [592, 336]
+      },
+      {
+        "name": "Create Image In Placid",
+        "type": "httpRequest",
+        "position": [800, 112]
+      },
+      {
+        "name": "Create Idea In Buffer",
+        "type": "httpRequest",
+        "position": [1024, 112]
+      },
+      {
+        "name": "Notify Team In Slack",
+        "type": "slack",
+        "position": [1248, 112]
+      }
+    ],
+    "edges": [
+      {
+        "from": "Article Pushed",
+        "to": "Fetch Article Page",
+        "kind": "main"
+      },
+      {
+        "from": "Fetch Article Page",
+        "to": "AI Write Caption And Headline",
+        "kind": "main"
+      },
+      {
+        "from": "AI Write Caption And Headline",
+        "to": "Create Image In Placid",
+        "kind": "main"
+      },
+      {
+        "from": "Social AI Model",
+        "to": "AI Write Caption And Headline",
+        "kind": "ai_languageModel"
+      },
+      {
+        "from": "Social Content Parser",
+        "to": "AI Write Caption And Headline",
+        "kind": "ai_outputParser"
+      },
+      {
+        "from": "Create Image In Placid",
+        "to": "Create Idea In Buffer",
+        "kind": "main"
+      },
+      {
+        "from": "Create Idea In Buffer",
+        "to": "Notify Team In Slack",
+        "kind": "main"
+      }
+    ]
+  },
+  {
+    "id": "create-invoice-from-hubspot-to-quickbooks",
+    "name": "Create Invoice from HubSpot to QuickBooks",
+    "nodes": [
+      {
+        "name": "Deal Stage Changed",
+        "type": "hubspotTrigger",
+        "position": [0, 0]
+      },
+      {
+        "name": "Only Closed Won",
+        "type": "filter",
+        "position": [224, 0]
+      },
+      {
+        "name": "Get Deal With Associations",
+        "type": "httpRequest",
+        "position": [448, 0]
+      },
+      {
+        "name": "Get Company",
+        "type": "httpRequest",
+        "position": [672, 0]
+      },
+      {
+        "name": "Find QuickBooks Customer",
+        "type": "quickbooks",
+        "position": [896, 0]
+      },
+      {
+        "name": "Get Deal Line Items",
+        "type": "httpRequest",
+        "position": [1120, 0]
+      },
+      {
+        "name": "Create QuickBooks Invoice",
+        "type": "httpRequest",
+        "position": [1344, 0]
+      },
+      {
+        "name": "Notify Finance In Slack",
+        "type": "slack",
+        "position": [1568, 0]
+      }
+    ],
+    "edges": [
+      {
+        "from": "Deal Stage Changed",
+        "to": "Only Closed Won",
+        "kind": "main"
+      },
+      {
+        "from": "Only Closed Won",
+        "to": "Get Deal With Associations",
+        "kind": "main"
+      },
+      {
+        "from": "Get Deal With Associations",
+        "to": "Get Company",
+        "kind": "main"
+      },
+      {
+        "from": "Get Company",
+        "to": "Find QuickBooks Customer",
+        "kind": "main"
+      },
+      {
+        "from": "Find QuickBooks Customer",
+        "to": "Get Deal Line Items",
+        "kind": "main"
+      },
+      {
+        "from": "Get Deal Line Items",
+        "to": "Create QuickBooks Invoice",
+        "kind": "main"
+      },
+      {
+        "from": "Create QuickBooks Invoice",
+        "to": "Notify Finance In Slack",
+        "kind": "main"
+      }
+    ]
+  },
+  {
+    "id": "google-form-to-hubspot-with-10-link-and-1000-contract",
+    "name": "Google Form to HubSpot with $10 Link and $1000 Contract",
+    "nodes": [
+      {
+        "name": "New Google Form Response",
+        "type": "googleSheetsTrigger",
+        "position": [0, 96]
+      },
+      {
+        "name": "Create Contact In HubSpot",
+        "type": "hubspot",
+        "position": [224, 96]
+      },
+      {
+        "name": "Only People Who Selected FREE",
+        "type": "filter",
+        "position": [448, 96]
+      },
+      {
+        "name": "Route By Offer",
+        "type": "switch",
+        "position": [672, 96]
+      },
+      {
+        "name": "Send $10 Link Email",
+        "type": "gmail",
+        "position": [896, 0]
+      },
+      {
+        "name": "Format Contract Date",
+        "type": "set",
+        "position": [896, 192]
+      },
+      {
+        "name": "Create Contract From Template",
+        "type": "httpRequest",
+        "position": [1120, 192]
+      },
+      {
+        "name": "AI Draft Contract Email",
+        "type": "agent",
+        "position": [1344, 192]
+      },
+      {
+        "name": "Email AI Model",
+        "type": "lmChatOpenAi",
+        "position": [1424, 416]
+      },
+      {
+        "name": "Send Contract Email",
+        "type": "gmail",
+        "position": [1696, 192]
+      }
+    ],
+    "edges": [
+      {
+        "from": "New Google Form Response",
+        "to": "Create Contact In HubSpot",
+        "kind": "main"
+      },
+      {
+        "from": "Create Contact In HubSpot",
+        "to": "Only People Who Selected FREE",
+        "kind": "main"
+      },
+      {
+        "from": "Only People Who Selected FREE",
+        "to": "Route By Offer",
+        "kind": "main"
+      },
+      {
+        "from": "Route By Offer",
+        "to": "Send $10 Link Email",
+        "kind": "main"
+      },
+      {
+        "from": "Route By Offer",
+        "to": "Format Contract Date",
+        "kind": "main"
+      },
+      {
+        "from": "Format Contract Date",
+        "to": "Create Contract From Template",
+        "kind": "main"
+      },
+      {
+        "from": "Create Contract From Template",
+        "to": "AI Draft Contract Email",
+        "kind": "main"
+      },
+      {
+        "from": "AI Draft Contract Email",
+        "to": "Send Contract Email",
+        "kind": "main"
+      },
+      {
+        "from": "Email AI Model",
+        "to": "AI Draft Contract Email",
+        "kind": "ai_languageModel"
+      }
+    ]
+  },
+  {
+    "id": "partnership-operations-automation",
+    "name": "Partnership Operations Automation",
+    "nodes": [
+      {
+        "name": "New Partnership Inquiry",
+        "type": "gmailTrigger",
+        "position": [0, 112]
+      },
+      {
+        "name": "AI Screen Inquiry",
+        "type": "agent",
+        "position": [224, 0]
+      },
+      {
+        "name": "Screening AI Model",
+        "type": "lmChatOpenAi",
+        "position": [240, 224]
+      },
+      {
+        "name": "Screening Result Parser",
+        "type": "outputParserStructured",
+        "position": [368, 224]
+      },
+      {
+        "name": "Mark Inquiry As Read",
+        "type": "gmail",
+        "position": [576, 112]
+      },
+      {
+        "name": "Qualified By AI?",
+        "type": "if",
+        "position": [800, 112]
+      },
+      {
+        "name": "Human Review In Slack",
+        "type": "slack",
+        "position": [1024, 112]
+      },
+      {
+        "name": "Approved By Human?",
+        "type": "if",
+        "position": [1248, 112]
+      },
+      {
+        "name": "Save Contact In CRM",
+        "type": "hubspot",
+        "position": [1472, 112]
+      },
+      {
+        "name": "Create Partnership Deal",
+        "type": "hubspot",
+        "position": [1696, 112]
+      },
+      {
+        "name": "Create Contract For Signing",
+        "type": "httpRequest",
+        "position": [1920, 112]
+      },
+      {
+        "name": "Wait 3 Days",
+        "type": "wait",
+        "position": [2144, 112]
+      },
+      {
+        "name": "Check Signing Status",
+        "type": "httpRequest",
+        "position": [2368, 112]
+      },
+      {
+        "name": "Still Unsigned?",
+        "type": "if",
+        "position": [2592, 112]
+      },
+      {
+        "name": "Send Signing Follow-Up",
+        "type": "gmail",
+        "position": [2816, 112]
+      },
+      {
+        "name": "Contract Signed Webhook",
+        "type": "webhook",
+        "position": [0, 432]
+      },
+      {
+        "name": "Normalize Signed Contract",
+        "type": "set",
+        "position": [224, 432]
+      },
+      {
+        "name": "Create Project Card",
+        "type": "trello",
+        "position": [448, 432]
+      },
+      {
+        "name": "Create Invoice",
+        "type": "quickbooks",
+        "position": [672, 432]
+      },
+      {
+        "name": "Announce Signed Partnership",
+        "type": "slack",
+        "position": [896, 432]
+      },
+      {
+        "name": "Every Monday 9 AM",
+        "type": "scheduleTrigger",
+        "position": [0, 768]
+      },
+      {
+        "name": "Get Partnership Deals",
+        "type": "hubspot",
+        "position": [224, 768]
+      },
+      {
+        "name": "Combine Deals",
+        "type": "aggregate",
+        "position": [448, 768]
+      },
+      {
+        "name": "AI Write Weekly Report",
+        "type": "agent",
+        "position": [672, 768]
+      },
+      {
+        "name": "Report AI Model",
+        "type": "lmChatOpenAi",
+        "position": [752, 992]
+      },
+      {
+        "name": "Post Weekly Report",
+        "type": "slack",
+        "position": [1024, 768]
+      }
+    ],
+    "edges": [
+      {
+        "from": "New Partnership Inquiry",
+        "to": "AI Screen Inquiry",
+        "kind": "main"
+      },
+      {
+        "from": "AI Screen Inquiry",
+        "to": "Mark Inquiry As Read",
+        "kind": "main"
+      },
+      {
+        "from": "Screening AI Model",
+        "to": "AI Screen Inquiry",
+        "kind": "ai_languageModel"
+      },
+      {
+        "from": "Screening Result Parser",
+        "to": "AI Screen Inquiry",
+        "kind": "ai_outputParser"
+      },
+      {
+        "from": "Mark Inquiry As Read",
+        "to": "Qualified By AI?",
+        "kind": "main"
+      },
+      {
+        "from": "Qualified By AI?",
+        "to": "Human Review In Slack",
+        "kind": "main"
+      },
+      {
+        "from": "Human Review In Slack",
+        "to": "Approved By Human?",
+        "kind": "main"
+      },
+      {
+        "from": "Approved By Human?",
+        "to": "Save Contact In CRM",
+        "kind": "main"
+      },
+      {
+        "from": "Save Contact In CRM",
+        "to": "Create Partnership Deal",
+        "kind": "main"
+      },
+      {
+        "from": "Create Partnership Deal",
+        "to": "Create Contract For Signing",
+        "kind": "main"
+      },
+      {
+        "from": "Create Contract For Signing",
+        "to": "Wait 3 Days",
+        "kind": "main"
+      },
+      {
+        "from": "Wait 3 Days",
+        "to": "Check Signing Status",
+        "kind": "main"
+      },
+      {
+        "from": "Check Signing Status",
+        "to": "Still Unsigned?",
+        "kind": "main"
+      },
+      {
+        "from": "Still Unsigned?",
+        "to": "Send Signing Follow-Up",
+        "kind": "main"
+      },
+      {
+        "from": "Contract Signed Webhook",
+        "to": "Normalize Signed Contract",
+        "kind": "main"
+      },
+      {
+        "from": "Normalize Signed Contract",
+        "to": "Create Project Card",
+        "kind": "main"
+      },
+      {
+        "from": "Create Project Card",
+        "to": "Create Invoice",
+        "kind": "main"
+      },
+      {
+        "from": "Create Invoice",
+        "to": "Announce Signed Partnership",
+        "kind": "main"
+      },
+      {
+        "from": "Every Monday 9 AM",
+        "to": "Get Partnership Deals",
+        "kind": "main"
+      },
+      {
+        "from": "Get Partnership Deals",
+        "to": "Combine Deals",
+        "kind": "main"
+      },
+      {
+        "from": "Combine Deals",
+        "to": "AI Write Weekly Report",
+        "kind": "main"
+      },
+      {
+        "from": "AI Write Weekly Report",
+        "to": "Post Weekly Report",
+        "kind": "main"
+      },
+      {
+        "from": "Report AI Model",
+        "to": "AI Write Weekly Report",
+        "kind": "ai_languageModel"
+      }
+    ]
+  },
+  {
+    "id": "set-a-meeting-via-slack",
+    "name": "Set a Meeting via Slack",
+    "nodes": [
+      {
+        "name": "New Slack Message",
+        "type": "slackTrigger",
+        "position": [0, 112]
+      },
+      {
+        "name": "AI Extract Meeting Details",
+        "type": "agent",
+        "position": [224, 112]
+      },
+      {
+        "name": "Extraction AI Model",
+        "type": "lmChatOpenAi",
+        "position": [240, 336]
+      },
+      {
+        "name": "Meeting Details Parser",
+        "type": "outputParserStructured",
+        "position": [368, 336]
+      },
+      {
+        "name": "Only Meeting Requests",
+        "type": "filter",
+        "position": [576, 112]
+      },
+      {
+        "name": "Find Contact In HubSpot",
+        "type": "hubspot",
+        "position": [800, 112]
+      },
+      {
+        "name": "Schedule Google Meet",
+        "type": "googleCalendar",
+        "position": [1024, 112]
+      },
+      {
+        "name": "Confirm In Slack",
+        "type": "slack",
+        "position": [1248, 112]
+      }
+    ],
+    "edges": [
+      {
+        "from": "New Slack Message",
+        "to": "AI Extract Meeting Details",
+        "kind": "main"
+      },
+      {
+        "from": "AI Extract Meeting Details",
+        "to": "Only Meeting Requests",
+        "kind": "main"
+      },
+      {
+        "from": "Extraction AI Model",
+        "to": "AI Extract Meeting Details",
+        "kind": "ai_languageModel"
+      },
+      {
+        "from": "Meeting Details Parser",
+        "to": "AI Extract Meeting Details",
+        "kind": "ai_outputParser"
+      },
+      {
+        "from": "Only Meeting Requests",
+        "to": "Find Contact In HubSpot",
+        "kind": "main"
+      },
+      {
+        "from": "Find Contact In HubSpot",
+        "to": "Schedule Google Meet",
+        "kind": "main"
+      },
+      {
+        "from": "Schedule Google Meet",
+        "to": "Confirm In Slack",
+        "kind": "main"
+      }
+    ]
+  },
+  {
+    "id": "shift-timesheet-reminders-ai-validation",
+    "name": "Shift Timesheet Reminders + AI Validation",
+    "nodes": [
+      {
+        "name": "Every 15 Minutes",
+        "type": "scheduleTrigger",
+        "position": [0, 0]
+      },
+      {
+        "name": "Get Running Clockify Timers",
+        "type": "httpRequest",
+        "position": [224, 0]
+      },
+      {
+        "name": "Calculate Minutes Left",
+        "type": "set",
+        "position": [672, 0]
+      },
+      {
+        "name": "Ending Soon And No Entry?",
+        "type": "if",
+        "position": [848, 0]
+      },
+      {
+        "name": "Slack Shift-End Reminder",
+        "type": "slack",
+        "position": [1152, 0]
+      },
+      {
+        "name": "Create Required Entry Task",
+        "type": "trello",
+        "position": [1392, 0]
+      },
+      {
+        "name": "Every Hour",
+        "type": "scheduleTrigger",
+        "position": [0, 336]
+      },
+      {
+        "name": "Get Recent Clockify Entries",
+        "type": "httpRequest",
+        "position": [224, 336]
+      },
+      {
+        "name": "Split Time Entries",
+        "type": "splitOut",
+        "position": [448, 336]
+      },
+      {
+        "name": "AI Validate Timesheet Entry",
+        "type": "agent",
+        "position": [672, 336]
+      },
+      {
+        "name": "OpenAI Validator Model",
+        "type": "lmChatOpenAi",
+        "position": [688, 560]
+      },
+      {
+        "name": "Validation Result Parser",
+        "type": "outputParserStructured",
+        "position": [816, 560]
+      },
+      {
+        "name": "Discrepancy Found?",
+        "type": "if",
+        "position": [1024, 336]
+      },
+      {
+        "name": "Slack Flag To Manager",
+        "type": "slack",
+        "position": [1248, 336]
+      },
+      {
+        "name": "Find Slack User",
+        "type": "slack",
+        "position": [976, -128]
+      }
+    ],
+    "edges": [
+      {
+        "from": "Every 15 Minutes",
+        "to": "Get Running Clockify Timers",
+        "kind": "main"
+      },
+      {
+        "from": "Calculate Minutes Left",
+        "to": "Ending Soon And No Entry?",
+        "kind": "main"
+      },
+      {
+        "from": "Slack Shift-End Reminder",
+        "to": "Create Required Entry Task",
+        "kind": "main"
+      },
+      {
+        "from": "Every Hour",
+        "to": "Get Recent Clockify Entries",
+        "kind": "main"
+      },
+      {
+        "from": "AI Validate Timesheet Entry",
+        "to": "Discrepancy Found?",
+        "kind": "main"
+      },
+      {
+        "from": "OpenAI Validator Model",
+        "to": "AI Validate Timesheet Entry",
+        "kind": "ai_languageModel"
+      },
+      {
+        "from": "Validation Result Parser",
+        "to": "AI Validate Timesheet Entry",
+        "kind": "ai_outputParser"
+      },
+      {
+        "from": "Discrepancy Found?",
+        "to": "Slack Flag To Manager",
+        "kind": "main"
+      },
+      {
+        "from": "Get Running Clockify Timers",
+        "to": "Calculate Minutes Left",
+        "kind": "main"
+      },
+      {
+        "from": "Ending Soon And No Entry?",
+        "to": "Find Slack User",
+        "kind": "main"
+      },
+      {
+        "from": "Find Slack User",
+        "to": "Slack Shift-End Reminder",
+        "kind": "main"
+      },
+      {
+        "from": "Get Recent Clockify Entries",
+        "to": "Split Time Entries",
+        "kind": "main"
+      },
+      {
+        "from": "Split Time Entries",
+        "to": "AI Validate Timesheet Entry",
+        "kind": "main"
+      }
+    ]
+  },
+  {
+    "id": "slack-message-to-clickup",
+    "name": "Slack Message to ClickUp",
+    "nodes": [
+      {
+        "name": "New Slack Message",
+        "type": "slackTrigger",
+        "position": [0, 112]
+      },
+      {
+        "name": "AI Turn Message Into Task",
+        "type": "agent",
+        "position": [224, 112]
+      },
+      {
+        "name": "Task AI Model",
+        "type": "lmChatOpenAi",
+        "position": [240, 336]
+      },
+      {
+        "name": "Task Parser",
+        "type": "outputParserStructured",
+        "position": [368, 336]
+      },
+      {
+        "name": "Format Due Date",
+        "type": "set",
+        "position": [576, 112]
+      },
+      {
+        "name": "Create ClickUp Task",
+        "type": "clickUp",
+        "position": [800, 112]
+      }
+    ],
+    "edges": [
+      {
+        "from": "New Slack Message",
+        "to": "AI Turn Message Into Task",
+        "kind": "main"
+      },
+      {
+        "from": "AI Turn Message Into Task",
+        "to": "Format Due Date",
+        "kind": "main"
+      },
+      {
+        "from": "Task AI Model",
+        "to": "AI Turn Message Into Task",
+        "kind": "ai_languageModel"
+      },
+      {
+        "from": "Task Parser",
+        "to": "AI Turn Message Into Task",
+        "kind": "ai_outputParser"
+      },
+      {
+        "from": "Format Due Date",
+        "to": "Create ClickUp Task",
+        "kind": "main"
+      }
+    ]
+  }
+]

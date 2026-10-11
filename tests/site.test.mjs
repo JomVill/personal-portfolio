@@ -15,3 +15,37 @@ test('placeholders are always marked', async () => {
     assert.match(before, /data-placeholder/, 'unmarked placeholder text');
   }
 });
+
+test('workflows.json is sanitized', async () => {
+  const raw = await readFile('src/data/workflows.json', 'utf8');
+  for (const bad of ['credential', 'webhookId', 'apiKey', '@', 'parameters'])
+    assert.ok(!raw.includes(bad), bad);
+  const data = JSON.parse(raw);
+  assert.equal(data.length, 8);
+  const values = [];
+  const walk = (v) => {
+    if (Array.isArray(v)) v.forEach(walk);
+    else if (v && typeof v === 'object') Object.values(v).forEach(walk);
+    else values.push(String(v));
+  };
+  walk(data);
+  for (const v of values) assert.doesNotMatch(v, /^[A-Za-z0-9]{16}$/, 'n8n-style id');
+  for (const w of data) {
+    for (const k of Object.keys(w)) assert.ok(['id', 'name', 'nodes', 'edges'].includes(k), k);
+    for (const n of w.nodes) assert.deepEqual(Object.keys(n).sort(), ['name', 'position', 'type']);
+    for (const e of w.edges) assert.deepEqual(Object.keys(e).sort(), ['from', 'kind', 'to']);
+  }
+});
+
+test('workflow copy keys match workflow ids', async () => {
+  const data = JSON.parse(await readFile('src/data/workflows.json', 'utf8'));
+  const copy = await readFile('src/data/workflow-copy.ts', 'utf8');
+  const keys = [...copy.matchAll(/^ {2}'([a-z0-9-]+)': \{/gm)].map((m) => m[1]);
+  assert.deepEqual([...keys].sort(), data.map((w) => w.id).sort());
+  const featured = data.find((w) => w.id === 'partnership-operations-automation');
+  const names = new Set(featured.nodes.map((n) => n.name));
+  const path = copy.match(/mainPath: \[([^\]]+)\]/)[1];
+  const steps = [...path.matchAll(/'([^']+)'/g)].map((m) => m[1]);
+  assert.equal(steps.length, 10);
+  for (const s of steps) assert.ok(names.has(s), s);
+});
