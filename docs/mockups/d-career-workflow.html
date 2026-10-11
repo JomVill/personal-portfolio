@@ -1,0 +1,799 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mockup D — Career workflow · Jomari Villanueva</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500&family=Manrope:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --paper: #f8f8f5;
+        --card: #ffffff;
+        --ink: #252623;
+        --muted: #696b64;
+        --line: #dcdcd5;
+        --wire: #c4c4bc;
+        --signal: #ee652b;
+        --accent: #ad3b0f;
+        --ch1: #b33d0b;
+        --ch2: #1d6b85;
+        --ch3: #6d4aa8;
+        --ch4: #2e7539;
+        --mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
+        --sans: 'DM Sans', system-ui, sans-serif;
+        --head: 'Manrope', system-ui, sans-serif;
+        --gutter: clamp(16px, 4vw, 56px);
+        --max: 1280px;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font: 400 17px/1.6 var(--sans);
+      }
+      a {
+        color: inherit;
+      }
+      :focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 3px;
+      }
+      .wrap {
+        max-width: var(--max);
+        margin: 0 auto;
+        padding: 0 var(--gutter);
+      }
+
+      /* Header */
+      .site-header .wrap {
+        display: flex;
+        align-items: center;
+        gap: 32px;
+        padding-top: 28px;
+        padding-bottom: 28px;
+      }
+      .brand {
+        font: 700 17px/1.2 var(--head);
+        text-decoration: none;
+        letter-spacing: -0.01em;
+      }
+      .nav {
+        display: flex;
+        gap: 28px;
+        margin-left: auto;
+        font-size: 15px;
+      }
+      .nav a {
+        text-decoration: none;
+        color: var(--muted);
+      }
+      .nav a:hover {
+        color: var(--ink);
+      }
+      .email {
+        font-size: 15px;
+        font-weight: 500;
+        text-decoration: none;
+        padding: 8px 16px;
+        border: 1px solid var(--ink);
+        border-radius: 999px;
+      }
+      .email:hover {
+        background: var(--ink);
+        color: var(--paper);
+      }
+
+      /* Hero */
+      .hero {
+        padding: clamp(56px, 10vw, 128px) 0 clamp(64px, 9vw, 112px);
+      }
+      .hero h1 {
+        font: 700 clamp(36px, 5.4vw, 68px)/1.06 var(--head);
+        letter-spacing: -0.03em;
+        margin: 0;
+        max-width: 17ch;
+      }
+      .hero p {
+        margin: 28px 0 0;
+        color: var(--muted);
+        font-size: clamp(17px, 1.6vw, 20px);
+        max-width: 52ch;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 40px;
+        background: var(--ink);
+        color: var(--paper);
+        text-decoration: none;
+        font-weight: 500;
+        padding: 14px 22px;
+        border-radius: 999px;
+      }
+      .btn span {
+        color: var(--signal);
+        transition: transform 0.2s;
+      }
+      .btn:hover span {
+        transform: translateX(3px);
+      }
+
+      /* Section heads */
+      .section-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 24px;
+        flex-wrap: wrap;
+        margin-bottom: 28px;
+      }
+      .section-head h2 {
+        font: 700 22px/1.3 var(--head);
+        letter-spacing: -0.01em;
+        margin: 0;
+      }
+      .section-head p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 15px;
+      }
+
+      /* Workflow canvas */
+      .flow-section {
+        padding-bottom: clamp(80px, 10vw, 128px);
+      }
+      .canvas {
+        position: relative;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: #fcfcfa;
+        padding: 44px 40px 36px;
+      }
+      .wires {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        overflow: visible;
+      }
+      .wires path {
+        fill: none;
+        stroke: var(--wire);
+        stroke-width: 1.25;
+        transition: stroke 0.2s;
+      }
+      .wires path.on {
+        stroke: var(--signal);
+        stroke-width: 1.75;
+      }
+      .wires circle {
+        fill: var(--signal);
+      }
+      .flow {
+        position: relative;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr) 1.3fr;
+        grid-template-rows: repeat(4, auto);
+        column-gap: 28px;
+        row-gap: 24px;
+        align-items: center;
+      }
+      .flow .note {
+        display: none;
+      }
+      .node {
+        position: relative;
+        width: 100%;
+        text-align: left;
+        cursor: pointer;
+        font: inherit;
+        color: inherit;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 12px 14px 13px;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+      }
+      .node::before,
+      .node::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        width: 7px;
+        height: 7px;
+        margin-top: -3.5px;
+        border-radius: 50%;
+        background: var(--card);
+        border: 1px solid var(--wire);
+      }
+      .node::before {
+        left: -4px;
+      }
+      .node::after {
+        right: -4px;
+      }
+      .node:hover {
+        border-color: #b9b9b1;
+      }
+      .node[aria-pressed='true'] {
+        border-color: var(--signal);
+        box-shadow: 0 0 0 3px rgba(238, 101, 43, 0.14);
+      }
+      .node[aria-pressed='true']::before,
+      .node[aria-pressed='true']::after {
+        border-color: var(--signal);
+        background: var(--signal);
+      }
+      .node .when {
+        display: block;
+        font: 12px/1.4 var(--mono);
+        color: var(--muted);
+      }
+      .node .what {
+        display: block;
+        font: 700 14.5px/1.3 var(--head);
+        margin-top: 4px;
+      }
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 8px;
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 1;
+      }
+      .tag::before {
+        content: '';
+        width: 6px;
+        height: 6px;
+        border-radius: 2px;
+        background: currentColor;
+      }
+      .t-automation {
+        color: var(--ch1);
+      }
+      .t-research {
+        color: var(--ch2);
+      }
+      .t-policy {
+        color: var(--ch3);
+      }
+      .t-teaching {
+        color: var(--ch4);
+      }
+      .node.next {
+        border-style: dashed;
+        background: transparent;
+      }
+      .node.no-in::before,
+      .node.no-out::after,
+      .node.next::after {
+        display: none;
+      }
+      .chip {
+        display: inline-block;
+        margin-top: 8px;
+        padding: 3px 7px;
+        border-radius: 6px;
+        font: 11px/1.35 var(--mono);
+        color: var(--accent);
+        background: #fdf0ea;
+        border: 1px dashed #e9b49c;
+      }
+
+      /* Detail panel */
+      .panel {
+        margin-top: 20px;
+        padding: 4px 4px 0;
+        min-height: 84px;
+      }
+      .panel .meta {
+        font: 12.5px/1.5 var(--mono);
+        color: var(--muted);
+        margin: 0;
+      }
+      .panel h3 {
+        font: 700 19px/1.3 var(--head);
+        margin: 4px 0 2px;
+      }
+      .panel h3 {
+        display: inline;
+      }
+      .panel .org {
+        display: inline;
+        margin: 0 0 0 8px;
+        font: 600 19px/1.3 var(--head);
+        color: var(--muted);
+      }
+      .panel .org::before {
+        content: '— ';
+      }
+      .panel p.line {
+        margin-top: 4px !important;
+      }
+      .panel p.line {
+        margin: 0;
+        max-width: 70ch;
+      }
+      .panel .chip {
+        margin-top: 10px;
+      }
+
+      /* Channels */
+      .channels {
+        padding-bottom: clamp(80px, 10vw, 128px);
+      }
+      .channel-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 32px;
+      }
+      .channel-list a {
+        display: block;
+        text-decoration: none;
+        border-top: 1px solid var(--line);
+        padding-top: 18px;
+      }
+      .channel-list .name {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font: 700 17px/1.3 var(--head);
+      }
+      .channel-list .name::before {
+        content: '';
+        width: 7px;
+        height: 7px;
+        border-radius: 2px;
+        background: var(--c);
+      }
+      .channel-list .name span {
+        margin-left: auto;
+        color: var(--muted);
+        font-weight: 400;
+        transition:
+          transform 0.2s,
+          color 0.2s;
+      }
+      .channel-list a:hover .name span {
+        transform: translateX(3px);
+        color: var(--accent);
+      }
+      .channel-list p {
+        margin: 6px 0 0;
+        color: var(--muted);
+        font-size: 15px;
+      }
+
+      /* Footer */
+      .site-footer .foot {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px 28px;
+        justify-content: space-between;
+        border-top: 1px solid var(--line);
+        padding-top: 28px;
+        padding-bottom: 40px;
+        font-size: 14px;
+        color: var(--muted);
+      }
+      .site-footer nav {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+      .site-footer a {
+        text-decoration: none;
+      }
+      .site-footer a:hover {
+        color: var(--ink);
+      }
+
+      @media (min-width: 1380px) {
+        .canvas {
+          margin: 0 -40px;
+        }
+      }
+      /* Narrow: workflow stacks vertically */
+      @media (max-width: 860px) {
+        .site-header .wrap {
+          flex-wrap: wrap;
+          row-gap: 14px;
+        }
+        .email {
+          margin-left: auto;
+        }
+        .nav {
+          order: 3;
+          width: 100%;
+          margin-left: 0;
+          gap: 8px 20px;
+          flex-wrap: wrap;
+          font-size: 14.5px;
+        }
+        .canvas {
+          border: 0;
+          background: none;
+          padding: 0;
+        }
+        .wires {
+          display: none;
+        }
+        .flow {
+          display: block;
+          padding-left: 28px;
+        }
+        .flow::before {
+          content: '';
+          position: absolute;
+          left: 7px;
+          top: 8px;
+          bottom: 30px;
+          width: 1px;
+          background: var(--wire);
+        }
+        .flow > li {
+          position: relative;
+          margin-bottom: 12px;
+        }
+        .flow .note {
+          display: block;
+          font: 12px/1.4 var(--mono);
+          color: var(--muted);
+          padding: 10px 0 2px;
+        }
+        .node::after {
+          display: none;
+        }
+        .node.no-in::before,
+        .node::before {
+          display: block;
+          left: -25px;
+        }
+        .panel {
+          margin: 0 0 12px;
+          padding: 14px 14px 16px;
+          min-height: 0;
+          border-left: 2px solid var(--signal);
+          background: var(--card);
+          border-radius: 0 10px 10px 0;
+        }
+        .panel .meta,
+        .panel h3 {
+          display: none;
+        }
+        .panel p.line {
+          font-size: 15.5px;
+        }
+        .panel .org {
+          display: block;
+          margin: 0 0 2px;
+          font-size: 15px;
+        }
+        .panel .org::before {
+          content: none;
+        }
+        .channel-list {
+          grid-template-columns: 1fr 1fr;
+          gap: 28px 20px;
+        }
+      }
+      @media (max-width: 480px) {
+        .channel-list {
+          grid-template-columns: 1fr;
+          gap: 0;
+        }
+        .channel-list a {
+          padding: 16px 0 18px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href="#">Jomari Villanueva</a>
+        <nav class="nav" aria-label="Main">
+          <a href="#">Automation</a><a href="#">Research</a><a href="#">Policy</a><a href="#">Teaching</a
+          ><a href="#">Logs</a><a href="#">About</a>
+        </nav>
+        <a class="email" href="mailto:jomarifrancis.villanueva@g.msuiit.edu.ph">Email me</a>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="wrap">
+          <h1>I build AI systems — and study how they land in society.</h1>
+          <p>I’m Jomari. I wire up workflows, sensors, and classrooms in Iligan City.</p>
+          <a class="btn" href="#">See my automation work <span aria-hidden="true">→</span></a>
+        </div>
+      </section>
+
+      <section class="flow-section" aria-labelledby="flow-title">
+        <div class="wrap">
+          <div class="section-head">
+            <h2 id="flow-title">How I got here, as a workflow</h2>
+            <p>Select a step. Yes, 2022 forked three ways.</p>
+          </div>
+          <div class="canvas">
+            <svg class="wires" aria-hidden="true"></svg>
+            <ol class="flow" id="flow"></ol>
+            <div class="panel" id="panel" aria-live="polite"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="channels" aria-labelledby="ch-title">
+        <div class="wrap">
+          <div class="section-head"><h2 id="ch-title">Where to go next</h2></div>
+          <ul class="channel-list">
+            <li>
+              <a href="#" style="--c: var(--ch1)"
+                ><span class="name">Automation <span aria-hidden="true">→</span></span>
+                <p>AI workflows and agents I build for real work.</p></a
+              >
+            </li>
+            <li>
+              <a href="#" style="--c: var(--ch2)"
+                ><span class="name">Research <span aria-hidden="true">→</span></span>
+                <p>Societal computing: how sensing and AI land in communities.</p></a
+              >
+            </li>
+            <li>
+              <a href="#" style="--c: var(--ch3)"
+                ><span class="name">Policy <span aria-hidden="true">→</span></span>
+                <p>Helping institutions decide how to adopt technology.</p></a
+              >
+            </li>
+            <li>
+              <a href="#" style="--c: var(--ch4)"
+                ><span class="name">Teaching <span aria-hidden="true">→</span></span>
+                <p>Computing courses and AI literacy training.</p></a
+              >
+            </li>
+          </ul>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <div class="foot">
+          <span>Jomari Francis Villanueva · Iligan City, Philippines</span>
+          <nav aria-label="Elsewhere">
+            <a href="https://www.linkedin.com/in/jomari-francis-villanueva-63a5a1aa/">LinkedIn</a>
+            <a href="https://github.com/JomVill">GitHub</a>
+            <a href="https://scholar.google.com/citations?user=sddXKAgAAAAJ&hl=en&oi=ao">Google Scholar</a>
+            <a href="#">CV</a>
+          </nav>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // All facts from src/data/profile.ts. col/row = desktop canvas position.
+      const steps = [
+        {
+          id: 'bs',
+          col: 1,
+          row: 3,
+          when: '2014–2019',
+          what: 'BS Computer & Electronics Tech.',
+          role: 'BS in Computer and Electronics Technology',
+          org: 'MSU-IIT',
+          line: 'Graduated Cum Laude.',
+        },
+        {
+          id: 'ms',
+          col: 2,
+          row: 3,
+          when: '2019–2022',
+          what: 'MS Computer Applications',
+          role: 'MS in Computer Applications',
+          org: 'MSU-IIT',
+          line: 'DOST–ERDT Scholar.',
+        },
+        {
+          id: 'ra',
+          col: 3,
+          row: 2,
+          note: '2022 · three branches start',
+          when: 'Jan 2022–Jun 2023',
+          short: '2022–2023',
+          what: 'Research Assistant',
+          tag: 'research',
+          role: 'Project Research Assistant',
+          org: 'OVCRE, MSU-IIT',
+          line: 'Built a microcontroller-based water-level and soil-moisture monitor for rice farms, and surveyed how smart campuses are defined.',
+        },
+        {
+          id: 'fal',
+          col: 3,
+          row: 3,
+          when: '2022–2026',
+          what: 'Head of Tech & Research',
+          tag: 'automation',
+          role: 'Head of Technology & Research',
+          org: 'Future AI Lab / BrandNat',
+          line: 'AI workflows, agents, automation, APIs, and content intelligence.',
+        },
+        {
+          id: 'anino',
+          col: 3,
+          row: 4,
+          when: '2022–Present',
+          short: '2022–now',
+          what: 'Co-founder, AnIno',
+          tag: 'automation',
+          role: 'Co-founder',
+          org: 'AnIno Solution',
+          line: 'IoT consultancy: embedded systems, sensor networks, and automation.',
+        },
+        {
+          id: 'prof',
+          col: 4,
+          row: 2,
+          when: 'Aug 2024–Present',
+          short: '2024–now',
+          what: 'Assistant Professor I',
+          tag: 'teaching',
+          role: 'Assistant Professor I',
+          org: 'MSU-IIT',
+          line: 'Department of Computer Applications. Teaching IoT, programming, robotics, and computing.',
+        },
+        {
+          id: 'pcett',
+          col: 5,
+          row: 2,
+          note: '2025 · two more branches',
+          when: 'Jan 2025–Present',
+          short: '2025–now',
+          what: 'Head of PCETT',
+          tag: 'policy',
+          role: 'Head of PCETT',
+          org: 'Institute for Policy Innovation and Leadership',
+          line: 'Policy Center for Emerging Trends & Technologies: AI policy, digital governance, foresight, capacity building.',
+        },
+        {
+          id: 'aiready',
+          col: 5,
+          row: 1,
+          when: '2025–Present',
+          short: '2025–now',
+          what: 'AI READY ASEAN Master Trainer',
+          tag: 'teaching',
+          role: 'AI READY ASEAN Master Trainer',
+          org: 'SmartCT',
+          line: 'Master Trainer in the AI READY ASEAN Program.',
+        },
+        {
+          id: 'phd',
+          col: 6,
+          row: 3,
+          next: true,
+          when: 'Next',
+          what: 'PhD in societal computing',
+          tag: 'research',
+          role: 'PhD in societal computing',
+          org: '',
+          line: 'Where the building and the studying meet.',
+          chip: '[Needs input: timing / target programs]',
+        },
+      ];
+      const edges = [
+        ['bs', 'ms'],
+        ['ms', 'ra'],
+        ['ms', 'fal'],
+        ['ms', 'anino'],
+        ['ra', 'prof'],
+        ['prof', 'pcett'],
+        ['prof', 'aiready'],
+        ['fal', 'phd'],
+        ['pcett', 'phd'],
+      ];
+      const names = {
+        automation: 'Automation',
+        research: 'Research',
+        policy: 'Policy',
+        teaching: 'Teaching',
+      };
+
+      const flow = document.getElementById('flow');
+      const panel = document.getElementById('panel');
+      const svg = document.querySelector('.wires');
+      const narrow = matchMedia('(max-width: 860px)');
+      const calm = matchMedia('(prefers-reduced-motion: reduce)');
+      const btn = {};
+      let selected = 'fal';
+
+      const tagHtml = (t) => (t ? `<span class="tag t-${t}">${names[t]}</span>` : '');
+      for (const s of steps) {
+        if (s.note)
+          flow.insertAdjacentHTML('beforeend', `<li class="note" aria-hidden="true">${s.note}</li>`);
+        const li = document.createElement('li');
+        li.style.gridColumn = s.col;
+        li.style.gridRow = s.row;
+        li.innerHTML = `<button type="button" class="node${s.next ? ' next' : ''}" aria-pressed="false" aria-controls="panel">
+      <span class="when">${s.short || s.when}</span><span class="what">${s.what}</span>${tagHtml(s.tag)}${s.chip ? `<span class="chip">${s.chip}</span>` : ''}</button>`;
+        flow.append(li);
+        if (!edges.some((e) => e[1] === s.id)) li.firstElementChild.classList.add('no-in');
+        if (!edges.some((e) => e[0] === s.id)) li.firstElementChild.classList.add('no-out');
+        const b = li.firstElementChild;
+        btn[s.id] = b;
+        b.addEventListener('click', () => select(s.id));
+        b.addEventListener('focus', () => select(s.id));
+        b.addEventListener('mouseenter', () => !narrow.matches && render(s.id));
+      }
+      flow.addEventListener('mouseleave', () => render(selected));
+
+      function render(id) {
+        const s = steps.find((x) => x.id === id);
+        panel.innerHTML = `<p class="meta">${s.when}${s.tag ? ' · ' + names[s.tag] : ''}</p>
+      <h3>${s.role}</h3>${s.org ? `<p class="org">${s.org}</p>` : ''}
+      <p class="line">${s.line}</p>`;
+        for (const k in btn) btn[k].setAttribute('aria-pressed', String(k === id));
+        if (narrow.matches) btn[id].parentElement.append(panel);
+        else if (panel.parentElement !== flow.parentElement) flow.after(panel);
+        draw(id);
+      }
+      function select(id) {
+        selected = id;
+        render(id);
+      }
+
+      function draw(active) {
+        if (narrow.matches) return;
+        const box = svg.getBoundingClientRect();
+        let out = '',
+          packet = '';
+        edges.forEach(([a, b], i) => {
+          const r1 = btn[a].getBoundingClientRect(),
+            r2 = btn[b].getBoundingClientRect();
+          const x1 = r1.right - box.left,
+            y1 = r1.top + r1.height / 2 - box.top;
+          const x2 = r2.left - box.left,
+            y2 = r2.top + r2.height / 2 - box.top;
+          const dx = Math.min((x2 - x1) / 2, 60);
+          const d =
+            y1 === y2
+              ? `M${x1} ${y1}H${x2}`
+              : `M${x1} ${y1}H${x1 + 8}C${x1 + 8 + dx} ${y1} ${x2 - 8 - dx} ${y2} ${x2 - 8} ${y2}H${x2}`;
+          const on = b === active;
+          out += `<path id="w${i}" class="${on || a === active ? 'on' : ''}" d="${d}"/>`;
+          if (on && !calm.matches && !packet)
+            packet = `<circle r="3"><animateMotion dur="3.2s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;0.55;1" calcMode="linear"><mpath href="#w${i}"/></animateMotion></circle>`;
+        });
+        svg.innerHTML = out + packet;
+      }
+
+      render(selected);
+      addEventListener('resize', () => render(selected));
+      narrow.addEventListener('change', () => render(selected));
+    </script>
+  </body>
+</html>
