@@ -586,6 +586,55 @@
       .hu.dec .shape {
         background: var(--screen-ink);
       }
+      /* live run: packet + lit nodes (JS only, never with reduced motion) */
+      .flow-screen {
+        position: relative;
+      }
+      .flow li,
+      .flow .shape {
+        transition:
+          color 0.45s,
+          border-color 0.45s,
+          box-shadow 0.45s;
+      }
+      .flow li.lit {
+        color: var(--screen-ink);
+      }
+      .flow li.lit .shape {
+        border-color: var(--screen-ink);
+        box-shadow:
+          0 0 0 3px #e6eddb1a,
+          0 0 14px #e6eddb24;
+      }
+      .flow li.ai.lit .shape {
+        border-color: #ff9a6b;
+        box-shadow:
+          0 0 0 3px #ee652b40,
+          0 0 18px #ee652b73;
+      }
+      .flow li.hu.lit .shape {
+        border-color: #fff;
+        box-shadow:
+          0 0 0 4px #e6eddb38,
+          0 0 20px #e6eddb4d;
+      }
+      .packet {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 2;
+        width: 9px;
+        height: 9px;
+        margin: -4.5px 0 0 -4.5px;
+        border-radius: 50%;
+        background: #ff9361;
+        box-shadow:
+          0 0 0 3px #ee652b38,
+          0 0 14px 3px #ee652b8c;
+        opacity: 0;
+        pointer-events: none;
+        will-change: transform, opacity;
+      }
       .screen-foot {
         padding: 12px 20px;
         border-top: 1px solid #dce7ce17;
@@ -705,6 +754,24 @@
       .wf .n.ai {
         fill: var(--orange);
         stroke: var(--orange);
+      }
+      .wf .n {
+        transition:
+          stroke 0.6s,
+          filter 0.6s;
+      }
+      .wf .n.lit {
+        stroke: #e2875c;
+      }
+      .wf .n.ai.lit {
+        filter: drop-shadow(0 0 3px #ee652b80);
+      }
+      .wf .pk {
+        fill: var(--orange);
+      }
+      .wf .pk-halo {
+        fill: var(--orange);
+        opacity: 0.16;
       }
 
       /* contact */
@@ -845,10 +912,10 @@
     <main>
       <div class="wrap hero">
         <div class="hero-copy">
-          <h1>AI automation that gives you time back.</h1>
+          <h1>Hi, I’m Jom, and I automate repetitive tasks.</h1>
           <p class="lede">
-            I’m Jom. I connect your tools with Zapier, n8n, and AI so repetitive tasks run themselves, saving
-            you up to <strong class="hl">3 hours a day</strong>.
+            I connect your tools with Zapier, n8n, and AI so the busywork runs itself, saving you up to
+            <strong class="hl">3 hours a day</strong>.
           </p>
           <div class="actions">
             <a class="key key-orange" href="#work">See my workflows</a>
@@ -1189,10 +1256,10 @@
       </section>
 
       <section id="work" class="wrap" aria-labelledby="feat-title">
-        <p class="eyebrow">Featured workflow</p>
-        <h2 id="feat-title" class="feature-title">Partnership Operations Automation</h2>
+        <p class="eyebrow">Featured workflow · Partnerships</p>
+        <h2 id="feat-title" class="feature-title">Partnership inquiries, handled end to end</h2>
         <div class="device">
-          <div class="screen">
+          <div class="screen flow-screen">
             <div class="screen-top">
               <span>WF-01 · Main path</span>
               <ul class="legend" aria-label="Legend">
@@ -1201,35 +1268,35 @@
               </ul>
             </div>
             <ol class="flow" aria-label="Main path of the workflow, 10 steps">
-              <li class="trigger"><span class="shape" aria-hidden="true"></span>New partnership inquiry</li>
-              <li class="ai"><span class="shape" aria-hidden="true"></span>AI screens inquiry</li>
-              <li class="dec"><span class="shape" aria-hidden="true"></span>Qualified by AI?</li>
-              <li class="hu"><span class="shape" aria-hidden="true"></span>Human review in Slack</li>
-              <li class="hu dec"><span class="shape" aria-hidden="true"></span>Approved by human?</li>
-              <li><span class="shape" aria-hidden="true"></span>Save contact in CRM</li>
-              <li><span class="shape" aria-hidden="true"></span>Create contract for signing</li>
-              <li><span class="shape" aria-hidden="true"></span>Signing follow&#8209;up</li>
+              <li class="trigger"><span class="shape" aria-hidden="true"></span>New inquiry</li>
+              <li class="ai"><span class="shape" aria-hidden="true"></span>AI checks fit</li>
+              <li class="dec"><span class="shape" aria-hidden="true"></span>Good fit?</li>
+              <li class="hu"><span class="shape" aria-hidden="true"></span>You review</li>
+              <li class="hu dec"><span class="shape" aria-hidden="true"></span>Approved?</li>
+              <li><span class="shape" aria-hidden="true"></span>Add to CRM</li>
+              <li><span class="shape" aria-hidden="true"></span>Send contract</li>
+              <li><span class="shape" aria-hidden="true"></span>Follow up</li>
               <li class="later">
-                <span class="shape" aria-hidden="true"></span><span class="sr">Once signed: </span>Create
-                project card
+                <span class="shape" aria-hidden="true"></span><span class="sr">Once signed: </span>Start
+                project
               </li>
-              <li><span class="shape" aria-hidden="true"></span>Create invoice</li>
+              <li><span class="shape" aria-hidden="true"></span>Send invoice</li>
             </ol>
-            <p class="screen-foot">Dashed: once the contract is signed · Weekly report folded</p>
+            <p class="screen-foot">Dashed line: after the contract is signed</p>
           </div>
           <ol class="beats">
-            <li><b>Trigger</b>A partnership inquiry lands in Gmail.</li>
-            <li class="on"><b>AI</b>An AI agent screens each inquiry.</li>
-            <li><b>A person approves</b>Nothing moves until someone says yes.</li>
-            <li><b>Then</b>CRM, contract, follow-up, project card, invoice.</li>
+            <li><b>Inquiry comes in</b>A partner emails. No one has to watch the inbox.</li>
+            <li class="on"><b>AI does the first read</b>Serious leads are sorted from the noise.</li>
+            <li><b>You make the call</b>One click in Slack. Nothing moves without you.</li>
+            <li><b>The rest runs itself</b>CRM, contract, reminders, and invoice.</li>
           </ol>
-          <p class="device-foot"><a class="textlink" href="#">How it runs, step by step</a></p>
+          <p class="device-foot"><a class="textlink" href="#">See the full workflow</a></p>
         </div>
       </section>
 
       <section class="wrap" aria-labelledby="more-title">
         <div class="sec-head">
-          <h2 id="more-title">More workflows</h2>
+          <h2 id="more-title">More time-savers</h2>
           <a class="textlink" href="#">See all 8</a>
         </div>
         <div class="cards">
@@ -1269,8 +1336,8 @@
                 <rect class="n" x="205.0" y="5.3" width="22.0" height="22.0" rx="4.8" />
               </svg>
             </div>
-            <h3>Shift Timesheet Reminders + AI Validation</h3>
-            <p>Shift reminders in Slack; AI checks the time entries.</p>
+            <h3>Timesheets that check themselves</h3>
+            <p>Staff get reminders before shifts end. Mistakes go straight to a manager.</p>
             <a class="textlink" href="#">View workflow</a>
           </article>
           <article class="card">
@@ -1291,8 +1358,8 @@
                 <rect class="n" x="288.3" y="191.0" width="22.0" height="22.0" rx="4.8" />
               </svg>
             </div>
-            <h3>AI Email Classifier</h3>
-            <p>AI sorts each email and alerts the right Slack channel.</p>
+            <h3>Every email reaches the right team</h3>
+            <p>AI reads incoming mail and routes it to support, billing, or general.</p>
             <a class="textlink" href="#">View workflow</a>
           </article>
           <article class="card">
@@ -1315,8 +1382,8 @@
                 <rect class="n" x="288.3" y="5.3" width="22.0" height="22.0" rx="4.8" />
               </svg>
             </div>
-            <h3>Article to Social Content</h3>
-            <p>AI turns a new article into a drafted social post.</p>
+            <h3>One article, ready-to-post social content</h3>
+            <p>AI writes the caption and image, then queues it for your review.</p>
             <a class="textlink" href="#">View workflow</a>
           </article>
         </div>
@@ -1450,6 +1517,208 @@
           visible ? start() : stop();
         }).observe(term);
         document.addEventListener('visibilitychange', () => (document.hidden ? stop() : visible && start()));
+      })();
+    </script>
+    <script>
+      // Workflow diagrams: one packet travels the path; nodes light as it arrives.
+      (() => {
+        if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        const ease = (x) => 0.5 - Math.cos(Math.PI * Math.min(Math.max(x, 0), 1)) / 2;
+        const anims = [];
+        let raf = 0,
+          prev = 0;
+        const frame = (now) => {
+          const dt = prev ? Math.min(now - prev, 50) : 0;
+          prev = now;
+          let any = false;
+          for (const a of anims)
+            if (a.on) {
+              a.t += dt;
+              a.draw();
+              any = true;
+            }
+          raf = any ? requestAnimationFrame(frame) : 0;
+        };
+        const wake = () => {
+          if (raf || document.hidden || !anims.some((a) => a.on)) return;
+          prev = 0;
+          raf = requestAnimationFrame(frame);
+        };
+        const watch = (a, el) => {
+          anims.push(a);
+          new IntersectionObserver(([e]) => {
+            a.vis = e.isIntersecting;
+            a.on = a.vis && !document.hidden;
+            wake();
+          }).observe(el);
+        };
+        document.addEventListener('visibilitychange', () => {
+          anims.forEach((a) => (a.on = a.vis && !document.hidden));
+          if (document.hidden) {
+            cancelAnimationFrame(raf);
+            raf = 0;
+          } else wake();
+        });
+
+        // Featured diagram
+        const flow = document.querySelector('.flow');
+        if (flow) {
+          const screen = flow.closest('.screen');
+          const nodes = [...flow.children];
+          const shapes = nodes.map((li) => li.querySelector('.shape'));
+          const beats = [...document.querySelectorAll('.beats li')];
+          const BEAT = [0, 1, 1, 2, 2, 3, 3, 3, 3, 3];
+          const HUMAN = nodes.findIndex((li) => li.matches('.hu:not(.dec)'));
+          const IN = 400,
+            MOVE = 490,
+            DWELL = 110,
+            WAIT = 900,
+            LIT = 520,
+            OUT = 1100;
+          const arrive = [],
+            depart = [];
+          nodes.forEach((_, i) => {
+            arrive[i] = i ? depart[i - 1] + MOVE : IN;
+            depart[i] = arrive[i] + (i === HUMAN ? WAIT : i ? DWELL : 250);
+          });
+          const last = nodes.length - 1;
+          const CYCLE = arrive[last] + OUT;
+          const pk = document.createElement('span');
+          pk.className = 'packet';
+          pk.setAttribute('aria-hidden', 'true');
+          screen.append(pk);
+          let pts = null,
+            beat = -1;
+          const measure = () => {
+            const sr = screen.getBoundingClientRect();
+            pts = shapes.map((s) => {
+              const r = s.getBoundingClientRect();
+              return [
+                r.left + r.width / 2 - sr.left - screen.clientLeft,
+                r.top + r.height / 2 - sr.top - screen.clientTop,
+              ];
+            });
+          };
+          new ResizeObserver(measure).observe(screen);
+          const a = {
+            t: 0,
+            on: false,
+            vis: false,
+            draw() {
+              if (!pts) measure();
+              const t = (a.t %= CYCLE);
+              let x,
+                y,
+                op = 1,
+                sc = 1,
+                cur = 0;
+              if (t < arrive[0]) {
+                [x, y] = pts[0];
+                op = t / IN;
+              } else {
+                for (let i = 0; i <= last; i++) if (t >= arrive[i]) cur = i;
+                if (cur < last && t > depart[cur]) {
+                  const k = ease((t - depart[cur]) / MOVE);
+                  x = pts[cur][0] + (pts[cur + 1][0] - pts[cur][0]) * k;
+                  y = pts[cur][1] + (pts[cur + 1][1] - pts[cur][1]) * k;
+                } else {
+                  [x, y] = pts[cur];
+                  if (cur === HUMAN) sc = 1 + 0.18 * Math.sin(((t - arrive[cur]) / WAIT) * Math.PI * 2);
+                  if (cur === last) op = 1 - Math.min(Math.max((t - arrive[last] - 350) / 600, 0), 1);
+                }
+              }
+              pk.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) scale(${sc.toFixed(3)})`;
+              pk.style.opacity = op.toFixed(3);
+              nodes.forEach((li, i) => li.classList.toggle('lit', t >= arrive[i] && t < depart[i] + LIT));
+              if (BEAT[cur] !== beat) {
+                beat = BEAT[cur];
+                beats.forEach((b, i) => b.classList.toggle('on', i === beat));
+              }
+            },
+          };
+          watch(a, screen);
+        }
+
+        // Card mini-diagrams: quieter, slower, staggered
+        const NS = 'http://www.w3.org/2000/svg';
+        const ROUTES = [
+          [
+            'M20.7 41.9H203.1C204.1 41.9 204.1 16.3 205 16.3H227C233.7 16.3 233.7 41.9 240.3 41.9H299.3',
+            'M20.7 109.2H270.5',
+          ],
+          [
+            'M20.7 109.2H147.7C218 109.2 218 16.3 288.3 16.3H299.3',
+            'M20.7 109.2H299.3',
+            'M20.7 109.2H147.7C218 109.2 218 202 288.3 202H299.3',
+          ],
+          ['M20.7 16.3H299.3'],
+        ];
+        const STAGGER = [-700, -2300, -3900];
+        document.querySelectorAll('.card .wf').forEach((svg, ci) => {
+          if (!ROUTES[ci]) return;
+          const vb = svg.viewBox.baseVal;
+          const paths = ROUTES[ci].map((d) => {
+            const p = document.createElementNS(NS, 'path');
+            p.setAttribute('d', d);
+            p.setAttribute('fill', 'none');
+            svg.append(p);
+            return p;
+          });
+          const lens = paths.map((p) => p.getTotalLength());
+          const ns = [...svg.querySelectorAll('.n')];
+          const boxes = ns.map((n) => n.getBBox());
+          const g = document.createElementNS(NS, 'g');
+          g.innerHTML = '<circle class="pk-halo"/><circle class="pk"/>';
+          g.style.opacity = 0;
+          svg.append(g);
+          const [halo, core] = g.children;
+          let scale = 1;
+          const measure = () => {
+            scale = svg.getBoundingClientRect().width / vb.width || 1;
+            core.setAttribute('r', (2.6 / scale).toFixed(2));
+            halo.setAttribute('r', (6.5 / scale).toFixed(2));
+          };
+          new ResizeObserver(measure).observe(svg);
+          const FADE = 450,
+            REST = 1600;
+          let ri = 0;
+          const durOf = (i) => Math.max(2600, ((lens[i] * scale) / 62) * 1000);
+          const a = {
+            t: STAGGER[ci],
+            on: false,
+            vis: false,
+            draw() {
+              let dur = durOf(ri);
+              while (a.t > dur + FADE * 2 + REST) {
+                a.t -= dur + FADE * 2 + REST;
+                ri = (ri + 1) % paths.length;
+                dur = durOf(ri);
+              }
+              const t = a.t;
+              if (t < 0 || t > dur + FADE * 2) {
+                g.style.opacity = 0;
+                ns.forEach((n) => n.classList.remove('lit'));
+                return;
+              }
+              const k = ease((t - FADE) / dur);
+              const pt = paths[ri].getPointAtLength(k * lens[ri]);
+              const op = Math.min(t / FADE, 1, (dur + FADE * 2 - t) / FADE);
+              g.style.opacity = (0.8 * op).toFixed(3);
+              g.setAttribute('transform', `translate(${pt.x.toFixed(2)} ${pt.y.toFixed(2)})`);
+              ns.forEach((n, i) => {
+                const b = boxes[i];
+                n.classList.toggle(
+                  'lit',
+                  pt.x >= b.x - 2 &&
+                    pt.x <= b.x + b.width + 2 &&
+                    pt.y >= b.y - 2 &&
+                    pt.y <= b.y + b.height + 2,
+                );
+              });
+            },
+          };
+          watch(a, svg);
+        });
       })();
     </script>
   </body>
