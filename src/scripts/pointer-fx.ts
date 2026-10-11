@@ -1,4 +1,5 @@
-// Quiet pointer effects for fine pointers: a trailing orange ring and a soft sheen on silver panels.
+// Quiet pointer effects for fine pointers: a custom cursor (exact orange dot + trailing ring that
+// replaces the native cursor) and a soft sheen on silver panels.
 // Off for touch/coarse pointers, under prefers-reduced-motion, and while html.motion-paused.
 import { isPaused, onPauseChange } from './motion';
 
@@ -11,6 +12,7 @@ const SHEEN = '.panel, .device';
 const LERP = 0.18;
 
 let ring: HTMLDivElement | null = null;
+let dot: HTMLDivElement | null = null;
 let x = 0;
 let y = 0;
 let tx = 0;
@@ -44,7 +46,13 @@ const start = () => {
   if (!loop && !document.hidden) loop = requestAnimationFrame(tick);
 };
 
-const hide = () => ring?.classList.remove('is-visible', 'is-down');
+const hide = () => {
+  ring?.classList.remove('is-visible', 'is-down');
+  dot?.classList.remove('is-visible');
+};
+
+// The native cursor is replaced only while the custom one is active and motion isn't paused.
+const setCursor = (on: boolean) => root.classList.toggle('fx-cursor', on);
 
 const mount = () => {
   if (ring) return;
@@ -52,14 +60,21 @@ const mount = () => {
   ring.className = 'fx-ring';
   ring.setAttribute('aria-hidden', 'true');
   ring.append(document.createElement('span'));
-  document.body.append(ring);
+  dot = document.createElement('div');
+  dot.className = 'fx-dot';
+  dot.setAttribute('aria-hidden', 'true');
+  document.body.append(ring, dot);
   root.classList.add('fx-on');
+  setCursor(!isPaused());
 };
 
 const unmount = () => {
   stop();
   ring?.remove();
+  dot?.remove();
   ring = null;
+  dot = null;
+  setCursor(false);
   placed = false;
   root.classList.remove('fx-on');
 };
@@ -87,6 +102,10 @@ document.addEventListener(
       ring.style.transform = `translate3d(${x}px, ${y}px, 0)`;
     }
     ring.classList.add('is-visible');
+    if (dot) {
+      dot.style.transform = `translate3d(${tx}px, ${ty}px, 0)`;
+      dot.classList.add('is-visible');
+    }
     start();
     const panel = (e.target as Element | null)?.closest?.<HTMLElement>(SHEEN) ?? null;
     if (panel) {
@@ -105,6 +124,8 @@ document.addEventListener('pointerover', (e) => {
   ring.classList.toggle('is-hover', !!t?.closest?.(INTERACTIVE));
   ring.classList.toggle('is-dark', !!t?.closest?.(DARK));
   ring.classList.toggle('is-accent', !!t?.closest?.('.key-orange'));
+  dot?.classList.toggle('is-dark', !!t?.closest?.(DARK));
+  dot?.classList.toggle('is-accent', !!t?.closest?.('.key-orange'));
 });
 
 document.addEventListener('mouseout', (e) => {
@@ -121,6 +142,7 @@ document.addEventListener('visibilitychange', () => {
 
 onPauseChange((paused) => {
   if (!ring) return;
+  setCursor(!paused);
   if (paused) {
     stop();
     hide();
