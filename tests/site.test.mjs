@@ -359,7 +359,7 @@ test('homepage contact form: fields, spam guards, fallback', async () => {
     fb,
     /<a class="fallback-mail" href="mailto:jomarivillanueva83@gmail\.com\?subject=Automation%20inquiry%20from%20your%20portfolio">jomarivillanueva83@gmail\.com<\/a>/,
   );
-  assert.match(fb, /<button type="button" class="key key-sm copy-key"[^>]*>[\s\S]*Copy[\s\S]*Copied ✓/);
+  assert.match(fb, /<button type="button" class="copy-key"[^>]*>[\s\S]*Copy[\s\S]*Copied ✓/);
   // the endpoint ships empty until the Apps Script backend is deployed
   assert.match(
     await readFile('src/data/profile.ts', 'utf8'),

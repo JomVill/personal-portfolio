@@ -255,12 +255,7 @@ const tag = (order: number) => `WF-${String(order).padStart(2, '0')}`;
         <a class="fallback-mail" href={mailto}>
           {profile.email}
         </a>
-        <button
-          type="button"
-          class="key key-sm copy-key"
-          data-copy={profile.email}
-          aria-label="Copy email address"
-        >
+        <button type="button" class="copy-key" data-copy={profile.email} aria-label="Copy email address">
           <span class="copy-idle">Copy</span>
           <span class="copy-done" aria-hidden="true">
             Copied ✓

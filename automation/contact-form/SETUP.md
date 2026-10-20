@@ -51,7 +51,7 @@ If you skip this, every inquiry is still saved and emailed, just triaged as `unc
 | `SHEET_ID`          | the ID from step 1                                          |
 | `OWNER_EMAIL`       | `jomarivillanueva83@gmail.com`                              |
 | `GEMINI_API_KEY`    | the key from step 4                                         |
-| `GEMINI_MODEL`      | optional, defaults to `gemini-2.5-flash`                    |
+| `GEMINI_MODEL`      | optional, defaults to `gemini-flash-lite-latest`            |
 | `SLACK_WEBHOOK_URL` | optional, a Slack incoming webhook URL (skipped when unset) |
 
 Click **Save script properties**.

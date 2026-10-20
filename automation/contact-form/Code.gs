@@ -9,14 +9,15 @@
  *   SHEET_ID           required  ID of the Google Sheet that logs inquiries
  *   OWNER_EMAIL        required  where new-inquiry emails go
  *   GEMINI_API_KEY     optional  without it every inquiry is triaged "unclear"
- *   GEMINI_MODEL       optional  default gemini-2.5-flash
+ *   GEMINI_MODEL       optional  default gemini-flash-lite-latest
  *   SLACK_WEBHOOK_URL  optional  Slack incoming webhook; skipped when unset
  */
 
 const LIMITS = { name: 100, email: 254, messageMin: 20, message: 2000, page: 300, userAgent: 400 };
 const MIN_FILL_MS = 3000;
 const RATE = { perEmail: 5, total: 30, windowSeconds: 3600 };
-const DEFAULT_MODEL = 'gemini-2.5-flash';
+// An alias that always points to Google's newest fast model, so retiring a version doesn't break triage.
+const DEFAULT_MODEL = 'gemini-flash-lite-latest';
 const FITS = ['good', 'unclear', 'not_a_fit'];
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const SHEET_NAME = 'Inquiries';
@@ -181,8 +182,6 @@ function triage_(input, props) {
       required: ['fit', 'reason', 'summary'],
     },
   };
-  // Flash models answer faster with thinking off; other models keep their defaults.
-  if (/flash/.test(model)) generationConfig.thinkingConfig = { thinkingBudget: 0 };
   const body = {
     systemInstruction: { parts: [{ text: TRIAGE_PROMPT }] },
     contents: [
