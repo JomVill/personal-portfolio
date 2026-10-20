@@ -252,7 +252,7 @@ function notifyOwner_(props, input, triage) {
     '',
     'Name: ' + input.name,
     'Email: ' + input.email,
-    'AI triage: ' + label + ' — ' + triage.reason,
+    'AI triage: ' + label + ' - ' + triage.reason,
     triage.summary ? 'Summary: ' + triage.summary : '',
     '',
     'Message:',
@@ -269,7 +269,7 @@ function notifyOwner_(props, input, triage) {
     esc_(input.email) +
     '<br><b>AI triage:</b> ' +
     esc_(label) +
-    ' — ' +
+    ' - ' +
     esc_(triage.reason) +
     (triage.summary ? '<br><b>Summary:</b> ' + esc_(triage.summary) : '') +
     '</p><p><b>Message:</b></p><blockquote style="white-space:pre-wrap;margin:0 0 0 12px">' +
@@ -280,7 +280,7 @@ function notifyOwner_(props, input, triage) {
   MailApp.sendEmail({
     to: to,
     replyTo: input.email,
-    subject: '[Portfolio] ' + triage.fit + ' — ' + input.name,
+    subject: '[Portfolio] ' + triage.fit + ' - ' + input.name,
     body: lines.join('\n'),
     htmlBody: html,
     name: 'Portfolio contact form',
@@ -295,7 +295,7 @@ function notifySlack_(props, input, triage) {
     slack_(triage.fit) +
     ')\n*' +
     slack_(input.name) +
-    '* · ' +
+    '* | ' +
     slack_(input.email) +
     '\n' +
     slack_(triage.summary || triage.reason) +
@@ -320,7 +320,7 @@ function autoReply_(props, input) {
     '',
     'Thanks for reaching out about the task that eats your week. I read every message myself and will reply within one working day.',
     '',
-    '— Jom',
+    '- Jom',
   ].join('\n');
   const mail = { to: input.email, subject: 'Thanks, I got your message', body: body, name: 'Jom' };
   if (owner) mail.replyTo = owner;
