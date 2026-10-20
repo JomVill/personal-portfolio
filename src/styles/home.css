@@ -372,30 +372,242 @@ html.motion-paused .track {
   font-size: 15px;
 }
 
-/* ---- contact ---- */
+/* ---- contact (form: src/scripts/contact-form.ts) ---- */
 .contact {
+  display: grid;
+  gap: 32px clamp(40px, 6vw, 88px);
   padding-block: clamp(56px, 7vw, 96px);
+}
+@media (min-width: 960px) {
+  .contact {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    align-items: start;
+  }
 }
 .contact h2 {
   font-size: clamp(32px, 4.6vw, 56px);
-  max-width: 18ch;
+  max-width: 14ch;
   letter-spacing: -0.03em;
 }
-.contact p {
+.contact-lede {
   margin-top: 16px;
+  max-width: 30rem;
   color: var(--muted);
 }
-.contact .actions {
-  margin-top: 28px;
+.contact [hidden] {
+  display: none !important;
+}
+.contact-form {
+  display: grid;
+  gap: 10px;
+  padding: clamp(18px, 2.4vw, 28px);
+}
+.field-row {
+  display: grid;
+  gap: 10px 16px;
+}
+@media (min-width: 640px) {
+  .field-row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+.field {
+  display: grid;
+  min-width: 0;
+}
+.field label {
+  margin-bottom: 8px;
+  font: 500 12px/1.4 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #3f413b;
+}
+.field input,
+.field textarea {
+  width: 100%;
+  min-height: 46px;
+  padding: 11px 14px;
+  font: 400 16px/1.5 var(--sans);
+  color: var(--ink);
+  background: var(--white);
+  border: 1px solid #c3c5bc;
+  border-radius: 10px;
+  box-shadow: 0 1px 2px #242b1914 inset;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+.field textarea {
+  min-height: 144px;
+  resize: vertical;
+}
+.field ::placeholder {
+  color: #7a7c74;
+  opacity: 1;
+}
+.field input:hover,
+.field textarea:hover {
+  border-color: #a9aba1;
+}
+.field input:focus-visible,
+.field textarea:focus-visible {
+  outline: 2px solid var(--accent-text);
+  outline-offset: 2px;
+  border-color: var(--accent-text);
+  border-radius: 10px;
+}
+.field [aria-invalid='true'] {
+  border-color: var(--accent-text);
+  box-shadow: 0 0 0 3px #ad3b0f14;
+}
+/* the message slot keeps its line so errors never push the form around */
+.field-msg {
+  min-height: 1.5em;
+  margin-top: 6px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--accent-text);
+}
+.field-foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.field-count {
+  flex: none;
+  margin-top: 6px;
+  font: 500 11.5px/1.7 var(--mono);
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+.hp {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.form-foot {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 12px 24px;
+  gap: 12px 20px;
+  margin-top: 2px;
 }
-.mail {
+.send-key {
+  justify-content: center;
+  min-width: 8.5em;
+}
+.send-key[aria-disabled='true'] {
+  cursor: progress;
+  opacity: 0.75;
+}
+.form-note {
+  font-size: 14px;
   color: var(--muted);
+}
+.contact-alert {
+  margin-top: 16px;
+  padding: 12px 14px;
+  border: 1px solid #efc3ab;
+  border-radius: 10px;
+  background: #fbebe2;
+  color: #6f2608;
   font-size: 15px;
   overflow-wrap: anywhere;
+}
+.contact-alert a {
+  font-weight: 600;
+  text-underline-offset: 4px;
+}
+.contact-fallback {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin-top: 18px;
+  padding-inline: 4px;
+  font-size: 15px;
+  color: var(--muted);
+}
+.fallback-mail {
+  color: var(--ink);
+  text-decoration-color: var(--wire);
+  text-underline-offset: 4px;
+  overflow-wrap: anywhere;
+}
+.fallback-mail:hover {
+  text-decoration-color: currentColor;
+}
+.copy-key {
+  display: inline-grid;
+  justify-items: center;
+  align-items: center;
+  height: 26px;
+  padding: 0 10px;
+  border: 1px solid var(--line, #dedfd8);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font: 500 11px/1 var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    color 0.15s,
+    border-color 0.15s,
+    background-color 0.15s;
+}
+.copy-key:hover {
+  color: var(--ink);
+  border-color: #b9bab3;
+}
+.copy-key:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.copy-key.is-copied {
+  color: #ad3b0f;
+  border-color: #ee652b66;
+  background: #ee652b0f;
+}
+.copy-key > span {
+  grid-area: 1 / 1;
+}
+.copy-key .copy-done,
+.copy-key.is-copied .copy-idle {
+  visibility: hidden;
+}
+.copy-key.is-copied .copy-done {
+  visibility: visible;
+}
+/* success panel: same screen language as the hero terminal */
+.contact-done .screen-top span + span {
+  color: #8d9a80;
+}
+.cd-body {
+  padding: 20px 22px 22px;
+  font: 400 13px/1.75 var(--mono);
+  color: var(--screen-muted);
+}
+.cd-title {
+  font: 400 13px/1.75 var(--mono);
+  letter-spacing: 0;
+}
+.cd-title:focus {
+  outline: none;
+}
+.cd-title:focus-visible {
+  outline: 2px solid #ffa47a;
+  outline-offset: 4px;
+}
+.cd-steps {
+  margin-top: 12px;
+}
+.cd-note {
+  padding: 16px 4px 2px;
+  font-size: 15px;
+  max-width: 34rem;
 }
 
 @media (max-width: 960px) {
