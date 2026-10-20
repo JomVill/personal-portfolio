@@ -1,4 +1,5 @@
 ---
+import { getImage } from 'astro:assets';
 import logo from '../assets/brand/j-logo.png';
 import { path } from '../lib/paths';
 const links = [
@@ -8,11 +9,13 @@ const links = [
 // J logo aspect 824:1047, shown 36px tall
 const logoHeight = 36;
 const logoWidth = Math.round((logoHeight * 824) / 1047);
+// The source PNG is ~1000px tall; ship a 2x WebP sized for the header instead.
+const logoImg = await getImage({ src: logo, height: logoHeight * 2, format: 'webp', quality: 85 });
 ---
 
 <header class="wrap top">
-  <a class="brand" href={path()} aria-label="Jomari Villanueva, home">
-    <img src={logo.src} alt="" width={logoWidth} height={logoHeight} />
+  <a class="brand" href={path()} aria-label="Jom, home">
+    <img src={logoImg.src} alt="" width={logoWidth} height={logoHeight} />
     <span class="brand-name">Jom</span>
   </a>
   <nav aria-label="Main">

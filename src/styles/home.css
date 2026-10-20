@@ -756,3 +756,34 @@ html.motion-paused .track {
   width: 1.5px;
   background: #cfd0c9;
 }
+
+/* Reduced motion on phones: a compact three-column grid instead of a long wrapped list. */
+@media (prefers-reduced-motion: reduce) and (max-width: 560px) {
+  .logos {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px 10px;
+    padding: 16px 14px;
+  }
+  .logos li,
+  .logos .primary {
+    flex-direction: column;
+    gap: 6px;
+    font: 500 11.5px/1.2 var(--sans);
+    letter-spacing: 0;
+    text-align: center;
+    white-space: normal;
+  }
+  .logos .lg,
+  .logos .primary .lg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Very small phones: keep the name label on one line. */
+@media (max-width: 400px) {
+  .hero-eyebrow .hero-role {
+    display: none;
+  }
+}

@@ -464,3 +464,17 @@ html.motion-paused .panel::after,
 html.motion-paused .device::after {
   opacity: 0;
 }
+
+/* Touch screens: give text links a finger-sized target (44px) without changing the layout. */
+@media (pointer: coarse) {
+  .top nav a:not(.key),
+  .site-footer a,
+  .textlink {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+  .top nav a:not(.key) {
+    padding-inline: 6px;
+  }
+}
