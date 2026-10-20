@@ -2,6 +2,8 @@
 import '@fontsource-variable/manrope';
 import '@fontsource-variable/dm-sans';
 import '../styles/site.css';
+import dmSansLatin from '@fontsource-variable/dm-sans/files/dm-sans-latin-wght-normal.woff2?url';
+import manropeLatin from '@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2?url';
 import favicon32 from '../assets/brand/favicon-32.png';
 import favicon180 from '../assets/brand/favicon-180.png';
 import Header from '../components/Header.astro';
@@ -34,6 +36,8 @@ const person = {
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    <link rel="preload" href={dmSansLatin} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={manropeLatin} as="font" type="font/woff2" crossorigin />
     <link rel="icon" type="image/png" sizes="32x32" href={favicon32.src} />
     <link rel="apple-touch-icon" sizes="180x180" href={favicon180.src} />
     <link rel="sitemap" href={path('sitemap-index.xml')} />

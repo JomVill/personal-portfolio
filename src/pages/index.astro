@@ -20,7 +20,10 @@ const tag = (order: number) => `WF-${String(order).padStart(2, '0')}`;
 <Layout>
   <div class="wrap hero">
     <div class="hero-copy">
-      <p class="eyebrow hero-eyebrow">{profile.academicName} · AI automation</p>
+      <p class="eyebrow hero-eyebrow">
+        {profile.academicName}
+        <span class="hero-role"> · AI automation</span>
+      </p>
       <h1>Hi, I’m Jom, and I automate repetitive tasks.</h1>
       <p class="lede">
         I connect your tools with Zapier, n8n, and AI so the busywork runs itself, saving you up to{' '}
