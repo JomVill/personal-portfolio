@@ -167,8 +167,7 @@ function triage_(input, props) {
   const url =
     'https://generativelanguage.googleapis.com/v1beta/models/' +
     encodeURIComponent(model) +
-    ':generateContent?key=' +
-    encodeURIComponent(key);
+    ':generateContent';
   const generationConfig = {
     temperature: 0.2,
     responseMimeType: 'application/json',
@@ -198,6 +197,7 @@ function triage_(input, props) {
     const res = UrlFetchApp.fetch(url, {
       method: 'post',
       contentType: 'application/json',
+      headers: { 'x-goog-api-key': key },
       payload: JSON.stringify(body),
       muteHttpExceptions: true,
     });
@@ -309,20 +309,16 @@ function notifySlack_(props, input, triage) {
   });
 }
 
-/** Short plain-text auto-reply from the owner's account. Never includes the AI triage. */
+/**
+ * Short plain-text auto-reply from the owner's account. It never quotes the visitor's message or
+ * includes the AI triage, so the form can't be used to send arbitrary text to other addresses.
+ */
 function autoReply_(props, input) {
   const owner = props.getProperty('OWNER_EMAIL');
   const body = [
     'Hi ' + input.name + ',',
     '',
     'Thanks for reaching out about the task that eats your week. I read every message myself and will reply within one working day.',
-    '',
-    'Here’s a copy of what you sent:',
-    '',
-    input.message
-      .split('\n')
-      .map((l) => '> ' + l)
-      .join('\n'),
     '',
     '— Jom',
   ].join('\n');

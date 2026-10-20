@@ -6,7 +6,7 @@
 import { isPaused } from './motion';
 
 const MIN_FILL_MS = 3000;
-const TIMEOUT_MS = 12000;
+const TIMEOUT_MS = 25000;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MSG = {
   failed: 'Couldn’t send just now. You can email me instead:',

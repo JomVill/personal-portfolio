@@ -353,7 +353,7 @@ test('homepage contact form: fields, spam guards, fallback', async () => {
     assert.match(section, new RegExp(`⎿[\\s\\S]*?✓[\\s\\S]*?${line}`), line);
   assert.match(
     section,
-    /I’ll reply within one working day\. A copy of your message is on its way to your inbox\./,
+    /I’ll reply within one working day\. A confirmation is on its way to your inbox\./,
   );
   // email fallback, always visible: address as mailto with subject + copy button
   const fb = section.match(/<div class="contact-fallback">[\s\S]*?<\/div>/)[0];
