@@ -276,6 +276,12 @@ for (const opts of [{ reducedMotion: 'reduce' }, { hasTouch: true, isMobile: tru
       body: reply.body,
     });
   });
+  // Never reach the real Apps Script backend from tests (it sends real emails).
+  let prodHits = 0;
+  await cf.route(/script\.google(usercontent)?\.com/, (route) => {
+    prodHits++;
+    return route.abort();
+  });
   const open = async () => {
     await cf.goto('about:blank'); // a hash-only goto would not reload the page
     await cf.goto(new URL('#contact', base).href, { waitUntil: 'networkidle' });
@@ -316,6 +322,7 @@ for (const opts of [{ reducedMotion: 'reduce' }, { hasTouch: true, isMobile: tru
   result.validation = { invalid, focusId, shift: formBox2.height - formBox.height };
 
   // 2. endpoint empty: "isn't connected yet" with the email fallback
+  await cf.evaluate(() => (document.querySelector('#contact-form').dataset.endpoint = ''));
   await fill();
   await send();
   await cf.locator('#contact-alert').waitFor({ state: 'visible' });
@@ -399,6 +406,8 @@ for (const opts of [{ reducedMotion: 'reduce' }, { hasTouch: true, isMobile: tru
   await cf.waitForTimeout(2200);
   if (await cf.locator('.copy-key.is-copied').count()) failures.push('Contact: Copied state did not reset');
   result.copy = { copied: !!copied, clip };
+  if (prodHits) failures.push(`Contact: ${prodHits} request(s) tried to reach the real Apps Script`);
+  result.prodHits = prodHits;
   report.push({ contactForm: result });
   await ctx.close();
 }

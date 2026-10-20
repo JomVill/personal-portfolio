@@ -8,7 +8,8 @@ export const profile = {
   // Google Apps Script web app URL (ends in /exec) for the homepage contact form; see
   // automation/contact-form/SETUP.md. Empty means "not connected yet": the form still renders,
   // and submitting points people to email instead.
-  contactEndpoint: '',
+  contactEndpoint:
+    'https://script.google.com/macros/s/AKfycbw3nKBqqVwsCpCPcLgX5tmVubemliNcUMm7EZC98m-xlsMl15KzKiPmbhzJxP00LcNZEw/exec',
 };
 export const socialLinks = [
   { label: 'LinkedIn', href: 'https://www.linkedin.com/in/jomari-francis-villanueva-63a5a1aa/' },

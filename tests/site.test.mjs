@@ -351,10 +351,7 @@ test('homepage contact form: fields, spam guards, fallback', async () => {
   assert.match(section, /role="status" aria-live="polite"[^>]*>\s*<div class="device contact-done" hidden/);
   for (const line of ['Inquiry received', 'AI triaged your request', 'Jom notified'])
     assert.match(section, new RegExp(`⎿[\\s\\S]*?✓[\\s\\S]*?${line}`), line);
-  assert.match(
-    section,
-    /I’ll reply within one working day\. A confirmation is on its way to your inbox\./,
-  );
+  assert.match(section, /I’ll reply within one working day\. A confirmation is on its way to your inbox\./);
   // email fallback, always visible: address as mailto with subject + copy button
   const fb = section.match(/<div class="contact-fallback">[\s\S]*?<\/div>/)[0];
   assert.match(fb, /Prefer email\?/);
@@ -366,7 +363,7 @@ test('homepage contact form: fields, spam guards, fallback', async () => {
   // the endpoint ships empty until the Apps Script backend is deployed
   assert.match(
     await readFile('src/data/profile.ts', 'utf8'),
-    /contactEndpoint: '(https:\/\/script\.google\.com\/[^']+\/exec)?'/,
+    /contactEndpoint:\s*'(https:\/\/script\.google\.com\/[^']+\/exec)?'/,
   );
 });
 
