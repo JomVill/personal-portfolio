@@ -251,6 +251,157 @@ for (const opts of [{ reducedMotion: 'reduce' }, { hasTouch: true, isMobile: tru
     failures.push(`Custom cursor: native cursor hidden under ${JSON.stringify(opts)}`);
   await ctx.close();
 }
+// Contact form: validation, unconnected endpoint, success, server error, honeypot, copy.
+{
+  const ctx = await browser.newContext({
+    reducedMotion: 'no-preference',
+    viewport: { width: 1440, height: 1000 },
+  });
+  await ctx.grantPermissions(['clipboard-read', 'clipboard-write'], { origin: new URL(base).origin });
+  const cf = await ctx.newPage();
+  cf.on('pageerror', (error) => failures.push(`contact: ${error.message}`));
+  const STUB = 'https://example.test/contact';
+  let hits = 0;
+  let reply = { status: 200, body: '{"ok":true}' };
+  let lastBody = '';
+  let lastHeaders = {};
+  await cf.route(STUB, (route) => {
+    hits++;
+    lastBody = route.request().postData() ?? '';
+    lastHeaders = route.request().headers();
+    return route.fulfill({
+      status: reply.status,
+      contentType: 'application/json',
+      headers: { 'access-control-allow-origin': '*' },
+      body: reply.body,
+    });
+  });
+  const open = async () => {
+    await cf.goto('about:blank'); // a hash-only goto would not reload the page
+    await cf.goto(new URL('#contact', base).href, { waitUntil: 'networkidle' });
+    await cf.waitForTimeout(3100); // past the 3 s minimum fill time
+  };
+  const fill = async () => {
+    await cf.getByLabel('Name').fill('Ana Tester');
+    await cf.getByLabel('Email', { exact: true }).fill('ana@example.com');
+    await cf
+      .getByLabel('What task eats your week?')
+      .fill('Every Monday I copy new leads into HubSpot by hand.');
+  };
+  const alertText = () => cf.locator('#contact-alert').innerText();
+  const send = () => cf.getByRole('button', { name: 'Send it' }).click();
+  const result = {};
+
+  // 1. empty submit: inline errors, focus on first invalid field, no layout shift
+  await open();
+  const formBox = await cf.locator('#contact-form').boundingBox();
+  await send();
+  const invalid = await cf.locator('#contact-form [aria-invalid="true"]').count();
+  const focusId = await cf.evaluate(() => document.activeElement?.id);
+  const formBox2 = await cf.locator('#contact-form').boundingBox();
+  if (invalid !== 3) failures.push(`Contact: ${invalid} invalid fields after empty submit (want 3)`);
+  if (focusId !== 'cf-name') failures.push(`Contact: focus on ${focusId} after empty submit`);
+  if (Math.abs(formBox.height - formBox2.height) > 1)
+    failures.push(`Contact: validation shifted layout (${formBox.height} -> ${formBox2.height})`);
+  const errText = await cf.locator('#cf-email-error').innerText();
+  if (!errText) failures.push('Contact: no email error message');
+  const axeErr = await new AxeBuilder({ page: cf })
+    .include('#contact')
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
+    .analyze();
+  if (axeErr.violations.length)
+    failures.push(
+      ...axeErr.violations.map((v) => `contact (errors): ${v.id}: ${v.nodes.map((n) => n.target)}`),
+    );
+  result.validation = { invalid, focusId, shift: formBox2.height - formBox.height };
+
+  // 2. endpoint empty: "isn't connected yet" with the email fallback
+  await fill();
+  await send();
+  await cf.locator('#contact-alert').waitFor({ state: 'visible' });
+  await cf.waitForTimeout(100);
+  if (!/isn’t connected yet/.test(await alertText())) failures.push('Contact: no "not connected" message');
+  if (!(await cf.locator('#contact-alert a[href^="mailto:"]').count()))
+    failures.push('Contact: alert lacks mailto');
+  if (hits) failures.push('Contact: request sent with no endpoint');
+  result.unconnected = await alertText();
+
+  // 3. stub endpoint returns ok: success panel, focus on its heading, form gone
+  await open();
+  await cf.evaluate((u) => (document.querySelector('#contact-form').dataset.endpoint = u), STUB);
+  await fill();
+  await send();
+  await cf.locator('.contact-done').waitFor({ state: 'visible', timeout: 5000 });
+  const focusCls = await cf.evaluate(() => document.activeElement?.className ?? '');
+  if (!/cd-title/.test(focusCls)) failures.push(`Contact: focus not on success heading (${focusCls})`);
+  if (await cf.locator('#contact-form').isVisible())
+    failures.push('Contact: form still visible after success');
+  if (hits !== 1) failures.push(`Contact: ${hits} requests on success (want 1)`);
+  const sent = JSON.parse(lastBody || '{}');
+  if (sent.name !== 'Ana Tester' || sent.company !== '' || !(sent.elapsedMs >= 3000))
+    failures.push(`Contact: unexpected payload ${lastBody}`);
+  if (!/^text\/plain/.test(lastHeaders['content-type'] ?? ''))
+    failures.push(`Contact: not a simple text/plain request (${lastHeaders['content-type']})`);
+  await cf.waitForTimeout(1800);
+  const lines = await cf
+    .locator('.cd-steps li')
+    .evaluateAll((ls) => ls.map((l) => getComputedStyle(l).visibility));
+  if (lines.some((v) => v !== 'visible')) failures.push('Contact: success lines did not all appear');
+  const axeOk = await new AxeBuilder({ page: cf })
+    .include('#contact')
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
+    .analyze();
+  if (axeOk.violations.length)
+    failures.push(
+      ...axeOk.violations.map((v) => `contact (success): ${v.id}: ${v.nodes.map((n) => n.target)}`),
+    );
+  result.success = { focusCls, hits };
+
+  // 4. server error: form stays, error + fallback, key re-enabled
+  await open();
+  hits = 0;
+  reply = { status: 500, body: '{"ok":false}' };
+  await cf.evaluate((u) => (document.querySelector('#contact-form').dataset.endpoint = u), STUB);
+  await fill();
+  await send();
+  await cf.locator('#contact-alert').waitFor({ state: 'visible' });
+  await cf.waitForTimeout(100);
+  if (!/Couldn’t send just now/.test(await alertText())) failures.push('Contact: no error message on 500');
+  if (!(await cf.locator('#contact-form').isVisible())) failures.push('Contact: form hidden after error');
+  if (await cf.locator('.send-key[aria-disabled]').count()) failures.push('Contact: key stuck disabled');
+  if ((await cf.locator('.send-key').innerText()) !== 'Send it')
+    failures.push('Contact: key label not reset');
+  result.serverError = { hits, alert: await alertText() };
+
+  // 5. honeypot filled: nothing is sent
+  await open();
+  hits = 0;
+  reply = { status: 200, body: '{"ok":true}' };
+  await cf.evaluate((u) => (document.querySelector('#contact-form').dataset.endpoint = u), STUB);
+  await fill();
+  await cf.locator('#cf-company').fill('Bot Inc', { force: true });
+  await send();
+  await cf.waitForTimeout(500);
+  if (hits) failures.push('Contact: honeypot submission was sent');
+  if (await cf.locator('.contact-done').isVisible())
+    failures.push('Contact: honeypot submission showed success');
+  result.honeypot = { hits };
+
+  // 6. copy button
+  await cf.getByRole('button', { name: 'Copy email address' }).click();
+  const copied = await cf
+    .locator('.copy-key.is-copied')
+    .waitFor({ timeout: 1000 })
+    .then(() => 1)
+    .catch(() => 0);
+  const clip = await cf.evaluate(() => navigator.clipboard.readText().catch(() => ''));
+  if (!copied || clip !== 'jomarivillanueva83@gmail.com') failures.push(`Contact: copy failed (${clip})`);
+  await cf.waitForTimeout(2200);
+  if (await cf.locator('.copy-key.is-copied').count()) failures.push('Contact: Copied state did not reset');
+  result.copy = { copied: !!copied, clip };
+  report.push({ contactForm: result });
+  await ctx.close();
+}
 await writeFile('test-results/browser-report.json', JSON.stringify({ report, failures }, null, 2));
 await browser.close();
 console.log(JSON.stringify({ report, failures }, null, 2));

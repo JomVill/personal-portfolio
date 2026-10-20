@@ -61,12 +61,13 @@ test('workflow copy keys match workflow ids', async () => {
   }
 });
 
-test('site shell: header logo, Email me key, footer links', async () => {
+test('site shell: header logo, Let’s talk key, footer links', async () => {
   const html = await readPage('');
   const header = html.match(/<header[\s\S]*?<\/header>/)[0];
   assert.match(header, /<img[^>]+j-logo/);
   assert.match(header, /class="brand-name">Jom</);
-  assert.match(header, /<a[^>]+href="mailto:jomarivillanueva83@gmail\.com"[^>]*>\s*Email me\s*<\/a>/);
+  assert.match(header, new RegExp(`<a[^>]+href="${base}#contact"[^>]*>\\s*Let’s talk\\s*</a>`));
+  assert.doesNotMatch(header, /mailto:/);
   const footer = html.match(/<footer[\s\S]*?<\/footer>/)[0];
   assert.match(footer, /Academic work/);
   assert.match(footer, /© \d{4} Jomari Villanueva/);
@@ -179,7 +180,6 @@ test('homepage: hero, terminal final state, marquee, featured, cards, no CDNs', 
   ])
     assert.match(cards, new RegExp(`href="${base}work/${slug}/"`), slug);
   assert.match(cards, new RegExp(`href="${base}work/"[^>]*>\\s*See all 12`));
-  assert.match(html, /href="mailto:jomarivillanueva83@gmail\.com"[^>]*>\s*Email me/);
   assert.doesNotMatch(html, /cdn\.jsdelivr|fonts\.googleapis|fonts\.gstatic/);
 });
 
@@ -225,7 +225,8 @@ test('each workflow has a detail page', async () => {
     assert.match(html, /<h2[^>]*>Built with<\/h2>/, w.id);
     assert.match(html, /wfd--full/, w.id);
     assert.match(html, /Want one like this\?/, w.id);
-    assert.match(html, /href="mailto:jomarivillanueva83@gmail\.com"[^>]*>\s*Email me/, w.id);
+    const cta = html.match(/<section class="cta"[\s\S]*?<\/section>/)[0];
+    assert.match(cta, new RegExp(`href="${base}#contact"[^>]*>\\s*Let’s talk`), w.id);
   }
   const p = await readPage('work/partnership-operations-automation');
   assert.match(p, /A person approves in Slack before anything moves\./);
@@ -319,4 +320,71 @@ test('lab section tells the manual → AI-assisted → agentic story', async () 
   const stages = [...lab.matchAll(/<b>([^<]+)<\/b>/g)].map((m) => m[1]);
   assert.deepEqual(stages, ['Manual automation', 'AI-assisted', 'Agentic']);
   assert.match(html, /hand-wired Zapier automations to AI agents that plan their own steps/);
+});
+
+test('homepage contact form: fields, spam guards, fallback', async () => {
+  const html = await readPage('');
+  const section = html.match(/<section id="contact"[\s\S]*?<\/section>/)[0];
+  assert.match(section, /<h2 id="contact-title">Got a task that eats your week\?<\/h2>/);
+  assert.match(section, /Tell me what it is\. I’ll say honestly if it’s worth automating\./);
+  const form = section.match(/<form[^>]*id="contact-form"[\s\S]*?<\/form>/)[0];
+  assert.match(form, /data-endpoint/);
+  for (const [id, label, attrs] of [
+    ['cf-name', 'Name', /autocomplete="name"[^>]*required|required[^>]*autocomplete="name"/],
+    ['cf-email', 'Email', /type="email"/],
+    ['cf-message', 'What task eats your week\\?', /minlength="20"[^>]*maxlength="2000"/],
+  ]) {
+    assert.match(form, new RegExp(`<label for="${id}">${label}</label>`), id);
+    const el = form.match(new RegExp(`<(?:input|textarea) id="${id}"[^>]*>`))[0];
+    assert.match(el, /required/, id);
+    assert.match(el, attrs, id);
+    assert.match(el, new RegExp(`aria-describedby="${id}-error`), id);
+    assert.match(form, new RegExp(`id="${id}-error"`), id);
+  }
+  assert.match(form, /<input id="cf-email"[^>]*autocomplete="email"/);
+  // honeypot: off-screen wrapper hidden from AT, not tabbable, no autofill
+  const hp = form.match(/<div class="hp" aria-hidden="true">[\s\S]*?<\/div>/)[0];
+  assert.match(hp, /<input id="cf-company" name="company"[^>]*tabindex="-1"[^>]*autocomplete="off"/);
+  assert.match(form, /<input type="hidden" name="startedAt"/);
+  assert.match(form, /<button type="submit"[^>]*>Send it<\/button>/);
+  // success panel is server-rendered but hidden, inside a polite live region
+  assert.match(section, /role="status" aria-live="polite"[^>]*>\s*<div class="device contact-done" hidden/);
+  for (const line of ['Inquiry received', 'AI triaged your request', 'Jom notified'])
+    assert.match(section, new RegExp(`⎿[\\s\\S]*?✓[\\s\\S]*?${line}`), line);
+  assert.match(
+    section,
+    /I’ll reply within one working day\. A copy of your message is on its way to your inbox\./,
+  );
+  // email fallback, always visible: address as mailto with subject + copy button
+  const fb = section.match(/<div class="contact-fallback">[\s\S]*?<\/div>/)[0];
+  assert.match(fb, /Prefer email\?/);
+  assert.match(
+    fb,
+    /<a class="fallback-mail" href="mailto:jomarivillanueva83@gmail\.com\?subject=Automation%20inquiry%20from%20your%20portfolio">jomarivillanueva83@gmail\.com<\/a>/,
+  );
+  assert.match(fb, /<button type="button" class="key key-sm copy-key"[^>]*>[\s\S]*Copy[\s\S]*Copied ✓/);
+  // the endpoint ships empty until the Apps Script backend is deployed
+  assert.match(
+    await readFile('src/data/profile.ts', 'utf8'),
+    /contactEndpoint: '(https:\/\/script\.google\.com\/[^']+\/exec)?'/,
+  );
+});
+
+test('no "Email me" left in any built page', async () => {
+  const { readdir } = await import('node:fs/promises');
+  const files = (await readdir('dist', { recursive: true })).filter((f) => f.endsWith('.html'));
+  assert.ok(files.length >= 12);
+  for (const f of files) assert.doesNotMatch(await readFile(join('dist', f), 'utf8'), /Email me/i, f);
+});
+
+test('Apps Script backend is committed without secrets', async () => {
+  const code = await readFile('automation/contact-form/Code.gs', 'utf8');
+  const manifest = JSON.parse(await readFile('automation/contact-form/appsscript.json', 'utf8'));
+  assert.match(code, /function doPost\(e\)/);
+  assert.match(code, /function doGet\(\)/);
+  assert.match(code, /getProperty\('GEMINI_API_KEY'\)/);
+  assert.doesNotMatch(code, /AIza[0-9A-Za-z_-]{20,}|hooks\.slack\.com\/services\/T/);
+  assert.equal(manifest.webapp.access, 'ANYONE_ANONYMOUS');
+  assert.equal(manifest.webapp.executeAs, 'USER_DEPLOYING');
+  assert.equal(manifest.timeZone, 'Asia/Manila');
 });

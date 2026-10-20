@@ -1,6 +1,5 @@
 ---
 import logo from '../assets/brand/j-logo.png';
-import { profile } from '../data/profile';
 import { path } from '../lib/paths';
 const links = [
   ['Work', 'work/'],
@@ -22,8 +21,8 @@ const logoWidth = Math.round((logoHeight * 824) / 1047);
         {label}
       </a>
     ))}
-    <a class="key key-sm" href={`mailto:${profile.email}`}>
-      Email me
+    <a class="key key-sm" href={path('#contact')}>
+      Let’s talk
     </a>
   </nav>
 </header>

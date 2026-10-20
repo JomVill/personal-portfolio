@@ -13,6 +13,7 @@ import '../styles/home.css';
 const all = getWorkflows();
 const feat = featured();
 const more = homeCards();
+const mailto = `mailto:${profile.email}?subject=${encodeURIComponent('Automation inquiry from your portfolio')}`;
 const tag = (order: number) => `WF-${String(order).padStart(2, '0')}`;
 ---
 
@@ -132,18 +133,146 @@ const tag = (order: number) => `WF-${String(order).padStart(2, '0')}`;
     </div>
   </section>
 
-  <section class="wrap contact" aria-labelledby="contact-title">
-    <h2 id="contact-title">Got a task that eats your week?</h2>
-    <p>Tell me what it is. I'll say honestly if it's worth automating.</p>
-    <div class="actions">
-      <a class="key key-orange" href={`mailto:${profile.email}`}>
-        Email me
-      </a>
-      <span class="mail">{profile.email}</span>
+  <section id="contact" class="wrap contact" aria-labelledby="contact-title">
+    <div class="contact-intro">
+      <h2 id="contact-title">Got a task that eats your week?</h2>
+      <p class="contact-lede">Tell me what it is. I’ll say honestly if it’s worth automating.</p>
+    </div>
+    <div class="contact-main">
+      <form
+        id="contact-form"
+        class="panel contact-form"
+        data-endpoint={profile.contactEndpoint}
+        aria-labelledby="contact-title"
+        novalidate
+      >
+        <div class="field-row">
+          <div class="field">
+            <label for="cf-name">Name</label>
+            <input
+              id="cf-name"
+              name="name"
+              type="text"
+              autocomplete="name"
+              maxlength="100"
+              required
+              aria-describedby="cf-name-error"
+            />
+            <p class="field-msg" id="cf-name-error"></p>
+          </div>
+          <div class="field">
+            <label for="cf-email">Email</label>
+            <input
+              id="cf-email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              inputmode="email"
+              spellcheck="false"
+              maxlength="254"
+              required
+              aria-describedby="cf-email-error"
+            />
+            <p class="field-msg" id="cf-email-error"></p>
+          </div>
+        </div>
+        <div class="field">
+          <label for="cf-message">What task eats your week?</label>
+          <textarea
+            id="cf-message"
+            name="message"
+            rows="5"
+            minlength="20"
+            maxlength="2000"
+            required
+            autocomplete="off"
+            placeholder="Every Monday I copy new leads from our form into HubSpot…"
+            aria-describedby="cf-message-error cf-message-hint"
+          ></textarea>
+          <div class="field-foot">
+            <p class="field-msg" id="cf-message-error"></p>
+            <span class="field-count" aria-hidden="true">
+              0 / 2000
+            </span>
+          </div>
+          <span class="sr" id="cf-message-hint">
+            Between 20 and 2000 characters.
+          </span>
+        </div>
+        <div class="hp" aria-hidden="true">
+          <label for="cf-company">Company</label>
+          <input id="cf-company" name="company" type="text" tabindex="-1" autocomplete="off" />
+        </div>
+        <input type="hidden" name="startedAt" value="" />
+        <div class="form-foot">
+          <button type="submit" class="key key-orange send-key">
+            Send it
+          </button>
+          <p class="form-note">I read every message myself.</p>
+        </div>
+        <div class="contact-alert" id="contact-alert" role="alert" hidden>
+          <span class="alert-text"></span> <a href={mailto}>{profile.email}</a>
+        </div>
+      </form>
+
+      <div class="contact-status" role="status" aria-live="polite">
+        <div class="device contact-done" hidden>
+          <div class="screen">
+            <div class="screen-top">
+              <span aria-hidden="true">Inquiry · Sent</span>
+              <span aria-hidden="true">Contact form</span>
+            </div>
+            <div class="cd-body">
+              <h3 class="t-prompt cd-title" tabindex="-1">
+                <span class="t-caret" aria-hidden="true">
+                  &gt;
+                </span>
+                <span>Message sent</span>
+              </h3>
+              <ol class="t-steps cd-steps">
+                {['Inquiry received', 'AI triaged your request', 'Jom notified'].map((label) => (
+                  <li class="t-done">
+                    <span class="t-tree" aria-hidden="true">
+                      ⎿
+                    </span>
+                    <span class="t-ok" aria-hidden="true">
+                      ✓
+                    </span>
+                    {label}
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </div>
+          <p class="cd-note">
+            Thanks — I’ll reply within one working day. A copy of your message is on its way to your inbox.
+          </p>
+        </div>
+      </div>
+
+      <div class="contact-fallback">
+        <span>Prefer email?</span>
+        <a class="fallback-mail" href={mailto}>
+          {profile.email}
+        </a>
+        <button
+          type="button"
+          class="key key-sm copy-key"
+          data-copy={profile.email}
+          aria-label="Copy email address"
+        >
+          <span class="copy-idle">Copy</span>
+          <span class="copy-done" aria-hidden="true">
+            Copied ✓
+          </span>
+        </button>
+        <span class="sr copy-status" role="status"></span>
+      </div>
     </div>
   </section>
 </Layout>
 
 <script>
   import '../scripts/workflow-anim';
+  import '../scripts/contact-form';
 </script>
