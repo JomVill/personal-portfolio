@@ -291,7 +291,7 @@ for (const opts of [{ reducedMotion: 'reduce' }, { hasTouch: true, isMobile: tru
     await cf.getByLabel('Name').fill('Ana Tester');
     await cf.getByLabel('Email', { exact: true }).fill('ana@example.com');
     await cf
-      .getByLabel('What task eats your week?')
+      .getByLabel('The task, and the tools it touches')
       .fill('Every Monday I copy new leads into HubSpot by hand.');
   };
   const alertText = () => cf.locator('#contact-alert').innerText();

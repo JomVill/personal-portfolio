@@ -160,8 +160,8 @@ export const workflowCopy: Record<string, WorkflowCopy> = {
     control: 'Your team sees every email in Slack and decides what to do with it.',
   },
   'article-to-social-content': {
-    title: 'One article, ready-to-post social content',
-    summary: 'AI writes the caption and image, then queues it for your review.',
+    title: 'One article in, a social post out',
+    summary: 'AI writes the caption, a branded image is made, and the draft waits for your review.',
     tools: ['OpenAI', 'Placid', 'Buffer', 'Slack'],
     order: 8,
     steps: [
@@ -232,7 +232,7 @@ export const workflowCopy: Record<string, WorkflowCopy> = {
     },
   },
   'slack-message-to-clickup': {
-    title: 'Chat messages become tasks',
+    title: 'Slack requests become tasks',
     summary: 'AI turns a Slack message into a ClickUp task with a due date.',
     tools: ['Slack', 'OpenAI', 'ClickUp'],
     order: 11,
@@ -274,7 +274,7 @@ export const workflowCopy: Record<string, WorkflowCopy> = {
   'content-pipeline-1-daily-story-scout-score-and-vote': {
     title: 'Your best stories, found and scored every morning',
     summary:
-      'AI pulls stories from Hacker News, Reddit, and the web, scores them, and you pick the keepers in Slack.',
+      'Stories arrive from Hacker News, Reddit, and the web. AI scores them, and you pick the keepers in Slack.',
     tools: ['Hacker News', 'Reddit', 'OpenAI', 'Slack', 'Google Sheets'],
     order: 1,
     featured: true,
@@ -395,7 +395,7 @@ export const workflowCopy: Record<string, WorkflowCopy> = {
   },
   'content-pipeline-4-monthly-performance-review': {
     title: 'A monthly check-up on your content engine',
-    summary: "On the 1st of each month, AI reviews the month's votes and suggests changes to the scoring.",
+    summary: 'On the 1st of each month, AI reviews the month’s votes and suggests changes to the scoring.',
     tools: ['Google Sheets', 'OpenAI', 'Slack'],
     order: 4,
     steps: [

@@ -334,7 +334,7 @@ test('homepage contact form: fields, spam guards, fallback', async () => {
   for (const [id, label, attrs] of [
     ['cf-name', 'Name', /autocomplete="name"[^>]*required|required[^>]*autocomplete="name"/],
     ['cf-email', 'Email', /type="email"/],
-    ['cf-message', 'What task eats your week\\?', /minlength="20"[^>]*maxlength="2000"/],
+    ['cf-message', 'The task, and the tools it touches', /minlength="20"[^>]*maxlength="2000"/],
   ]) {
     assert.match(form, new RegExp(`<label for="${id}">${label}</label>`), id);
     const el = form.match(new RegExp(`<(?:input|textarea) id="${id}"[^>]*>`))[0];
