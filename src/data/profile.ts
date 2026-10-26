@@ -153,7 +153,7 @@ export const projects = [
     name: 'Jaryo',
     status: 'In beta',
     summary:
-      'An iPhone app that builds a personal news edition every morning. Rate the stories, and AI drafts social posts from the ones you keep.',
+      'Your morning paper, made for you, on iPhone. Swipe through today’s stories, clip the ones you love, and Jaryo drafts your social posts from them. Every swipe shapes tomorrow’s edition.',
     stack: 'Swift, Supabase, Cloudflare Workers, local AI models',
   },
   {
