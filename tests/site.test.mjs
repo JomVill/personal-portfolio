@@ -3,7 +3,9 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
-export const readPage = (route) => readFile(join('dist', route, 'index.html'), 'utf8');
+// Word joiners (U+2060) keep hyphenated titles from breaking; tests compare the visible text.
+export const readPage = async (route) =>
+  (await readFile(join('dist', route, 'index.html'), 'utf8')).replace(/\u2060/g, '');
 
 const home = await readFile('dist/index.html', 'utf8');
 const STORY_SCOUT = 'content-pipeline-1-daily-story-scout-score-and-vote';
