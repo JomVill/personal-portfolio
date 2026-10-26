@@ -108,7 +108,23 @@ html.fx-on .card:hover .wfd .ai .n {
   margin-top: 12px;
 }
 .card.project .stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
   margin: 0 0 20px;
+  padding: 0;
+  list-style: none;
   font-size: 14px;
   color: var(--ink);
+}
+.card.project .stack li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.card.project .stack svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+  flex: none;
 }

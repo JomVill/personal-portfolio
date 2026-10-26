@@ -145,7 +145,7 @@ export const projects = [
     status: 'Live',
     summary:
       'Find water in Iligan City before you set out. A live map of fetch points and hydrants, kept up to date by residents. Report a dry tap or a working source from your phone, no account needed.',
-    stack: 'Next.js, MapLibre, Supabase',
+    stack: ['Next.js', 'MapLibre', 'Supabase'],
     url: 'https://waterfalse.vercel.app',
     linkLabel: 'Open the live map',
   },
@@ -154,13 +154,13 @@ export const projects = [
     status: 'In beta',
     summary:
       'Your morning paper, made for you, on iPhone. Swipe through today’s stories, clip the ones you love, and Jaryo drafts your social posts from them. Every swipe shapes tomorrow’s edition.',
-    stack: 'Swift, Supabase, Cloudflare Workers, local AI models',
+    stack: ['Swift', 'Supabase', 'Cloudflare Workers', 'Ollama'],
   },
   {
     name: 'SPINNR Log',
     status: 'In daily use',
     summary:
       'Every load, every peso, in one place. The shop logs a sale in a few taps, sees who still owes, and copies the day into its spreadsheet. Sales data never leaves the device.',
-    stack: 'HTML, JavaScript, IndexedDB',
+    stack: ['HTML', 'JavaScript', 'IndexedDB'],
   },
 ];

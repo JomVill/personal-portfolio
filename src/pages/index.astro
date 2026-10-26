@@ -7,6 +7,29 @@ import WorkflowCard from '../components/WorkflowCard.astro';
 import WorkflowDiagram from '../components/WorkflowDiagram.astro';
 import { featured, getWorkflows, homeCards } from '../lib/workflows';
 import { profile, projects } from '../data/profile';
+import {
+  siCloudflareworkers,
+  siHtml5,
+  siJavascript,
+  siMaplibre,
+  siNextdotjs,
+  siOllama,
+  siSupabase,
+  siSwift,
+  type SimpleIcon,
+} from 'simple-icons';
+
+// Logos for the project stacks; a name without one (IndexedDB) shows as text.
+const stackIcons: Record<string, SimpleIcon> = {
+  'Next.js': siNextdotjs,
+  MapLibre: siMaplibre,
+  Supabase: siSupabase,
+  Swift: siSwift,
+  'Cloudflare Workers': siCloudflareworkers,
+  Ollama: siOllama,
+  HTML: siHtml5,
+  JavaScript: siJavascript,
+};
 import { path } from '../lib/paths';
 import '../styles/home.css';
 
@@ -145,7 +168,18 @@ const tag = (order: number) => `WF-${String(order).padStart(2, '0')}`;
           <span class="tag">{p.status}</span>
           <h3>{p.name}</h3>
           <p>{p.summary}</p>
-          <p class="stack">{p.stack}</p>
+          <ul class="stack" aria-label="Built with">
+            {p.stack.map((t) => (
+              <li>
+                {stackIcons[t] && (
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d={stackIcons[t].path} />
+                  </svg>
+                )}
+                {t}
+              </li>
+            ))}
+          </ul>
           {p.url && (
             <a class="textlink" href={p.url} rel="noopener">
               {p.linkLabel}
