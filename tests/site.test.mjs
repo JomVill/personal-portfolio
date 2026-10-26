@@ -3,7 +3,9 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
-export const readPage = (route) => readFile(join('dist', route, 'index.html'), 'utf8');
+// Word joiners (U+2060) keep hyphenated titles from breaking; tests compare the visible text.
+export const readPage = async (route) =>
+  (await readFile(join('dist', route, 'index.html'), 'utf8')).replace(/\u2060/g, '');
 
 const home = await readFile('dist/index.html', 'utf8');
 const STORY_SCOUT = 'content-pipeline-1-daily-story-scout-score-and-vote';
@@ -109,7 +111,7 @@ test('homepage: hero, terminal final state, marquee, featured, cards, no CDNs', 
     .replace(/<[^>]+>/g, '')
     .replace(/\s+/g, ' ')
     .trim();
-  assert.equal(summary, 'Done · 4 steps · ~5 min · saves ~2 h of manual work');
+  assert.equal(summary, 'Done 4 steps ~5 min saves ~2 h of manual work');
   assert.match(
     html,
     /aria-label="Example automation run:[^"]*about 5 minutes, saving about 2 hours of manual work\."/,
@@ -137,7 +139,7 @@ test('homepage: hero, terminal final state, marquee, featured, cards, no CDNs', 
   assert.match(logos[0][2], /<svg[^>]+fill="#FF4F00"[^>]*>\s*<use href="#si-zapier"/);
   assert.match(html, /<symbol id="si-zapier"[^>]*>\s*<path d="M/);
   // featured workflow
-  assert.match(html, /Featured workflow · Content/);
+  assert.match(html, /Featured content workflow/);
   assert.match(
     html,
     /<h2 id="feat-title"[^>]*>\s*Your best stories, found and scored every morning\s*<\/h2>/,
@@ -332,7 +334,7 @@ test('homepage contact form: fields, spam guards, fallback', async () => {
   for (const [id, label, attrs] of [
     ['cf-name', 'Name', /autocomplete="name"[^>]*required|required[^>]*autocomplete="name"/],
     ['cf-email', 'Email', /type="email"/],
-    ['cf-message', 'What task eats your week\\?', /minlength="20"[^>]*maxlength="2000"/],
+    ['cf-message', 'The task, and the tools it touches', /minlength="20"[^>]*maxlength="2000"/],
   ]) {
     assert.match(form, new RegExp(`<label for="${id}">${label}</label>`), id);
     const el = form.match(new RegExp(`<(?:input|textarea) id="${id}"[^>]*>`))[0];
@@ -384,4 +386,12 @@ test('Apps Script backend is committed without secrets', async () => {
   assert.equal(manifest.webapp.access, 'ANYONE_ANONYMOUS');
   assert.equal(manifest.webapp.executeAs, 'USER_DEPLOYING');
   assert.equal(manifest.timeZone, 'Asia/Manila');
+});
+
+test('homepage lists what I am building now, linking only the public one', async () => {
+  const home = await readPage('');
+  assert.match(home, /<h2 id="projects-title">What I’m building now<\/h2>/);
+  for (const name of ['WaterFalse: Iligan Water Watch', 'Jaryo', 'SPINNR Log'])
+    assert.ok(home.includes(name), name);
+  assert.match(home, /href="https:\/\/waterfalse\.vercel\.app"/);
 });

@@ -1,0 +1,109 @@
+/* Hallmark · checked: 2026-10-26 · genre: modern-minimal (inferred)
+ * floor: 0 FAIL · fixed: 13 (7a, 10a, 19, 24b, 34, 48, 50, 54, 63, 64, 67, F1, F3) · structural: 6 printed (8, 9, 42, 58, 59, 78)
+ * built: the project · redesign: polish · v2.0.0 */
+/* Hallmark · dismissed 58 · the hero h1 runs eight words; the owner's own line, asserted by the site tests and kept verbatim */
+
+/*
+ * The one token block. Every colour and face the site paints goes through a role name here.
+ * Values are the existing brand: paper, ink, the orange accent #EE652B, the silver housing and the dark screen.
+ */
+:root {
+  /* paper and ink, tinted toward the olive-grey of the silver housing */
+  --paper: #f8f8f5;
+  --field: #fdfdfa;
+  --ink: #252623;
+  --ink-2: #2b2d28;
+  --ink-3: #3a3c36;
+  --ink-label: #3f413b;
+  --ink-deep: #141512;
+  --muted: #62645d;
+  --muted-2: #575a52;
+  --placeholder: #7a7c74;
+
+  /* rules and edges, light to dark */
+  --line: #e2e2dc;
+  --line-2: #dadbd3;
+  --line-3: #d6d8cf;
+  --wire-2: #cfd0c9;
+  --wire: #b9bab2;
+  --edge: #babeb2;
+  --field-edge: #c3c5bc;
+  --field-edge-hover: #a9aba1;
+  --diagram-edge: #a9aba2;
+  --diagram-edge-hover: #8f9188;
+
+  /* the orange accent and its material */
+  --accent: #ee652b;
+  --accent-text: #ad3b0f;
+  --orange: var(--accent);
+  --accent-hi: #f77a43;
+  --accent-lo: #ef692e;
+  --accent-rim: #d25620;
+  --accent-rim-deep: #b3471b;
+  --accent-gloss: #ffc099;
+  --accent-ink: #2d2118;
+  --accent-ink-2: #3f2d1d;
+  --accent-shade: #6b2a0c;
+  --accent-deep: #6f2608;
+  --accent-wash: #fbebe2;
+  --accent-wash-edge: #efc3ab;
+  --accent-lit: #e2875c;
+  --accent-on-dark: #ffa47a;
+  --accent-on-dark-2: #ff9a6b;
+  --accent-packet: #ff9361;
+  --accent-verb: #f59466;
+  --accent-label-dark: #f8b08b;
+  --accent-cream: #fff8f2;
+
+  /* silver housing and keys */
+  --silver: #ecede6;
+  --silver-edge: #cbcdc5;
+  --silver-hi: #f0f1eb;
+  --silver-lo: #e2e4dc;
+  --silver-well: #e9eae3;
+  --silver-bevel: #bfc2b8;
+  --key-hi: #fcfcf7;
+  --key-lo: #e6e8df;
+  --beat-lo: #e9ebe2;
+  --gloss: #fffffb;
+  --shade: #242b19;
+  --shade-2: #555b4c;
+  --shade-3: #2a2d24;
+  --shade-4: #333530;
+  --shade-deep: #10130f;
+
+  /* the dark screen */
+  --screen: #242a25;
+  --screen-node: #30382e;
+  --screen-bezel: #454940;
+  --screen-ink: #e6eddb;
+  --screen-bright: #fbfdf7;
+  --screen-muted: #b2beac;
+  --screen-dim: #8d9a80;
+  --screen-wire: #6c795f;
+  --screen-rule: #dce7ce;
+
+  /* print */
+  --print-paper: #fdfdfb;
+  --print-ink: #141512;
+  --print-muted: #333530;
+
+  /* faces */
+  --sans: 'DM Sans Variable', system-ui, sans-serif;
+  --body: var(--sans);
+  --head: 'Manrope Variable', system-ui, sans-serif;
+  --mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  /* radius per nesting level */
+  --radius-housing: 22px;
+  --radius-panel: 16px;
+  --radius-screen: 12px;
+  --radius-control: 10px;
+  --radius-small: 4px;
+  --radius-pill: 999px;
+
+  /* motion */
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  --gutter: clamp(16px, 4vw, 48px);
+}

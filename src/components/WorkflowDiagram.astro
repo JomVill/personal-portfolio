@@ -295,7 +295,7 @@ const lineH = variant === 'full' ? 14 : 16;
     width: 100%;
     height: auto;
     overflow: visible;
-    font-family: var(--body, system-ui, sans-serif);
+    font-family: var(--body);
   }
   .e {
     fill: none;
@@ -309,37 +309,37 @@ const lineH = variant === 'full' ? 14 : 16;
 
   /* featured: dark display */
   .wfd--featured {
-    background: var(--screen, #242a25);
+    background: var(--screen);
     font-size: 13px;
   }
   .wfd--featured .e {
-    stroke: var(--screen-wire, #6c795f);
+    stroke: var(--screen-wire);
   }
   .wfd--featured .e.later {
-    stroke: var(--screen-muted, #b2beac);
+    stroke: var(--screen-muted);
     stroke-dasharray: 4 4;
   }
   .wfd--featured .n {
-    fill: #30382e;
-    stroke: #8d9a80;
+    fill: var(--screen-node);
+    stroke: var(--screen-dim);
   }
   .wfd--featured text {
-    fill: var(--screen-muted, #b2beac);
+    fill: var(--screen-muted);
   }
   .wfd--featured .ai .n {
-    fill: var(--orange, #ee652b);
-    stroke: var(--orange, #ee652b);
+    fill: var(--orange);
+    stroke: var(--orange);
   }
   .wfd--featured .ai text {
-    fill: #f8b08b;
+    fill: var(--accent-label-dark);
     font-weight: 600;
   }
   .wfd--featured .hu .n {
-    fill: var(--screen-ink, #e6eddb);
-    stroke: var(--screen-ink, #e6eddb);
+    fill: var(--screen-ink);
+    stroke: var(--screen-ink);
   }
   .wfd--featured .hu text {
-    fill: var(--screen-ink, #e6eddb);
+    fill: var(--screen-ink);
     font-weight: 600;
   }
 
@@ -360,21 +360,21 @@ const lineH = variant === 'full' ? 14 : 16;
   /* card + full: light */
   .wfd--card .e,
   .wfd--full .e {
-    stroke: #a9aba2;
+    stroke: var(--diagram-edge);
   }
   .wfd--card .n,
   .wfd--full .n {
-    fill: #fff;
-    stroke: var(--ink, #252623);
+    fill: var(--field);
+    stroke: var(--ink);
   }
   .wfd--card .ai .n,
   .wfd--full .ai .n {
-    fill: var(--orange, #ee652b);
-    stroke: var(--orange, #ee652b);
+    fill: var(--orange);
+    stroke: var(--orange);
   }
   .wfd--card .hu .n,
   .wfd--full .hu .n {
-    fill: var(--ink, #252623);
+    fill: var(--ink);
   }
   .wfd--full {
     width: auto;
@@ -383,11 +383,11 @@ const lineH = variant === 'full' ? 14 : 16;
     font-size: 12px;
   }
   .wfd--full text {
-    fill: var(--muted, #696b64);
+    fill: var(--muted);
   }
   .wfd--full .ai text,
   .wfd--full .hu text {
-    fill: var(--ink, #252623);
+    fill: var(--ink);
     font-weight: 600;
   }
 </style>

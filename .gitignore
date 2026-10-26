@@ -5,3 +5,4 @@ dist/
 .DS_Store
 .sites-runtime/
 test-results/
+.hallmark/

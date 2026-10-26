@@ -28,7 +28,7 @@ const scholar = socialLinks.find((l) => l.label === 'Google Scholar')!.href;
       <ul class="plain">
         {researchInterests.map((r) => (
           <li>
-            <strong>{r.title}</strong> — {r.text}
+            <strong>{r.title}</strong>: {r.text}
           </li>
         ))}
       </ul>
@@ -38,10 +38,12 @@ const scholar = socialLinks.find((l) => l.label === 'Google Scholar')!.href;
       <h2 id="publications">Publications</h2>
       {publications.map((p) => (
         <article class="item">
-          <p class="meta">
-            {p.year} · {p.type}
-          </p>
-          <h3>{p.title}</h3>
+          <div class="item-head">
+            <h3>{p.title}</h3>
+            <p class="meta">
+              {p.type}, {p.year}
+            </p>
+          </div>
           <p class="authors">{p.authors}</p>
           <p>{p.venue}</p>
           <a class="textlink" href={`https://doi.org/${p.doi}`}>
@@ -55,10 +57,14 @@ const scholar = socialLinks.find((l) => l.label === 'Google Scholar')!.href;
       <h2 id="conference">Conference presentation</h2>
       {presentations.map((p) => (
         <article class="item">
-          <p class="meta">{p.date}</p>
-          <h3>{p.title}</h3>
+          <div class="item-head">
+            <h3>{p.title}</h3>
+            <p class="meta">{p.date}</p>
+          </div>
           <p>
-            {p.type} · {p.event} · {p.location}
+            {p.type}, {p.event}
+            <br />
+            {p.location}
           </p>
         </article>
       ))}
@@ -77,8 +83,10 @@ const scholar = socialLinks.find((l) => l.label === 'Google Scholar')!.href;
     <section aria-labelledby="engagements">
       <h2 id="engagements">Policy & engagements</h2>
       <article class="item">
-        <p class="meta">Jan 2025–Present</p>
-        <h3>Head of PCETT</h3>
+        <div class="item-head">
+          <h3>Head of PCETT</h3>
+          <p class="meta">Jan 2025 to Present</p>
+        </div>
         <p>
           Policy Center for Emerging Trends & Technologies, Institute for Policy Innovation and Leadership,
           MSU-IIT. Work across AI policy, digital governance, technology foresight, and capacity building.
@@ -86,10 +94,12 @@ const scholar = socialLinks.find((l) => l.label === 'Google Scholar')!.href;
       </article>
       {engagements.map((e) => (
         <article class="item">
-          <p class="meta">{e.date}</p>
-          <h3>
-            <a href={e.url}>{e.title}</a>
-          </h3>
+          <div class="item-head">
+            <h3>
+              <a href={e.url}>{e.title}</a>
+            </h3>
+            <p class="meta">{e.date}</p>
+          </div>
           <p>{e.text}</p>
           <p class="meta">{e.role}</p>
         </article>

@@ -11,6 +11,8 @@ export default defineConfig({
   output: 'static',
   trailingSlash: 'always',
   devToolbar: { enabled: false },
+  // Small CSS: inline it so the first paint doesn't wait for extra requests.
+  build: { inlineStylesheets: 'always' },
   integrations: [sitemap()],
   redirects: {
     '/research/': to('academic/'),

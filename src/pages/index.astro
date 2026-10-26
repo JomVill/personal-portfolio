@@ -6,7 +6,30 @@ import LogoMarquee from '../components/LogoMarquee.astro';
 import WorkflowCard from '../components/WorkflowCard.astro';
 import WorkflowDiagram from '../components/WorkflowDiagram.astro';
 import { featured, getWorkflows, homeCards } from '../lib/workflows';
-import { profile } from '../data/profile';
+import { profile, projects } from '../data/profile';
+import {
+  siCloudflareworkers,
+  siHtml5,
+  siJavascript,
+  siMaplibre,
+  siNextdotjs,
+  siOllama,
+  siSupabase,
+  siSwift,
+  type SimpleIcon,
+} from 'simple-icons';
+
+// Logos for the project stacks; a name without one (IndexedDB) shows as text.
+const stackIcons: Record<string, SimpleIcon> = {
+  'Next.js': siNextdotjs,
+  MapLibre: siMaplibre,
+  Supabase: siSupabase,
+  Swift: siSwift,
+  'Cloudflare Workers': siCloudflareworkers,
+  Ollama: siOllama,
+  HTML: siHtml5,
+  JavaScript: siJavascript,
+};
 import { path } from '../lib/paths';
 import '../styles/home.css';
 
@@ -20,7 +43,6 @@ const tag = (order: number) => `WF-${String(order).padStart(2, '0')}`;
 <Layout>
   <div class="wrap hero">
     <div class="hero-copy">
-      <p class="eyebrow hero-eyebrow">{profile.academicName} · AI automation</p>
       <h1>Hi, I’m Jom, and I automate repetitive tasks.</h1>
       <p class="lede">
         I connect your tools with Zapier, n8n, and AI so the busywork runs itself, saving you up to{' '}
@@ -31,6 +53,10 @@ const tag = (order: number) => `WF-${String(order).padStart(2, '0')}`;
           See my workflows
         </a>
       </div>
+      <p class="hero-byline">
+        <span class="hero-name">{profile.academicName}</span>
+        <span class="hero-role">AI automation</span>
+      </p>
     </div>
     <Terminal />
   </div>
@@ -38,7 +64,6 @@ const tag = (order: number) => `WF-${String(order).padStart(2, '0')}`;
   <LogoMarquee />
 
   <section id="work" class="wrap featured" aria-labelledby="feat-title">
-    <p class="eyebrow">Featured workflow · Content</p>
     <h2 id="feat-title" class="feature-title">
       {feat.title}
     </h2>
@@ -74,6 +99,7 @@ const tag = (order: number) => `WF-${String(order).padStart(2, '0')}`;
         </ol>
       )}
       <p class="device-foot">
+        <span class="device-caption">Featured content workflow</span>
         <a class="textlink" href={path(`work/${feat.slug}/`)}>
           See the full workflow
         </a>
@@ -84,14 +110,13 @@ const tag = (order: number) => `WF-${String(order).padStart(2, '0')}`;
   <section class="wrap" aria-labelledby="lab-title">
     <div class="panel lab">
       <div class="lab-main">
-        <p class="eyebrow">Where I built this</p>
         <h2 id="lab-title">Head of Technology &amp; Research, Future AI Lab / BrandNat</h2>
-        <p class="lab-meta">2022–2026</p>
+        <p class="lab-meta">2022 to 2026</p>
         <p class="lab-body">
-          I joined Future AI Lab / BrandNat in 2022, just as AI went from a curiosity to a working tool. Over
-          four years as Head of Technology &amp; Research, I built through every stage of that shift, from
-          hand-wired Zapier automations to AI agents that plan their own steps, for content production and
-          audience intelligence.
+          I joined Future AI Lab / BrandNat in 2022, just as AI went from a curiosity to an everyday tool. In
+          four years leading technology and research, I built through every stage of that shift for its
+          content and audience work, from hand-wired Zapier automations to AI agents that plan their own
+          steps.
         </p>
         <p class="lab-link">
           <a class="textlink" href={path('about/')}>
@@ -108,7 +133,7 @@ const tag = (order: number) => `WF-${String(order).padStart(2, '0')}`;
         <li>
           <span class="stage">Then</span>
           <b>AI-assisted</b>
-          <span>AI inside the workflow, reading, sorting, and drafting.</span>
+          <span>AI inside the workflow, doing the reading, sorting, and drafting.</span>
         </li>
         <li class="now">
           <span class="stage">Now</span>
@@ -129,6 +154,39 @@ const tag = (order: number) => `WF-${String(order).padStart(2, '0')}`;
     <div class="cards">
       {more.map((w) => (
         <WorkflowCard workflow={w} />
+      ))}
+    </div>
+  </section>
+
+  <section class="wrap" aria-labelledby="projects-title">
+    <div class="sec-head">
+      <h2 id="projects-title">What I’m building now</h2>
+    </div>
+    <div class="cards">
+      {projects.map((p) => (
+        <article class="card panel project">
+          <span class="tag">{p.status}</span>
+          <h3>{p.name}</h3>
+          <p>{p.summary}</p>
+          <ul class="stack" aria-label="Built with">
+            {p.stack.map((t) => (
+              <li>
+                {stackIcons[t] && (
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d={stackIcons[t].path} />
+                  </svg>
+                )}
+                {t}
+              </li>
+            ))}
+          </ul>
+          {p.url && (
+            <a class="textlink" href={p.url} rel="noopener">
+              {p.linkLabel}
+              <span class="sr">: {p.name}</span>
+            </a>
+          )}
+        </article>
       ))}
     </div>
   </section>
@@ -177,7 +235,7 @@ const tag = (order: number) => `WF-${String(order).padStart(2, '0')}`;
           </div>
         </div>
         <div class="field">
-          <label for="cf-message">What task eats your week?</label>
+          <label for="cf-message">The task, and the tools it touches</label>
           <textarea
             id="cf-message"
             name="message"
@@ -245,7 +303,7 @@ const tag = (order: number) => `WF-${String(order).padStart(2, '0')}`;
             </div>
           </div>
           <p class="cd-note">
-            Thanks — I’ll reply within one working day. A confirmation is on its way to your inbox.
+            Thanks. I’ll reply within one working day. A confirmation is on its way to your inbox.
           </p>
         </div>
       </div>

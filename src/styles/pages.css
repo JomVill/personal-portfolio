@@ -9,7 +9,7 @@
   letter-spacing: -0.03em;
 }
 .page .lede {
-  margin-top: 18px;
+  margin-top: 16px;
   max-width: 38rem;
   font-size: clamp(17px, 1.5vw, 19px);
   color: var(--muted);
@@ -17,13 +17,13 @@
 .page .prose {
   margin-top: 28px;
   display: grid;
-  gap: 18px;
+  gap: 16px;
   max-width: 38rem;
 }
 .page .also {
-  font: 500 14px/1.5 var(--mono);
+  font: 400 15px/1.55 var(--sans);
   color: var(--muted);
-  padding-top: 8px;
+  padding-top: 12px;
   border-top: 1px solid var(--line);
 }
 .page .links {
@@ -54,7 +54,7 @@
 }
 .page .item,
 .page .experience {
-  padding-block: 14px;
+  padding-block: 16px;
 }
 .page .item + .item,
 .page .experience + .experience {
@@ -64,14 +64,27 @@
 .page .item h3 + p,
 .page .item p + a,
 .page .experience h3 + p {
-  margin-top: 6px;
+  margin-top: 4px;
 }
 .page .meta {
-  font: 500 12px/1.5 var(--mono);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font: 500 14px/1.5 var(--sans);
+  font-variant-numeric: tabular-nums;
   color: var(--muted);
   display: block;
+}
+/* heading left, its dates or kind right: a column, not a label above */
+.page .item-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 24px;
+}
+.page .item-head h3 {
+  flex: 1 1 24ch;
+}
+.page .item-head .meta {
+  flex: none;
 }
 .page .authors,
 .page .experience p {
@@ -80,13 +93,21 @@
 }
 .page .item a:not(.textlink),
 .page .experience a {
+  text-decoration-color: var(--wire);
   text-underline-offset: 4px;
+  transition: text-decoration-color 0.15s;
+}
+@media (hover: hover) {
+  .page .item a:not(.textlink):hover,
+  .page .experience a:hover {
+    text-decoration-color: currentColor;
+  }
 }
 .page .item,
 .page .item p,
 .page .experience p,
 .page h3 {
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
 }
 .cv-actions {
   display: flex;
@@ -98,8 +119,8 @@
 
 @media print {
   body {
-    background: #fff;
-    color: #000;
+    background: var(--print-paper);
+    color: var(--print-ink);
     font-size: 10pt;
   }
   .top,
@@ -121,7 +142,7 @@
   }
   .page section {
     padding-block: 12px 0;
-    margin-top: 14px;
+    margin-top: 16px;
   }
   .page h2 {
     font-size: 13pt;
@@ -136,11 +157,11 @@
   }
   .page .meta {
     font-size: 8pt;
-    color: #333;
+    color: var(--print-muted);
   }
   .page .experience p,
   .page .authors {
-    color: #000;
+    color: var(--print-ink);
     font-size: 10pt;
   }
 }
