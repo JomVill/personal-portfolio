@@ -10,7 +10,7 @@
   max-width: 20ch;
 }
 .lede {
-  margin-top: 18px;
+  margin-top: 16px;
   max-width: 38rem;
   font-size: clamp(17px, 1.5vw, 19px);
   color: var(--muted);
@@ -31,8 +31,8 @@
   margin-top: 32px;
   padding: 0;
   background: var(--silver);
-  border: 1px solid #dadbd3;
-  border-radius: 16px;
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius-panel);
   overflow: hidden;
 }
 .diagram-scroll {
@@ -69,8 +69,8 @@
   font-size: 17px;
 }
 .steps li::marker {
-  font-family: var(--mono);
-  font-size: 0.8em;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.9em;
   color: var(--muted);
 }
 .chips {
@@ -82,9 +82,9 @@
   gap: 8px;
 }
 .chips li {
-  padding: 6px 12px;
-  border: 1px solid #dadbd3;
-  border-radius: 999px;
+  padding: 4px 12px;
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius-pill);
   background: var(--silver);
   font-size: 14px;
   font-weight: 500;
@@ -93,7 +93,7 @@
   font-size: 17px;
 }
 .cta {
-  border-top: 1px solid #dadbd3;
+  border-top: 1px solid var(--line-2);
   margin-top: clamp(36px, 5vw, 56px);
 }
 .cta .actions {
