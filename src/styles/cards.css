@@ -103,11 +103,29 @@ html.fx-on .card:hover .wfd .ai .n {
   }
 }
 
-/* Project cards: no diagram, so the status sits above the title. */
-.card.project h3 {
-  margin-top: 12px;
+/* Project cards: the app's own icon beside its name and status, like an app listing. */
+.project-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 4px;
 }
-.card.project .stack {
+.project-head > div {
+  min-width: 0;
+}
+.app-icon {
+  display: block;
+  width: 56px;
+  height: 56px;
+  border-radius: 13px;
+  box-shadow: 0 0 0 1px var(--line);
+  flex: none;
+}
+.card.project h3 {
+  margin: 0 0 4px;
+  overflow-wrap: break-word;
+}
+.stack {
   display: flex;
   flex-wrap: wrap;
   gap: 8px 16px;
@@ -117,12 +135,12 @@ html.fx-on .card:hover .wfd .ai .n {
   font-size: 14px;
   color: var(--ink);
 }
-.card.project .stack li {
+.stack li {
   display: inline-flex;
   align-items: center;
   gap: 6px;
 }
-.card.project .stack svg {
+.stack svg {
   width: 16px;
   height: 16px;
   fill: currentColor;

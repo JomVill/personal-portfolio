@@ -1,0 +1,270 @@
+---
+// A project as an App Store style listing: header, fact strip, screens, about, how it works, information.
+import Layout from '../../layouts/Layout.astro';
+import WorkflowDiagram from '../../components/WorkflowDiagram.astro';
+import StackList from '../../components/StackList.astro';
+import { Image } from 'astro:assets';
+import { projects, automationWorkflow, type Project } from '../../data/projects';
+import type { Workflow } from '../../lib/workflows';
+import { profile } from '../../data/profile';
+import { path } from '../../lib/paths';
+import '../../styles/work.css';
+import '../../styles/projects.css';
+
+export function getStaticPaths() {
+  return projects.map((project) => ({ params: { slug: project.slug }, props: { project } }));
+}
+const { project: p } = Astro.props as { project: Project };
+const a = p.automation;
+const flow = a ? (automationWorkflow(p) as Workflow) : undefined;
+const facts = [
+  ['Status', p.status],
+  ['Works on', p.platform],
+  ['Category', p.category],
+  ['Account', p.account],
+];
+---
+
+<Layout title={p.name} description={p.summary}>
+  <div class="wrap detail listing">
+    <a class="textlink back" href={path('#projects')}>
+      All projects
+    </a>
+
+    <header class="listing-head">
+      <Image class="app-icon app-icon-lg" src={p.logo} alt="" width={128} height={128} densities={[1, 2]} />
+      <div class="listing-id">
+        <h1>{p.shortName ?? p.name}</h1>
+        <p class="listing-tagline">{p.tagline}</p>
+        <p class="listing-dev">{profile.academicName}</p>
+        {p.url && (
+          <a class="key key-orange listing-action" href={p.url} rel="noopener">
+            {p.linkLabel}
+          </a>
+        )}
+      </div>
+    </header>
+
+    <dl class="facts">
+      {facts.map(([k, v]) => (
+        <div>
+          <dt>{k}</dt>
+          <dd>{v}</dd>
+        </div>
+      ))}
+    </dl>
+
+    <section class="shots" aria-labelledby="shots-title">
+      <div class="shots-head">
+        <h2 id="shots-title">Screens</h2>
+        {p.desktop && (
+          <div class="view-switch" role="tablist" aria-label="Screen size" data-switch hidden>
+            <button type="button" role="tab" id="tab-phone" aria-controls="view-phone" aria-selected="true">
+              Phone
+            </button>
+            <button
+              type="button"
+              role="tab"
+              id="tab-desktop"
+              aria-controls="view-desktop"
+              aria-selected="false"
+              tabindex="-1"
+            >
+              Desktop
+            </button>
+          </div>
+        )}
+      </div>
+      <div
+        id="view-phone"
+        role={p.desktop ? 'tabpanel' : undefined}
+        aria-labelledby={p.desktop ? 'tab-phone' : undefined}
+      >
+        {p.desktop && <h3 class="view-label">Phone</h3>}
+        <ul class="shot-row">
+          {p.clips?.map((c) => (
+            <li>
+              <figure>
+                <video
+                  class="clip"
+                  src={path(`projects/${p.slug}/${c.name}.mp4`)}
+                  poster={path(`projects/${p.slug}/${c.name}.jpg`)}
+                  width="590"
+                  height="1202"
+                  muted
+                  loop
+                  playsinline
+                  preload="metadata"
+                  controls
+                  aria-label={c.label}
+                  data-clip
+                />
+                <figcaption>{c.caption}</figcaption>
+              </figure>
+            </li>
+          ))}
+          {p.shots.map((s) => (
+            <li>
+              <figure>
+                <Image src={s.src} alt={s.alt} widths={[280, 560]} sizes="(max-width: 640px) 72vw, 280px" />
+                <figcaption>{s.caption}</figcaption>
+              </figure>
+            </li>
+          ))}
+        </ul>
+      </div>
+      {p.desktop && (
+        <div id="view-desktop" role="tabpanel" aria-labelledby="tab-desktop">
+          <h3 class="view-label">Desktop</h3>
+          <ul class="shot-row shot-row-wide">
+            {p.desktop.map((s) => (
+              <li>
+                <figure>
+                  <Image
+                    src={s.src}
+                    alt={s.alt}
+                    widths={[720, 1440]}
+                    sizes="(max-width: 760px) 88vw, 720px"
+                  />
+                  <figcaption>{s.caption}</figcaption>
+                </figure>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+      {p.shotsNote && <p class="platform-note">{p.shotsNote}</p>}
+    </section>
+
+    <section class="about" aria-labelledby="about-title">
+      <h2 id="about-title">About</h2>
+      <p class="about-lede">{p.summary}</p>
+      <ul class="features">
+        {p.features.map((f) => (
+          <li>{f}</li>
+        ))}
+      </ul>
+    </section>
+
+    {a && flow && (
+      <section class="how" aria-labelledby="how-title">
+        <h2 id="how-title">How it works</h2>
+        <p class="auto-intro">{a.intro}</p>
+        <div class="diagram-box">
+          <div
+            class="diagram-scroll"
+            role="region"
+            aria-label="Automation diagram, scroll sideways"
+            tabindex="0"
+          >
+            <WorkflowDiagram workflow={flow} variant="full" />
+          </div>
+        </div>
+        <div class="detail-cols">
+          <ol class="steps">
+            {a.steps.map((s) => (
+              <li>{s}</li>
+            ))}
+          </ol>
+          {a.control && (
+            <div>
+              <h3>Where you stay in control</h3>
+              <p class="control">{a.control}</p>
+            </div>
+          )}
+        </div>
+      </section>
+    )}
+
+    <section class="info" aria-labelledby="info-title">
+      <h2 id="info-title">Information</h2>
+      <dl class="info-table">
+        <div>
+          <dt>Developer</dt>
+          <dd>{profile.academicName}</dd>
+        </div>
+        <div>
+          <dt>Built with</dt>
+          <dd>
+            <StackList items={p.stack} />
+          </dd>
+        </div>
+        <div>
+          <dt>Privacy</dt>
+          <dd>{p.privacy}</dd>
+        </div>
+        <div>
+          <dt>Made in</dt>
+          <dd>{profile.location}</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section class="cta" aria-labelledby="cta-title">
+      <h2 id="cta-title">Want something built like this?</h2>
+      <div class="actions">
+        <a class="key key-orange" href={path('#contact')}>
+          Let’s talk
+        </a>
+        <span class="mail">{profile.email}</span>
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<script>
+  // Recordings play silently while on screen, without controls; with reduced motion they wait for a press.
+  const clips = document.querySelectorAll<HTMLVideoElement>('[data-clip]');
+  if (
+    clips.length &&
+    !matchMedia('(prefers-reduced-motion: reduce)').matches &&
+    'IntersectionObserver' in window
+  ) {
+    const io = new IntersectionObserver((entries) =>
+      entries.forEach((e) => {
+        const v = e.target as HTMLVideoElement;
+        if (e.isIntersecting) v.play().catch(() => {});
+        else v.pause();
+      }),
+    );
+    clips.forEach((v) => {
+      v.controls = false;
+      io.observe(v);
+    });
+  }
+
+  // Phone / Desktop switch: without scripting both views show, each under its own label.
+  document.querySelectorAll<HTMLElement>('[data-switch]').forEach((list) => {
+    const tabs = [...list.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+    const panels = tabs.map((t) => document.getElementById(t.getAttribute('aria-controls')!)!);
+    const select = (i: number, focus = false) => {
+      tabs.forEach((t, k) => {
+        t.setAttribute('aria-selected', String(k === i));
+        t.tabIndex = k === i ? 0 : -1;
+        panels[k].hidden = k !== i;
+      });
+      if (focus) tabs[i].focus();
+    };
+    list.hidden = false;
+    document.documentElement.classList.add('views-on');
+    tabs.forEach((t, i) => {
+      t.addEventListener('click', () => select(i));
+      t.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowLeft')
+          select((i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length, true);
+      });
+    });
+    select(0);
+  });
+
+  // The scroll region is only a keyboard tab stop while it actually overflows.
+  const regions = document.querySelectorAll<HTMLElement>('.diagram-scroll');
+  const sync = () =>
+    regions.forEach((r) => {
+      if (r.scrollWidth > r.clientWidth) r.setAttribute('tabindex', '0');
+      else r.removeAttribute('tabindex');
+    });
+  sync();
+  addEventListener('resize', sync);
+  if ('ResizeObserver' in window) regions.forEach((r) => new ResizeObserver(sync).observe(r));
+</script>

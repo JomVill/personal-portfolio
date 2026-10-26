@@ -18,7 +18,17 @@ for (const width of [375, 768, 1024, 1440, 1920]) {
   await page.screenshot({ path: `test-results/home-${width}.png`, fullPage: true });
   report.push({ viewport: width, horizontalOverflow: overflow });
 }
-for (const route of ['', 'work/', ...workflows.map((w) => `work/${w.id}/`), 'about/', 'academic/', 'cv/']) {
+for (const route of [
+  '',
+  'work/',
+  ...workflows.map((w) => `work/${w.id}/`),
+  'about/',
+  'academic/',
+  'cv/',
+  'projects/waterfalse/',
+  'projects/jaryo/',
+  'projects/spinnr-log/',
+]) {
   const response = await page.goto(new URL(route, base).href, { waitUntil: 'networkidle' });
   if (!response.ok()) failures.push(`${route}: HTTP ${response.status()}`);
   const result = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();

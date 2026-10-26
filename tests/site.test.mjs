@@ -388,10 +388,25 @@ test('Apps Script backend is committed without secrets', async () => {
   assert.equal(manifest.timeZone, 'Asia/Manila');
 });
 
-test('homepage lists what I am building now, linking only the public one', async () => {
+test('homepage lists what I am building now, each linking to its page', async () => {
   const home = await readPage('');
   assert.match(home, /<h2 id="projects-title">What I’m building now<\/h2>/);
-  for (const name of ['WaterFalse: Iligan Water Watch', 'Jaryo', 'SPINNR Log'])
-    assert.ok(home.includes(name), name);
-  assert.match(home, /href="https:\/\/waterfalse\.vercel\.app"/);
+  for (const slug of ['waterfalse', 'jaryo', 'spinnr-log'])
+    assert.match(home, new RegExp(`href="${base}projects/${slug}/"`), slug);
+});
+
+test('project pages are listings: facts, screens, a Phone / Desktop switch, and only public links', async () => {
+  const wf = await readPage('projects/waterfalse/');
+  assert.match(wf, /href="https:\/\/waterfalse\.vercel\.app"/);
+  assert.match(wf, /role="tablist"/);
+  assert.match(wf, /How it works/);
+  const jaryo = await readPage('projects/jaryo/');
+  assert.doesNotMatch(jaryo, /data-jd/);
+  assert.match(jaryo, /<dt>Works on<\/dt>/);
+  assert.match(jaryo, /<h2 id="info-title">Information<\/h2>/);
+  assert.doesNotMatch(jaryo, /role="tablist"/);
+  const spinnr = await readPage('projects/spinnr-log/');
+  assert.match(spinnr, /role="tablist"/);
+  assert.match(spinnr, /Sample data/);
+  assert.doesNotMatch(spinnr, /How it works/);
 });
