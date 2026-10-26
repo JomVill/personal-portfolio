@@ -102,3 +102,13 @@ html.fx-on .card:hover .wfd .ai .n {
     transition: none;
   }
 }
+
+/* Project cards: no diagram, so the status sits above the title. */
+.card.project h3 {
+  margin-top: 12px;
+}
+.card.project .stack {
+  margin: 0 0 20px;
+  font-size: 14px;
+  color: var(--ink);
+}

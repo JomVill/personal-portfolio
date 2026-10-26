@@ -6,7 +6,7 @@ import LogoMarquee from '../components/LogoMarquee.astro';
 import WorkflowCard from '../components/WorkflowCard.astro';
 import WorkflowDiagram from '../components/WorkflowDiagram.astro';
 import { featured, getWorkflows, homeCards } from '../lib/workflows';
-import { profile } from '../data/profile';
+import { profile, projects } from '../data/profile';
 import { path } from '../lib/paths';
 import '../styles/home.css';
 
@@ -131,6 +131,28 @@ const tag = (order: number) => `WF-${String(order).padStart(2, '0')}`;
     <div class="cards">
       {more.map((w) => (
         <WorkflowCard workflow={w} />
+      ))}
+    </div>
+  </section>
+
+  <section class="wrap" aria-labelledby="projects-title">
+    <div class="sec-head">
+      <h2 id="projects-title">My projects</h2>
+    </div>
+    <div class="cards">
+      {projects.map((p) => (
+        <article class="card panel project">
+          <span class="tag">{p.status}</span>
+          <h3>{p.name}</h3>
+          <p>{p.summary}</p>
+          <p class="stack">{p.stack}</p>
+          {p.url && (
+            <a class="textlink" href={p.url} rel="noopener">
+              {p.linkLabel}
+              <span class="sr">: {p.name}</span>
+            </a>
+          )}
+        </article>
       ))}
     </div>
   </section>

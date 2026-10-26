@@ -387,3 +387,11 @@ test('Apps Script backend is committed without secrets', async () => {
   assert.equal(manifest.webapp.executeAs, 'USER_DEPLOYING');
   assert.equal(manifest.timeZone, 'Asia/Manila');
 });
+
+test('homepage lists my projects, linking only the public one', async () => {
+  const home = await readPage('');
+  assert.match(home, /<h2 id="projects-title">My projects<\/h2>/);
+  for (const name of ['WaterFalse: Iligan Water Watch', 'Jaryo', 'SPINNR Log'])
+    assert.ok(home.includes(name), name);
+  assert.match(home, /href="https:\/\/waterfalse\.vercel\.app"/);
+});

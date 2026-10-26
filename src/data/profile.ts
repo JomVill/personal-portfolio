@@ -137,3 +137,30 @@ export const researchInterests = [
     text: 'Technology policy, digital governance, foresight, and emerging technology analysis.',
   },
 ];
+
+// Products Jom designed and built, shown on the homepage. Only link what is public.
+export const projects = [
+  {
+    name: 'WaterFalse: Iligan Water Watch',
+    status: 'Live',
+    summary:
+      'A community map of where Iligan City has water. Residents report a dry tap or a working source, and an admin checks each report before it shows.',
+    stack: 'Next.js, MapLibre, Supabase',
+    url: 'https://waterfalse.vercel.app',
+    linkLabel: 'Open the live map',
+  },
+  {
+    name: 'Jaryo',
+    status: 'Private beta',
+    summary:
+      'An iPhone app that builds a personal news edition every morning. Rate the stories, and AI drafts social posts from the ones you keep.',
+    stack: 'Swift, Supabase, Cloudflare Workers, local AI models',
+  },
+  {
+    name: 'SPINNR Log',
+    status: 'In use',
+    summary:
+      'The daily sales log for SPINNR Launderette. It records each load and payment, totals the day and month, and copies rows straight into the shop spreadsheet.',
+    stack: 'HTML, JavaScript, IndexedDB',
+  },
+];
