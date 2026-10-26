@@ -1,8 +1,8 @@
 ---
+// A project as an App Store style listing: header, fact strip, screens, about, how it works, information.
 import Layout from '../../layouts/Layout.astro';
 import WorkflowDiagram from '../../components/WorkflowDiagram.astro';
 import StackList from '../../components/StackList.astro';
-import JaryoDemo from '../../components/JaryoDemo.astro';
 import { Image } from 'astro:assets';
 import { projects, automationWorkflow, type Project } from '../../data/projects';
 import type { Workflow } from '../../lib/workflows';
@@ -17,40 +17,46 @@ export function getStaticPaths() {
 const { project: p } = Astro.props as { project: Project };
 const a = p.automation;
 const flow = a ? (automationWorkflow(p) as Workflow) : undefined;
+const facts = [
+  ['Status', p.status],
+  ['Works on', p.platform],
+  ['Category', p.category],
+  ['Account', p.account],
+];
 ---
 
 <Layout title={p.name} description={p.summary}>
-  <div class="wrap detail project-page">
+  <div class="wrap detail listing">
     <a class="textlink back" href={path('#projects')}>
       All projects
     </a>
-    <div class="project-title">
-      <Image class="app-icon app-icon-lg" src={p.logo} alt="" width={72} height={72} densities={[1, 2]} />
-      <div>
-        <h1>{p.shortName ?? p.name}</h1>
-        {p.subtitle && <p class="project-sub">{p.subtitle}</p>}
-        <p class="project-status">{p.status}</p>
-      </div>
-    </div>
-    <p class="lede">{p.summary}</p>
-    {p.url && (
-      <p class="project-link">
-        <a class="key key-orange" href={p.url} rel="noopener">
-          {p.linkLabel}
-        </a>
-      </p>
-    )}
 
-    {p.demo && (
-      <section class="demo" aria-labelledby="demo-title">
-        <h2 id="demo-title">Try the app</h2>
-        <JaryoDemo />
-      </section>
-    )}
+    <header class="listing-head">
+      <Image class="app-icon app-icon-lg" src={p.logo} alt="" width={128} height={128} densities={[1, 2]} />
+      <div class="listing-id">
+        <h1>{p.shortName ?? p.name}</h1>
+        <p class="listing-tagline">{p.tagline}</p>
+        <p class="listing-dev">{profile.academicName}</p>
+        {p.url && (
+          <a class="key key-orange listing-action" href={p.url} rel="noopener">
+            {p.linkLabel}
+          </a>
+        )}
+      </div>
+    </header>
+
+    <dl class="facts">
+      {facts.map(([k, v]) => (
+        <div>
+          <dt>{k}</dt>
+          <dd>{v}</dd>
+        </div>
+      ))}
+    </dl>
 
     <section class="shots" aria-labelledby="shots-title">
       <div class="shots-head">
-        <h2 id="shots-title">{p.demo ? 'From the app' : 'Screens'}</h2>
+        <h2 id="shots-title">Screens</h2>
         {p.desktop && (
           <div class="view-switch" role="tablist" aria-label="Screen size" data-switch hidden>
             <button type="button" role="tab" id="tab-phone" aria-controls="view-phone" aria-selected="true">
@@ -109,9 +115,19 @@ const flow = a ? (automationWorkflow(p) as Workflow) : undefined;
       {p.shotsNote && <p class="platform-note">{p.shotsNote}</p>}
     </section>
 
+    <section class="about" aria-labelledby="about-title">
+      <h2 id="about-title">About</h2>
+      <p class="about-lede">{p.summary}</p>
+      <ul class="features">
+        {p.features.map((f) => (
+          <li>{f}</li>
+        ))}
+      </ul>
+    </section>
+
     {a && flow && (
-      <section aria-labelledby="auto-title">
-        <h2 id="auto-title">The automation behind it</h2>
+      <section class="how" aria-labelledby="how-title">
+        <h2 id="how-title">How it works</h2>
         <p class="auto-intro">{a.intro}</p>
         <div class="diagram-box">
           <div
@@ -123,41 +139,45 @@ const flow = a ? (automationWorkflow(p) as Workflow) : undefined;
             <WorkflowDiagram workflow={flow} variant="full" />
           </div>
         </div>
+        <div class="detail-cols">
+          <ol class="steps">
+            {a.steps.map((s) => (
+              <li>{s}</li>
+            ))}
+          </ol>
+          {a.control && (
+            <div>
+              <h3>Where you stay in control</h3>
+              <p class="control">{a.control}</p>
+            </div>
+          )}
+        </div>
       </section>
     )}
 
-    <div class="detail-cols">
-      <section aria-labelledby="runs-title">
-        <h2 id="runs-title">{a ? 'How it runs' : 'What it does'}</h2>
-        <ol class="steps">
-          {(a ? a.steps : p.features).map((s) => (
-            <li>{s}</li>
-          ))}
-        </ol>
-      </section>
-      <div>
-        <section aria-labelledby="built-title">
-          <h2 id="built-title">Built with</h2>
-          <StackList items={p.stack} />
-        </section>
-        {a?.control && (
-          <section aria-labelledby="control-title">
-            <h2 id="control-title">Where you stay in control</h2>
-            <p class="control">{a.control}</p>
-          </section>
-        )}
-        {a && (
-          <section aria-labelledby="more-title">
-            <h2 id="more-title">Also in the app</h2>
-            <ul class="features">
-              {p.features.map((f) => (
-                <li>{f}</li>
-              ))}
-            </ul>
-          </section>
-        )}
-      </div>
-    </div>
+    <section class="info" aria-labelledby="info-title">
+      <h2 id="info-title">Information</h2>
+      <dl class="info-table">
+        <div>
+          <dt>Developer</dt>
+          <dd>{profile.academicName}</dd>
+        </div>
+        <div>
+          <dt>Built with</dt>
+          <dd>
+            <StackList items={p.stack} />
+          </dd>
+        </div>
+        <div>
+          <dt>Privacy</dt>
+          <dd>{p.privacy}</dd>
+        </div>
+        <div>
+          <dt>Made in</dt>
+          <dd>{profile.location}</dd>
+        </div>
+      </dl>
+    </section>
 
     <section class="cta" aria-labelledby="cta-title">
       <h2 id="cta-title">Want something built like this?</h2>

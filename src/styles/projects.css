@@ -1,34 +1,106 @@
-/* Project pages: app icon beside the title, a row of phone screenshots. */
-.project-title {
-  display: flex;
+/* Project pages as App Store style listings. */
+.listing-head {
+  display: grid;
+  grid-template-columns: 128px minmax(0, 1fr);
+  gap: 28px;
   align-items: center;
-  gap: 20px;
-}
-.project-title h1 {
-  margin: 0;
-  min-width: 0;
-  overflow-wrap: break-word;
+  margin-top: 8px;
 }
 .app-icon-lg {
-  width: 72px;
-  height: 72px;
-  border-radius: 17px;
+  width: 128px;
+  height: 128px;
+  border-radius: 28px;
 }
-.project-status {
+.listing-id h1 {
+  margin: 0;
+  overflow-wrap: break-word;
+  min-width: 0;
+}
+.listing-tagline {
   margin: 6px 0 0;
+  font-size: 19px;
+  color: var(--ink-3);
+}
+.listing-dev {
+  margin: 4px 0 0;
   font-size: 15px;
   color: var(--muted);
 }
-.project-sub {
-  margin: 4px 0 0;
-  font-size: 17px;
+.listing-action {
+  margin-top: 18px;
+}
+
+/* the fact strip: four columns split by hairlines */
+.facts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 40px 0 0;
+  padding: 16px 0;
+  border-block: 1px solid var(--line);
+}
+.facts > div {
+  padding: 0 20px;
+  text-align: center;
+}
+.facts > div + div {
+  border-left: 1px solid var(--line);
+}
+.facts dt {
+  font-size: 13px;
+  color: var(--muted);
+}
+.facts dd {
+  margin: 6px 0 0;
+  font-size: 15px;
+  font-weight: 600;
   color: var(--ink);
 }
-.project-link {
-  margin: 24px 0 8px;
+.shots,
+.about,
+.how,
+.info {
+  margin-top: 56px;
 }
-.shots {
-  margin-top: 40px;
+.about-lede {
+  max-width: 62ch;
+  margin: 0 0 16px;
+  font-size: 18px;
+  line-height: 1.55;
+  color: var(--ink);
+}
+.how .detail-cols {
+  margin-top: 28px;
+  row-gap: 32px;
+}
+.how h3 {
+  margin: 0 0 8px;
+  font-size: 17px;
+}
+
+/* Information: label and value rows, like the store's table */
+.info-table {
+  margin: 0;
+  max-width: 760px;
+}
+.info-table > div {
+  display: grid;
+  grid-template-columns: 160px minmax(0, 1fr);
+  gap: 16px;
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+}
+.info-table > div:last-child {
+  border-bottom: 1px solid var(--line);
+}
+.info-table dt {
+  color: var(--muted);
+}
+.info-table dd {
+  margin: 0;
+  color: var(--ink);
+}
+.info-table .stack {
+  margin: 0;
 }
 .shot-row {
   display: grid;
@@ -141,12 +213,6 @@
 .shot-row-wide img {
   border-radius: 12px;
 }
-.demo {
-  margin-top: 48px;
-}
-.demo h2 {
-  margin-bottom: 20px;
-}
 @media (max-width: 760px) {
   .shot-row-wide {
     grid-auto-columns: 88vw;
@@ -155,5 +221,31 @@
 @media (prefers-reduced-motion: reduce) {
   .view-switch button {
     transition: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .listing-head {
+    grid-template-columns: 96px minmax(0, 1fr);
+    gap: 18px;
+  }
+  .app-icon-lg {
+    width: 96px;
+    height: 96px;
+    border-radius: 22px;
+  }
+  .listing-tagline {
+    font-size: 16px;
+  }
+  .facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 16px;
+  }
+  .facts > div:nth-child(3) {
+    border-left: 0;
+  }
+  .info-table > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
   }
 }

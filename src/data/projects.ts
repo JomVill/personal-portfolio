@@ -36,9 +36,16 @@ export type Automation = {
 export type Project = {
   slug: string;
   name: string;
-  /** Shorter name for titles, when the full one would wrap; `subtitle` carries the rest. */
+  /** Shorter name for titles, when the full one would wrap. */
   shortName?: string;
-  subtitle?: string;
+  /** One line under the name, like an App Store subtitle. */
+  tagline: string;
+  /** The fact strip under the header. */
+  platform: string;
+  category: string;
+  account: string;
+  /** One or two sentences for the Information table. */
+  privacy: string;
   status: string;
   logo: ImageMetadata;
   summary: string;
@@ -48,8 +55,6 @@ export type Project = {
   /** Phone screenshots; with `desktop` too, the page offers a Phone / Desktop switch. */
   shots: Shot[];
   desktop?: Shot[];
-  /** Show the hands-on demo (Jaryo) above the screenshots. */
-  demo?: boolean;
   shotsNote?: string;
   automation?: Automation;
   features: string[];
@@ -60,7 +65,12 @@ export const projects: Project[] = [
     slug: 'waterfalse',
     name: 'WaterFalse: Iligan Water Watch',
     shortName: 'WaterFalse',
-    subtitle: 'Iligan Water Watch',
+    tagline: 'Iligan City’s community water map',
+    platform: 'Web, phone and desktop',
+    category: 'Community',
+    account: 'Not needed',
+    privacy:
+      'Reports are anonymous and photos are stored privately. An admin reviews every report before it shows.',
     status: 'Live',
     logo: wfLogo,
     summary:
@@ -127,7 +137,12 @@ export const projects: Project[] = [
   },
   {
     slug: 'jaryo',
-    demo: true,
+    tagline: 'Your morning paper, made for you',
+    platform: 'iPhone',
+    category: 'News',
+    account: 'Email sign-in link',
+    privacy:
+      'The app holds no API keys. AI requests go through a gateway that checks sign-in and limits each reader.',
     name: 'Jaryo',
     status: 'In beta',
     logo: jaryoLogo,
@@ -184,6 +199,11 @@ export const projects: Project[] = [
   },
   {
     slug: 'spinnr-log',
+    tagline: 'The daily sales log for a launderette',
+    platform: 'Web, saved to the home screen',
+    category: 'Business',
+    account: 'None, one device',
+    privacy: 'Sales are saved in the browser on the shop’s own device. Nothing is sent to a server.',
     name: 'SPINNR Log',
     status: 'In daily use',
     logo: spinnrLogo,

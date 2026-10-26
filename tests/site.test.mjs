@@ -395,16 +395,18 @@ test('homepage lists what I am building now, each linking to its page', async ()
     assert.match(home, new RegExp(`href="${base}projects/${slug}/"`), slug);
 });
 
-test('project pages: screens, a Phone / Desktop switch, the Jaryo demo, and only public links', async () => {
+test('project pages are listings: facts, screens, a Phone / Desktop switch, and only public links', async () => {
   const wf = await readPage('projects/waterfalse/');
   assert.match(wf, /href="https:\/\/waterfalse\.vercel\.app"/);
   assert.match(wf, /role="tablist"/);
-  assert.match(wf, /The automation behind it/);
+  assert.match(wf, /How it works/);
   const jaryo = await readPage('projects/jaryo/');
-  assert.match(jaryo, /data-jd/);
+  assert.doesNotMatch(jaryo, /data-jd/);
+  assert.match(jaryo, /<dt>Works on<\/dt>/);
+  assert.match(jaryo, /<h2 id="info-title">Information<\/h2>/);
   assert.doesNotMatch(jaryo, /role="tablist"/);
   const spinnr = await readPage('projects/spinnr-log/');
   assert.match(spinnr, /role="tablist"/);
   assert.match(spinnr, /Sample data/);
-  assert.doesNotMatch(spinnr, /The automation behind it/);
+  assert.doesNotMatch(spinnr, /How it works/);
 });
