@@ -144,7 +144,7 @@ export const projects = [
     name: 'WaterFalse: Iligan Water Watch',
     status: 'Live',
     summary:
-      'A community map of where Iligan City has water. Residents report a dry tap or a working source, and an admin checks each report before it shows.',
+      'Find water in Iligan City before you set out. A live map of fetch points and hydrants, kept up to date by residents. Report a dry tap or a working source from your phone, no account needed.',
     stack: 'Next.js, MapLibre, Supabase',
     url: 'https://waterfalse.vercel.app',
     linkLabel: 'Open the live map',
@@ -160,7 +160,7 @@ export const projects = [
     name: 'SPINNR Log',
     status: 'In daily use',
     summary:
-      'The daily sales log for SPINNR Launderette. It records each load and payment, totals the day and month, and copies rows straight into the shop spreadsheet.',
+      'Every load, every peso, in one place. The shop logs a sale in a few taps, sees who still owes, and copies the day into its spreadsheet. Sales data never leaves the device.',
     stack: 'HTML, JavaScript, IndexedDB',
   },
 ];
