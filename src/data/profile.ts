@@ -20,34 +20,34 @@ export const socialLinks = [
 export const experience = [
   {
     role: 'Assistant Professor I',
-    dates: 'Aug 2024–Present',
+    dates: 'Aug 2024 to Present',
     organization: 'MSU-IIT',
     detail:
       'Department of Computer Applications, College of Computer Studies. Teaching and applied research across IoT, programming, robotics, and computing.',
   },
   {
     role: 'Head of PCETT',
-    dates: 'Jan 2025–Present',
+    dates: 'Jan 2025 to Present',
     organization: 'Institute for Policy Innovation and Leadership, MSU-IIT',
     detail:
       'Policy Center for Emerging Trends & Technologies. Work across AI policy, digital governance, technology foresight, and capacity building.',
   },
   {
     role: 'Head of Technology & Research',
-    dates: '2022–2026',
+    dates: '2022 to 2026',
     organization: 'Future AI Lab / BrandNat',
     detail: 'AI workflows, agents, automation, APIs, content intelligence, and emerging AI technologies.',
   },
   {
     role: 'Project Research Assistant',
-    dates: 'Jan 2022–Jun 2023',
+    dates: 'Jan 2022 to Jun 2023',
     organization: 'OVCRE, MSU-IIT',
     detail:
       'Developed a microcontroller-based water-level and soil-moisture monitoring and irrigation scheduling system for rice farming. Conducted an empirical survey on smart campus definitions, frameworks, and implementation models.',
   },
   {
     role: 'Co-founder',
-    dates: '2022–Present',
+    dates: '2022 to Present',
     organization: 'AnIno Solution',
     detail:
       'IoT consultancy working with embedded systems, sensor networks, automation, and applied technology solutions.',
@@ -65,31 +65,31 @@ export const teaching = [
 export const education = [
   {
     degree: 'MS in Computer Applications',
-    institution: 'MSU–Iligan Institute of Technology',
-    dates: '2019–2022',
-    detail: 'DOST–ERDT Scholar',
+    institution: 'MSU-Iligan Institute of Technology',
+    dates: '2019 to 2022',
+    detail: 'DOST-ERDT Scholar',
   },
   {
     degree: 'BS in Computer and Electronics Technology',
-    institution: 'MSU–Iligan Institute of Technology',
-    dates: '2014–2019',
+    institution: 'MSU-Iligan Institute of Technology',
+    dates: '2014 to 2019',
     detail: 'Cum Laude',
   },
 ];
 export const training = [
   {
     title: 'AI READY ASEAN Master Trainer',
-    provider: 'SmartCT — AI READY ASEAN Program',
-    year: '2025–Present',
+    provider: 'SmartCT, AI READY ASEAN Program',
+    year: '2025 to Present',
   },
   {
     title: 'Certificate Course on Foresight and Futures Thinking (Batch 14)',
-    provider: 'Development Academy of the Philippines — Graduate School of Public and Development Management',
+    provider: 'Development Academy of the Philippines, Graduate School of Public and Development Management',
     year: '2025',
   },
   {
     title: 'Certificate Course on Human Rights 101',
-    provider: 'Commission on Human Rights — Human Rights Institute, Human Rights Promotion Office',
+    provider: 'Commission on Human Rights: Human Rights Institute, Human Rights Promotion Office',
     year: '2025',
   },
   {
@@ -104,21 +104,21 @@ export const presentations = [
     event: 'ACDSA 2026',
     type: 'Oral presentation',
     location: 'Boracay Island, Philippines',
-    date: '5–7 February 2026',
+    date: '5 to 7 February 2026',
   },
 ];
 export const engagements = [
   {
     title: 'AI Ready ASEAN National Policy Convening',
     date: '29 April 2026',
-    role: 'Panelist · DICT Headquarters, Quezon City',
+    role: 'Panelist, DICT Headquarters, Quezon City',
     text: 'Contributed perspectives on AI literacy in education, community engagement, and AI adoption in Mindanao.',
     url: 'https://www.msuiit.edu.ph/news/news-detail.php?id=2477',
   },
   {
     title: 'ASEAN AHEAD & digital safety training',
     date: '18 August 2026',
-    role: 'PCETT-IPIL · MSU-IIT',
+    role: 'PCETT-IPIL, MSU-IIT',
     text: 'Led PCETT-IPIL’s support for training implementation with SmartCT, CDIIS, and Master Trainers.',
     url: 'https://www.msuiit.edu.ph/news/news-detail.php?id=2550',
   },

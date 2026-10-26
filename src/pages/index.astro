@@ -20,10 +20,6 @@ const tag = (order: number) => `WF-${String(order).padStart(2, '0')}`;
 <Layout>
   <div class="wrap hero">
     <div class="hero-copy">
-      <p class="eyebrow hero-eyebrow">
-        {profile.academicName}
-        <span class="hero-role"> · AI automation</span>
-      </p>
       <h1>Hi, I’m Jom, and I automate repetitive tasks.</h1>
       <p class="lede">
         I connect your tools with Zapier, n8n, and AI so the busywork runs itself, saving you up to{' '}
@@ -34,6 +30,10 @@ const tag = (order: number) => `WF-${String(order).padStart(2, '0')}`;
           See my workflows
         </a>
       </div>
+      <p class="hero-byline">
+        <span class="hero-name">{profile.academicName}</span>
+        <span class="hero-role">AI automation</span>
+      </p>
     </div>
     <Terminal />
   </div>
@@ -41,7 +41,6 @@ const tag = (order: number) => `WF-${String(order).padStart(2, '0')}`;
   <LogoMarquee />
 
   <section id="work" class="wrap featured" aria-labelledby="feat-title">
-    <p class="eyebrow">Featured workflow · Content</p>
     <h2 id="feat-title" class="feature-title">
       {feat.title}
     </h2>
@@ -77,6 +76,7 @@ const tag = (order: number) => `WF-${String(order).padStart(2, '0')}`;
         </ol>
       )}
       <p class="device-foot">
+        <span class="device-caption">Featured content workflow</span>
         <a class="textlink" href={path(`work/${feat.slug}/`)}>
           See the full workflow
         </a>
@@ -87,9 +87,8 @@ const tag = (order: number) => `WF-${String(order).padStart(2, '0')}`;
   <section class="wrap" aria-labelledby="lab-title">
     <div class="panel lab">
       <div class="lab-main">
-        <p class="eyebrow">Where I built this</p>
         <h2 id="lab-title">Head of Technology &amp; Research, Future AI Lab / BrandNat</h2>
-        <p class="lab-meta">2022–2026</p>
+        <p class="lab-meta">2022 to 2026</p>
         <p class="lab-body">
           I joined Future AI Lab / BrandNat in 2022, just as AI went from a curiosity to a working tool. Over
           four years as Head of Technology &amp; Research, I built through every stage of that shift, from
@@ -248,7 +247,7 @@ const tag = (order: number) => `WF-${String(order).padStart(2, '0')}`;
             </div>
           </div>
           <p class="cd-note">
-            Thanks — I’ll reply within one working day. A confirmation is on its way to your inbox.
+            Thanks. I’ll reply within one working day. A confirmation is on its way to your inbox.
           </p>
         </div>
       </div>

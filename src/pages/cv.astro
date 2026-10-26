@@ -9,7 +9,7 @@ import '../styles/pages.css';
   <div class="wrap page">
     <header>
       <h1>{profile.academicName}</h1>
-      <p class="lede">Assistant Professor · AI Automation · Technology Policy · Applied Research</p>
+      <p class="lede">Assistant Professor. AI automation, technology policy, and applied research.</p>
       <div class="cv-actions">
         <button class="key key-orange key-sm" id="print-profile" type="button">
           Print / save CV as PDF
@@ -32,8 +32,10 @@ import '../styles/pages.css';
       <div>
         {experience.map((e) => (
           <article class="experience">
-            <span class="meta">{e.dates}</span>
-            <h3>{e.role}</h3>
+            <div class="item-head">
+              <h3>{e.role}</h3>
+              <span class="meta">{e.dates}</span>
+            </div>
             <span class="meta">{e.organization}</span>
             <p>{e.detail}</p>
           </article>
@@ -45,8 +47,10 @@ import '../styles/pages.css';
       <div>
         {education.map((e) => (
           <article class="experience">
-            <span class="meta">{e.dates}</span>
-            <h3>{e.degree}</h3>
+            <div class="item-head">
+              <h3>{e.degree}</h3>
+              <span class="meta">{e.dates}</span>
+            </div>
             <p>
               {e.institution}
               <br />
@@ -60,10 +64,12 @@ import '../styles/pages.css';
       <h2>Publications</h2>
       {publications.map((p) => (
         <article class="experience">
-          <span class="meta">
-            {p.year} · {p.type}
-          </span>
-          <h3>{p.title}</h3>
+          <div class="item-head">
+            <h3>{p.title}</h3>
+            <span class="meta">
+              {p.type}, {p.year}
+            </span>
+          </div>
           <p>
             {p.authors}
             <br />
@@ -79,10 +85,12 @@ import '../styles/pages.css';
       <div>
         {presentations.map((p) => (
           <article class="experience">
-            <span class="meta">{p.date}</span>
-            <h3>{p.title}</h3>
+            <div class="item-head">
+              <h3>{p.title}</h3>
+              <span class="meta">{p.date}</span>
+            </div>
             <p>
-              {p.type} · {p.event}
+              {p.type}, {p.event}
               <br />
               {p.location}
             </p>
@@ -93,10 +101,10 @@ import '../styles/pages.css';
     <section>
       <h2>Teaching & technical practice</h2>
       <div>
-        <p>{teaching.join(' · ')}</p>
+        <p>{teaching.join(', ')}</p>
         <p>
-          Zapier · n8n · APIs · LLMs · AI agent workflows · Claude Code · Codex · embedded systems · IoT
-          sensor networks
+          Zapier, n8n, APIs, LLMs, AI agent workflows, Claude Code, Codex, embedded systems, IoT sensor
+          networks
         </p>
       </div>
     </section>
@@ -105,8 +113,10 @@ import '../styles/pages.css';
       <div>
         {training.map((t) => (
           <article class="experience">
-            <span class="meta">{t.year}</span>
-            <h3>{t.title}</h3>
+            <div class="item-head">
+              <h3>{t.title}</h3>
+              <span class="meta">{t.year}</span>
+            </div>
             <p>{t.provider}</p>
           </article>
         ))}
@@ -122,6 +132,14 @@ import '../styles/pages.css';
     </section>
   </div>
 </Layout>
+<style>
+  /* the full name is long at phone width: let it break rather than overflow */
+  h1 {
+    overflow-wrap: break-word;
+    min-width: 0;
+    text-wrap: balance;
+  }
+</style>
 <script>
   document.querySelector('#print-profile')?.addEventListener('click', () => window.print());
 </script>

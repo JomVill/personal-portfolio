@@ -109,7 +109,7 @@ test('homepage: hero, terminal final state, marquee, featured, cards, no CDNs', 
     .replace(/<[^>]+>/g, '')
     .replace(/\s+/g, ' ')
     .trim();
-  assert.equal(summary, 'Done · 4 steps · ~5 min · saves ~2 h of manual work');
+  assert.equal(summary, 'Done 4 steps ~5 min saves ~2 h of manual work');
   assert.match(
     html,
     /aria-label="Example automation run:[^"]*about 5 minutes, saving about 2 hours of manual work\."/,
@@ -137,7 +137,7 @@ test('homepage: hero, terminal final state, marquee, featured, cards, no CDNs', 
   assert.match(logos[0][2], /<svg[^>]+fill="#FF4F00"[^>]*>\s*<use href="#si-zapier"/);
   assert.match(html, /<symbol id="si-zapier"[^>]*>\s*<path d="M/);
   // featured workflow
-  assert.match(html, /Featured workflow · Content/);
+  assert.match(html, /Featured content workflow/);
   assert.match(
     html,
     /<h2 id="feat-title"[^>]*>\s*Your best stories, found and scored every morning\s*<\/h2>/,

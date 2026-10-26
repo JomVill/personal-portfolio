@@ -10,7 +10,7 @@ const TIMEOUT_MS = 25000;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MSG = {
   failed: 'Couldn’t send just now. You can email me instead:',
-  offline: 'The form isn’t connected yet — please email me.',
+  offline: 'The form isn’t connected yet. Please email me.',
 };
 
 type Field = HTMLInputElement | HTMLTextAreaElement;
