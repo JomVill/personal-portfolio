@@ -82,6 +82,27 @@ const facts = [
       >
         {p.desktop && <h3 class="view-label">Phone</h3>}
         <ul class="shot-row">
+          {p.clips?.map((c) => (
+            <li>
+              <figure>
+                <video
+                  class="clip"
+                  src={path(`projects/${p.slug}/${c.name}.mp4`)}
+                  poster={path(`projects/${p.slug}/${c.name}.jpg`)}
+                  width="590"
+                  height="1202"
+                  muted
+                  loop
+                  playsinline
+                  preload="metadata"
+                  controls
+                  aria-label={c.label}
+                  data-clip
+                />
+                <figcaption>{c.caption}</figcaption>
+              </figure>
+            </li>
+          ))}
           {p.shots.map((s) => (
             <li>
               <figure>
@@ -192,6 +213,26 @@ const facts = [
 </Layout>
 
 <script>
+  // Recordings play silently while on screen, without controls; with reduced motion they wait for a press.
+  const clips = document.querySelectorAll<HTMLVideoElement>('[data-clip]');
+  if (
+    clips.length &&
+    !matchMedia('(prefers-reduced-motion: reduce)').matches &&
+    'IntersectionObserver' in window
+  ) {
+    const io = new IntersectionObserver((entries) =>
+      entries.forEach((e) => {
+        const v = e.target as HTMLVideoElement;
+        if (e.isIntersecting) v.play().catch(() => {});
+        else v.pause();
+      }),
+    );
+    clips.forEach((v) => {
+      v.controls = false;
+      io.observe(v);
+    });
+  }
+
   // Phone / Desktop switch: without scripting both views show, each under its own label.
   document.querySelectorAll<HTMLElement>('[data-switch]').forEach((list) => {
     const tabs = [...list.querySelectorAll<HTMLButtonElement>('[role="tab"]')];

@@ -11,9 +11,6 @@ import wfDesktopMap from '../assets/projects/waterfalse/desktop-map.png';
 import wfDesktopLegend from '../assets/projects/waterfalse/desktop-legend.png';
 import wfDesktopReport from '../assets/projects/waterfalse/desktop-report.png';
 import jaryoLogo from '../assets/projects/jaryo/logo.png';
-import jaryoCover from '../assets/projects/jaryo/cover.png';
-import jaryoStory from '../assets/projects/jaryo/story.png';
-import jaryoReact from '../assets/projects/jaryo/react.png';
 import spinnrLogo from '../assets/projects/spinnr-log/logo.png';
 import spPhoneDashboard from '../assets/projects/spinnr-log/phone-dashboard.png';
 import spPhoneNew from '../assets/projects/spinnr-log/phone-new-sale.png';
@@ -23,6 +20,8 @@ import spDesktopNew from '../assets/projects/spinnr-log/desktop-new-sale.png';
 import spDesktopTransactions from '../assets/projects/spinnr-log/desktop-transactions.png';
 
 export type Shot = { src: ImageMetadata; alt: string; caption: string };
+/** A short silent screen recording in public/, shown in place of a screenshot. */
+export type Clip = { name: string; label: string; caption: string };
 
 /** The automation behind a project, drawn with the workflow diagram. Steps run left to right. */
 export type Automation = {
@@ -54,6 +53,8 @@ export type Project = {
   linkLabel?: string;
   /** Phone screenshots; with `desktop` too, the page offers a Phone / Desktop switch. */
   shots: Shot[];
+  /** Screen recordings from the real app; shown instead of `shots` when present. */
+  clips?: Clip[];
   desktop?: Shot[];
   shotsNote?: string;
   automation?: Automation;
@@ -149,24 +150,25 @@ export const projects: Project[] = [
     summary:
       'Your morning paper, made for you, on iPhone. Swipe through today’s stories, clip the ones you love, and Jaryo drafts your social posts from them. Every swipe shapes tomorrow’s edition.',
     stack: ['Swift', 'Supabase', 'Cloudflare Workers', 'Ollama'],
-    shots: [
+    shots: [],
+    clips: [
       {
-        src: jaryoCover,
-        alt: 'Jaryo cover page: The Jaryo, Morning edition, Read Today’s Edition',
-        caption: 'The morning cover',
+        name: 'swiping',
+        label: 'Swiping between stories in the Jaryo edition',
+        caption: 'Swipe between stories',
       },
       {
-        src: jaryoStory,
-        alt: 'A Jaryo story page with headline, the gist, and key facts',
-        caption: 'One story per page',
+        name: 'reaction',
+        label: 'Double tapping a story to open Dislike, Save, and Like',
+        caption: 'Double tap to react',
       },
       {
-        src: jaryoReact,
-        alt: 'Jaryo rating menu with Dislike, Save, and Like',
-        caption: 'Rate it in one tap',
+        name: 'clipping',
+        label: 'Pulling a story down to clip it, then offered a LinkedIn draft',
+        caption: 'Pull down to clip',
       },
     ],
-    shotsNote: 'Screens from the iOS Simulator with test data.',
+    shotsNote: 'Screen recordings from the app on iPhone.',
     automation: {
       intro: 'A press runs on its own every morning and builds one edition per reader.',
       nodes: [

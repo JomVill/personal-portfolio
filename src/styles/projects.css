@@ -119,7 +119,8 @@
 .shot-row figure {
   margin: 0;
 }
-.shot-row img {
+.shot-row img,
+.shot-row video {
   display: block;
   width: 100%;
   height: auto;
@@ -248,4 +249,9 @@
     grid-template-columns: minmax(0, 1fr);
     gap: 4px;
   }
+}
+
+.shot-row video {
+  aspect-ratio: 590 / 1202;
+  object-fit: cover;
 }
