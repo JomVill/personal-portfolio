@@ -151,14 +151,14 @@ export const projects = [
   },
   {
     name: 'Jaryo',
-    status: 'Private beta',
+    status: 'In beta',
     summary:
       'An iPhone app that builds a personal news edition every morning. Rate the stories, and AI drafts social posts from the ones you keep.',
     stack: 'Swift, Supabase, Cloudflare Workers, local AI models',
   },
   {
     name: 'SPINNR Log',
-    status: 'In use',
+    status: 'In daily use',
     summary:
       'The daily sales log for SPINNR Launderette. It records each load and payment, totals the day and month, and copies rows straight into the shop spreadsheet.',
     stack: 'HTML, JavaScript, IndexedDB',
