@@ -88,10 +88,22 @@
   --print-ink: #141512;
   --print-muted: #333530;
 
+  /* the Jaryo demo: the app's own iOS greys, white pages and one orange-red */
+  --jd-bg: #f2f2f7;
+  --jd-page: #ffffff;
+  --jd-ink: #0b0b0c;
+  --jd-muted: #66666b;
+  --jd-fill: #efefef;
+  --jd-line: #d9d9de;
+  --jd-accent: #ec5b2c;
+  --jd-shade: rgba(0, 0, 0, 0.12);
+
   /* faces */
   --sans: 'DM Sans Variable', system-ui, sans-serif;
   --body: var(--sans);
   --head: 'Manrope Variable', system-ui, sans-serif;
+  /* the demo's headline serif; system faces only, so nothing extra loads */
+  --serif: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
   --mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 
   /* radius per nesting level */

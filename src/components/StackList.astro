@@ -1,0 +1,44 @@
+---
+// "Built with" list with single-colour simple-icons logos; a name without one (IndexedDB) shows as text.
+import {
+  siCloudflareworkers,
+  siHtml5,
+  siJavascript,
+  siMaplibre,
+  siNextdotjs,
+  siOllama,
+  siSupabase,
+  siSwift,
+  type SimpleIcon,
+} from 'simple-icons';
+import '../styles/cards.css';
+
+interface Props {
+  items: string[];
+}
+
+const icons: Record<string, SimpleIcon> = {
+  'Next.js': siNextdotjs,
+  MapLibre: siMaplibre,
+  Supabase: siSupabase,
+  Swift: siSwift,
+  'Cloudflare Workers': siCloudflareworkers,
+  Ollama: siOllama,
+  HTML: siHtml5,
+  JavaScript: siJavascript,
+};
+const { items } = Astro.props;
+---
+
+<ul class="stack" aria-label="Built with">
+  {items.map((t) => (
+    <li>
+      {icons[t] && (
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d={icons[t].path} />
+        </svg>
+      )}
+      {t}
+    </li>
+  ))}
+</ul>

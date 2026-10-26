@@ -6,30 +6,10 @@ import LogoMarquee from '../components/LogoMarquee.astro';
 import WorkflowCard from '../components/WorkflowCard.astro';
 import WorkflowDiagram from '../components/WorkflowDiagram.astro';
 import { featured, getWorkflows, homeCards } from '../lib/workflows';
-import { profile, projects } from '../data/profile';
-import {
-  siCloudflareworkers,
-  siHtml5,
-  siJavascript,
-  siMaplibre,
-  siNextdotjs,
-  siOllama,
-  siSupabase,
-  siSwift,
-  type SimpleIcon,
-} from 'simple-icons';
-
-// Logos for the project stacks; a name without one (IndexedDB) shows as text.
-const stackIcons: Record<string, SimpleIcon> = {
-  'Next.js': siNextdotjs,
-  MapLibre: siMaplibre,
-  Supabase: siSupabase,
-  Swift: siSwift,
-  'Cloudflare Workers': siCloudflareworkers,
-  Ollama: siOllama,
-  HTML: siHtml5,
-  JavaScript: siJavascript,
-};
+import { profile } from '../data/profile';
+import { projects } from '../data/projects';
+import StackList from '../components/StackList.astro';
+import { Image } from 'astro:assets';
 import { path } from '../lib/paths';
 import '../styles/home.css';
 
@@ -158,34 +138,25 @@ const tag = (order: number) => `WF-${String(order).padStart(2, '0')}`;
     </div>
   </section>
 
-  <section class="wrap" aria-labelledby="projects-title">
+  <section id="projects" class="wrap" aria-labelledby="projects-title">
     <div class="sec-head">
       <h2 id="projects-title">What I’m building now</h2>
     </div>
     <div class="cards">
       {projects.map((p) => (
         <article class="card panel project">
-          <span class="tag">{p.status}</span>
-          <h3>{p.name}</h3>
+          <div class="project-head">
+            <Image class="app-icon" src={p.logo} alt="" width={56} height={56} densities={[1, 2]} />
+            <div>
+              <h3>{p.shortName ?? p.name}</h3>
+              <span class="tag">{p.status}</span>
+            </div>
+          </div>
           <p>{p.summary}</p>
-          <ul class="stack" aria-label="Built with">
-            {p.stack.map((t) => (
-              <li>
-                {stackIcons[t] && (
-                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                    <path d={stackIcons[t].path} />
-                  </svg>
-                )}
-                {t}
-              </li>
-            ))}
-          </ul>
-          {p.url && (
-            <a class="textlink" href={p.url} rel="noopener">
-              {p.linkLabel}
-              <span class="sr">: {p.name}</span>
-            </a>
-          )}
+          <StackList items={p.stack} />
+          <a class="textlink" href={path(`projects/${p.slug}/`)}>
+            See how it works<span class="sr">: {p.name}</span>
+          </a>
         </article>
       ))}
     </div>

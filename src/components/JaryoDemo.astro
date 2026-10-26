@@ -1,0 +1,274 @@
+---
+// A hands-on copy of Jaryo's edition: swipe to turn pages, double tap to rate, pull up to open the
+// original, pull down to clip, then finish to see a post drafted. The story is the real one used in the
+// app's tests; the draft is an example. Every gesture also has a button, so it works by keyboard.
+import '../styles/jaryo-demo.css';
+---
+
+<div class="jd-wrap">
+  <div class="jd" data-jd>
+    <header class="jd-mast">
+      <p class="jd-name">The Jaryo</p>
+      <p class="jd-date">Morning edition</p>
+    </header>
+    <div class="jd-viewport" data-jd-viewport>
+      <div class="jd-track" data-jd-track>
+        <section class="jd-page jd-cover" aria-label="Cover">
+          <p class="jd-cover-name">The Jaryo</p>
+          <p class="jd-date">Morning edition</p>
+          <p class="jd-cover-cta">
+            Read <b>Today’s Edition</b>
+          </p>
+          <p class="jd-date">Swipe left to start</p>
+        </section>
+        <section class="jd-page jd-story" aria-label="Story 1 of 1">
+          <p class="jd-count">1 of 1</p>
+          <h3 class="jd-headline">AI is less regulated than milk, says Microsoft president</h3>
+          <p class="jd-sub">
+            This debate decides whether AI safety rules arrive before the technology spreads.
+          </p>
+          <div class="jd-meta">
+            <span class="jd-dot" aria-hidden="true"></span>
+            <span class="jd-pill">BBC News Business</span>
+          </div>
+          <p class="jd-by">Synthesized by Jaryo</p>
+          <div class="jd-gist">
+            <p class="jd-by">The gist</p>
+            <p>If you follow AI policy, it shows how far the industry itself now backs limits.</p>
+          </div>
+          <ul class="jd-facts">
+            <li>Microsoft’s Brad Smith says washing machines and milk face stricter rules than AI.</li>
+            <li>
+              OpenAI backs a slowdown; the US president prefers self-regulation to keep pace with China.
+            </li>
+            <li>Experts warn of risks to humanity and call for independent government evaluators.</li>
+          </ul>
+        </section>
+        <section class="jd-page jd-finish" aria-label="Finish edition">
+          <p class="jd-count">Your picks</p>
+          <h3 class="jd-headline jd-headline-sm">That’s today’s edition.</h3>
+          <p class="jd-sub" data-jd-picks>
+            Rate the story to keep it, then draft a post.
+          </p>
+          <button type="button" class="jd-btn" data-jd-draft>
+            Draft my post
+          </button>
+          <ol class="jd-steps" data-jd-steps hidden>
+            <li>Reading the story you kept</li>
+            <li>Checking the facts against it</li>
+            <li>Writing in your voice</li>
+          </ol>
+          <div class="jd-draft" data-jd-out hidden>
+            <p class="jd-by">Example draft</p>
+            <p data-jd-text></p>
+          </div>
+        </section>
+      </div>
+    </div>
+    <div class="jd-react" data-jd-react hidden role="group" aria-label="Rate this story">
+      <button type="button" data-rate="Dislike">
+        <b>Dislike</b>
+        <span>not for me</span>
+      </button>
+      <button type="button" data-rate="Save">
+        <b>Save</b>
+        <span>keep this</span>
+      </button>
+      <button type="button" data-rate="Like">
+        <b>Like</b>
+        <span>interesting</span>
+      </button>
+    </div>
+    <p class="jd-toast" data-jd-toast role="status" aria-live="polite"></p>
+    <p class="jd-clips" data-jd-clips hidden></p>
+  </div>
+
+  <div class="jd-side">
+    <h3>Try it</h3>
+    <ul class="jd-howto">
+      <li>
+        <b>Swipe sideways</b> to turn the page.
+      </li>
+      <li>
+        <b>Double tap</b> a story to rate it.
+      </li>
+      <li>
+        <b>Pull up</b> to open the original.
+      </li>
+      <li>
+        <b>Pull down</b> to clip it for later.
+      </li>
+    </ul>
+    <div class="jd-keys" role="group" aria-label="Demo controls">
+      <button type="button" class="key" data-jd-act="prev">
+        Previous page
+      </button>
+      <button type="button" class="key" data-jd-act="next">
+        Next page
+      </button>
+      <button type="button" class="key" data-jd-act="rate">
+        Rate
+      </button>
+      <button type="button" class="key" data-jd-act="up">
+        Open original
+      </button>
+      <button type="button" class="key" data-jd-act="down">
+        Clip
+      </button>
+    </div>
+    <p class="jd-note">A web copy of the app’s main screen. The story is real; the draft is an example.</p>
+  </div>
+</div>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-jd]');
+  if (root) {
+    const q = <T extends HTMLElement>(s: string) => root.querySelector<T>(s)!;
+    const viewport = q('[data-jd-viewport]');
+    const track = q('[data-jd-track]');
+    const react = q('[data-jd-react]');
+    const toastEl = q('[data-jd-toast]');
+    const clipsEl = q('[data-jd-clips]');
+    const pages = track.children.length;
+    const STORY = 1;
+    let page = 0;
+    let rating = '';
+    let clips = 0;
+    let toastTimer = 0;
+
+    root.classList.add('jd-live');
+    const toast = (text: string) => {
+      toastEl.textContent = text;
+      toastEl.classList.add('on');
+      clearTimeout(toastTimer);
+      toastTimer = window.setTimeout(() => toastEl.classList.remove('on'), 2200);
+    };
+    const go = (n: number) => {
+      page = Math.max(0, Math.min(pages - 1, n));
+      track.style.transform = `translateX(${-page * 100}%)`;
+      react.hidden = true;
+      [...track.children].forEach((c, i) => c.toggleAttribute('inert', i !== page));
+    };
+    const openRate = (x?: number, y?: number) => {
+      if (page !== STORY) return toast('Turn to the story to rate it');
+      const box = root.getBoundingClientRect();
+      react.style.top = `${Math.max(90, Math.min((y ?? box.top + 220) - box.top - 40, box.height - 140))}px`;
+      react.hidden = false;
+      react.querySelector<HTMLButtonElement>('button')?.focus({ preventScroll: true });
+      void x;
+    };
+    const pickText: Record<string, string> = {
+      Dislike: 'Noted. You’ll see less like this tomorrow.',
+      Save: 'Saved. Tomorrow’s edition learns from it.',
+      Like: 'Liked. More like this tomorrow.',
+    };
+    react.addEventListener('click', (e) => {
+      const b = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-rate]');
+      if (!b) return;
+      rating = b.dataset.rate!;
+      react.hidden = true;
+      toast(pickText[rating]);
+      q('[data-jd-picks]').textContent =
+        rating === 'Dislike'
+          ? 'You passed on today’s story. Try Save or Like to draft a post.'
+          : `You chose ${rating} on 1 story.`;
+    });
+    const pullUp = () => (page === STORY ? toast('Opens the original at BBC News Business') : go(page));
+    const pullDown = () => {
+      if (page !== STORY) return;
+      clips += 1;
+      clipsEl.hidden = false;
+      clipsEl.textContent = `Clipped ${clips}`;
+      if (!rating) rating = 'Save';
+      toast('Clipped. It’s in Clippings, ready to draft.');
+    };
+
+    // Drafting: three visible steps, then the example post.
+    q('[data-jd-draft]').addEventListener('click', () => {
+      if (!rating || rating === 'Dislike') return toast('Save or Like the story first');
+      const steps = q('[data-jd-steps]');
+      const out = q('[data-jd-out]');
+      steps.hidden = false;
+      out.hidden = true;
+      const items = [...steps.children];
+      items.forEach((li) => li.classList.remove('done'));
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      items.forEach((li, i) => setTimeout(() => li.classList.add('done'), reduce ? 0 : 500 * (i + 1)));
+      setTimeout(
+        () => {
+          out.hidden = false;
+          q('[data-jd-text]').textContent =
+            'Milk and washing machines face stricter rules than AI, says Microsoft’s Brad Smith. Even AI companies now back limits. Who should check the checkers? #AIpolicy';
+        },
+        reduce ? 0 : 1900,
+      );
+    });
+
+    // Gestures: one pointer, axis locked by its first movement.
+    let sx = 0,
+      sy = 0,
+      axis: '' | 'x' | 'y' = '',
+      down = false,
+      lastTap = 0;
+    viewport.addEventListener('pointerdown', (e) => {
+      if ((e.target as HTMLElement).closest('button')) return;
+      down = true;
+      axis = '';
+      sx = e.clientX;
+      sy = e.clientY;
+      viewport.setPointerCapture(e.pointerId);
+      track.classList.add('drag');
+    });
+    viewport.addEventListener('pointermove', (e) => {
+      if (!down) return;
+      const dx = e.clientX - sx,
+        dy = e.clientY - sy;
+      if (!axis && Math.hypot(dx, dy) > 8) axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+      if (axis === 'x') track.style.transform = `translateX(calc(${-page * 100}% + ${dx}px))`;
+      if (axis === 'y') track.style.transform = `translateX(${-page * 100}%) translateY(${dy * 0.35}px)`;
+    });
+    const end = (e: PointerEvent) => {
+      if (!down) return;
+      down = false;
+      track.classList.remove('drag');
+      const dx = e.clientX - sx,
+        dy = e.clientY - sy;
+      const h = viewport.clientHeight;
+      if (axis === 'x' && Math.abs(dx) > viewport.clientWidth * 0.2) return go(page + (dx < 0 ? 1 : -1));
+      go(page);
+      if (axis === 'y' && dy < -h * 0.25) return pullUp();
+      if (axis === 'y' && dy > h * 0.25) return pullDown();
+      if (!axis) {
+        const now = e.timeStamp;
+        if (now - lastTap < 320) {
+          lastTap = 0;
+          openRate(e.clientX, e.clientY);
+        } else {
+          lastTap = now;
+          if (page === 0) setTimeout(() => lastTap && page === 0 && go(1), 330);
+        }
+      }
+    };
+    viewport.addEventListener('pointerup', end);
+    viewport.addEventListener('pointercancel', end);
+
+    root.closest('.jd-wrap')!.addEventListener('click', (e) => {
+      const act = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-jd-act]')?.dataset.jdAct;
+      if (act === 'prev') go(page - 1);
+      if (act === 'next') go(page + 1);
+      if (act === 'rate') {
+        if (page !== STORY) go(STORY);
+        openRate();
+      }
+      if (act === 'up') pullUp();
+      if (act === 'down') {
+        if (page !== STORY) go(STORY);
+        pullDown();
+      }
+    });
+    root.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') react.hidden = true;
+    });
+    go(0);
+  }
+</script>
