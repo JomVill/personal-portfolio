@@ -6,6 +6,37 @@ This project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [2026-11-10]
+
+Changes since 2.1.0 (made 2026-10-11 to 2026-10-26).
+
+### Added
+
+- My projects section with WaterFalse, Jaryo and SPINNR Log, under "What I'm building now" with consistent status labels.
+- Project pages styled as App Store listings: app icons, screenshots with a Phone / Desktop switch, automation diagrams and stack logos (single colour, from simple-icons).
+- Real Jaryo screen recordings (swipe, react, clip).
+- Contact form backed by Google Apps Script with a Gemini auto-reply; tests never reach production.
+- Perplexity, Google Apps Script, Airtable, Obsidian, Feedly, Notion, Reddit, Hacker News, OpenAI and Slack in the tools marquee.
+- Workflow animations show many items flowing through.
+- Ignore rules for env variants, keys, and local tooling folders.
+
+### Changed
+
+- Header shows "Jom", the body uses the full name, and Future AI Lab is highlighted; the lab section tells the manual to AI-assisted to agentic story.
+- README rewritten as a personal introduction; dev notes moved to docs.
+- Silver-key J favicon (original J logo kept).
+- Faster pages: 2 KB WebP logo, inlined CSS, font preload, larger touch targets.
+- Polish and copy passes: one design-token block, transform-only cursor ring, refined control states, plainer copy and sharper workflow titles.
+
+### Fixed
+
+- Hyphenated card titles stay on one line.
+- Contact form: no message quote in the auto-reply, API key sent in a header, 25 second timeout, ASCII-only punctuation in the Apps Script.
+
+### Removed
+
+- The hands-on Jaryo web demo, replaced by screen recordings.
+
 ## [2.1.0] - 2026-10-11
 
 ### Added
