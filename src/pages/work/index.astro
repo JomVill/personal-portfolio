@@ -2,9 +2,11 @@
 import Layout from '../../layouts/Layout.astro';
 import WorkflowCard from '../../components/WorkflowCard.astro';
 import { getWorkflows } from '../../lib/workflows';
+import { workGroups } from '../../data/workflow-copy';
 import '../../styles/work.css';
 
 const all = getWorkflows();
+const groups = workGroups.map((g) => ({ ...g, items: all.filter((w) => w.group === g.id) }));
 ---
 
 <Layout title="Workflows">
@@ -15,11 +17,17 @@ const all = getWorkflows();
       approving what matters.
     </p>
   </div>
-  <section class="wrap work-grid" aria-label="All workflows">
-    <div class="cards">
-      {all.map((w) => (
-        <WorkflowCard workflow={w} />
-      ))}
-    </div>
-  </section>
+  {groups.map((g) => (
+    <section class="wrap work-group" aria-labelledby={`group-${g.id}`}>
+      <div class="work-group-head">
+        <h2 id={`group-${g.id}`}>{g.title}</h2>
+        <p>{g.text}</p>
+      </div>
+      <div class="cards">
+        {g.items.map((w) => (
+          <WorkflowCard workflow={w} />
+        ))}
+      </div>
+    </section>
+  ))}
 </Layout>

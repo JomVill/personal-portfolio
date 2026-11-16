@@ -175,19 +175,15 @@
 
 /* ---- marquee ---- */
 .tools-strip {
-  padding-block: 0 clamp(48px, 6vw, 80px);
+  padding-block: clamp(40px, 5vw, 64px) 0;
 }
+/* the strip sits on the paper between two hairlines; no box */
 .marquee {
-  border-radius: var(--radius-screen);
-  background: var(--silver-well);
-  border: 1px solid var(--line-3);
-  box-shadow:
-    inset 0 2px 4px color-mix(in srgb, var(--shade-3) 8%, transparent),
-    inset 0 -1px 0 color-mix(in srgb, var(--gloss) 69%, transparent);
+  border-block: 1px solid var(--line);
 }
-/* the strip's caption, set under it in the body face */
+/* the strip's label, set above it in the body face */
 .tools-caption {
-  margin-top: 12px;
+  margin-bottom: 12px;
   font-size: 14px;
   color: var(--muted);
 }
@@ -280,7 +276,6 @@ html.motion-paused .track {
   padding-top: 0;
 }
 .feature-title {
-  font-size: clamp(26px, 3vw, 36px);
   margin-bottom: 24px;
 }
 .legend {
@@ -741,19 +736,16 @@ html.motion-paused .track {
 .lab {
   display: grid;
   gap: 28px;
-  padding: clamp(24px, 3vw, 36px);
 }
 @media (min-width: 900px) {
   .lab {
     grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
     gap: clamp(32px, 5vw, 64px);
-    align-items: center;
+    align-items: start;
   }
 }
 .lab h2 {
-  font-size: clamp(24px, 2.6vw, 32px);
-  letter-spacing: -0.02em;
-  max-width: 24ch;
+  max-width: 30ch;
 }
 .lab-meta {
   margin-top: 12px;
@@ -842,5 +834,76 @@ html.motion-paused .track {
   .logos .primary .lg {
     width: 20px;
     height: 20px;
+  }
+}
+
+/* ---- projects: one row each, the real screen beside the words ---- */
+.project-rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.project-rows > li {
+  display: grid;
+  gap: 24px;
+  padding-block: 32px;
+  border-top: 1px solid var(--line);
+}
+.project-rows > li:last-child {
+  border-bottom: 1px solid var(--line);
+}
+.project-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+}
+.project-copy h3 {
+  font-size: 24px;
+  line-height: 1.2;
+  margin: 0 0 4px;
+}
+.project-copy .tag {
+  font-size: 14px;
+  color: var(--muted);
+}
+.project-copy > p {
+  margin: 16px 0 20px;
+  max-width: 34rem;
+  color: var(--muted);
+}
+.project-cover {
+  aspect-ratio: 16 / 10;
+  border-radius: var(--radius-panel);
+  overflow: hidden;
+  box-shadow: 0 0 0 1px var(--line-2);
+}
+.project-cover img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top left;
+}
+/* a phone screen stands in a quiet well, cut off at the foot */
+.cover-phone {
+  display: flex;
+  justify-content: center;
+  padding-top: 28px;
+  background: var(--silver-well);
+}
+.cover-phone img {
+  width: min(280px, 60%);
+  height: auto;
+  align-self: flex-start;
+  border-radius: 24px 24px 0 0;
+  box-shadow: 0 0 0 1px var(--line-3);
+}
+@media (min-width: 900px) {
+  .project-rows > li {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: clamp(32px, 5vw, 72px);
+    align-items: center;
+    padding-block: 40px;
   }
 }

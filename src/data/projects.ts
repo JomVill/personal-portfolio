@@ -11,6 +11,7 @@ import wfDesktopMap from '../assets/projects/waterfalse/desktop-map.png';
 import wfDesktopLegend from '../assets/projects/waterfalse/desktop-legend.png';
 import wfDesktopReport from '../assets/projects/waterfalse/desktop-report.png';
 import jaryoLogo from '../assets/projects/jaryo/logo.png';
+import jaryoCover from '../assets/projects/jaryo/cover.jpg';
 import spinnrLogo from '../assets/projects/spinnr-log/logo.png';
 import spPhoneDashboard from '../assets/projects/spinnr-log/phone-dashboard.png';
 import spPhoneNew from '../assets/projects/spinnr-log/phone-new-sale.png';
@@ -47,6 +48,10 @@ export type Project = {
   privacy: string;
   status: string;
   logo: ImageMetadata;
+  /** The one picture on the homepage row: a wide desktop screen, or a phone screen (`coverKind`). */
+  cover: ImageMetadata;
+  coverKind: 'wide' | 'phone';
+  coverAlt: string;
   summary: string;
   stack: string[];
   url?: string;
@@ -74,6 +79,9 @@ export const projects: Project[] = [
       'Reports are anonymous and photos are stored privately. An admin reviews every report before it shows.',
     status: 'Live',
     logo: wfLogo,
+    cover: wfDesktopMap,
+    coverKind: 'wide',
+    coverAlt: 'WaterFalse on a desktop browser: the map of Iligan City with water point pins',
     summary:
       'Find water in Iligan City before you set out. A live map of fetch points and hydrants, kept up to date by residents. Report a dry tap or a working source from your phone, no account needed.',
     stack: ['Next.js', 'MapLibre', 'Supabase'],
@@ -147,6 +155,9 @@ export const projects: Project[] = [
     name: 'Jaryo',
     status: 'In beta',
     logo: jaryoLogo,
+    cover: jaryoCover,
+    coverKind: 'phone',
+    coverAlt: 'A story page in Jaryo, with headline, the gist, and key facts',
     summary:
       'Your morning paper, made for you, on iPhone. Swipe through today’s stories, clip the ones you love, and Jaryo drafts your social posts from them. Every swipe shapes tomorrow’s edition.',
     stack: ['Swift', 'Supabase', 'Cloudflare Workers', 'Ollama'],
@@ -209,6 +220,9 @@ export const projects: Project[] = [
     name: 'SPINNR Log',
     status: 'In daily use',
     logo: spinnrLogo,
+    cover: spDesktopDashboard,
+    coverKind: 'wide',
+    coverAlt: 'SPINNR Log dashboard on desktop with sample data',
     summary:
       'Every load, every peso, in one place. The shop logs a sale in a few taps, sees who still owes, and copies the day into its spreadsheet. Sales data never leaves the device.',
     stack: ['HTML', 'JavaScript', 'IndexedDB'],

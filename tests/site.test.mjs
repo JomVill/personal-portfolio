@@ -199,15 +199,17 @@ test('work index lists all 12 workflows', async () => {
   );
   assert.equal(links.size, 12);
   assert.equal([...html.matchAll(/<article class="card/g)].length, 12);
-  // listed in copy order: content pipeline first, then Partnership
-  const order = [...html.matchAll(/<span class="tag">WF-(\d+)<\/span>/g)].map((m) => +m[1]);
-  assert.deepEqual(order, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
+  // grouped by job: content first, then sales and finance, then team operations; no serial tags
+  assert.doesNotMatch(html, /WF-\d/);
+  const groups = [...html.matchAll(/<h2 id="group-[a-z]+"[^>]*>([\s\S]*?)<\/h2>/g)].map((m) => m[1].trim());
+  assert.deepEqual(groups, ['Content', 'Sales and finance', 'Team operations']);
   const titles = [...html.matchAll(/<h3[^>]*>([\s\S]*?)<\/h3>/g)].map((m) => m[1].trim());
-  assert.deepEqual(titles.slice(0, 5), [
+  assert.deepEqual(titles.slice(0, 6), [
     'Your best stories, found and scored every morning',
     'A story in, a ready-to-film script out',
     'An AI that learns your taste',
     'A monthly check-up on your content engine',
+    'One article in, a social post out',
     'Partnership inquiries, handled end to end',
   ]);
 });
