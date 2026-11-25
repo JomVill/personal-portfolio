@@ -1,22 +1,21 @@
 ---
-import { getImage } from 'astro:assets';
-import logo from '../assets/brand/j-logo.png';
 import { path } from '../lib/paths';
 const links = [
   ['Work', 'work/'],
   ['About', 'about/'],
 ];
-// J logo aspect 824:1047, shown 36px tall
-const logoHeight = 36;
-const logoWidth = Math.round((logoHeight * 824) / 1047);
-// The source PNG is ~1000px tall; ship a 2x WebP sized for the header instead.
-const logoImg = await getImage({ src: logo, height: logoHeight * 2, format: 'webp', quality: 85 });
 ---
 
+{/* Wordmark: Manrope 800 outlines, the o drawn as one solid workflow node. */}
 <header class="wrap top">
   <a class="brand" href={path()} aria-label="Jom, home">
-    <img src={logoImg.src} alt="" width={logoWidth} height={logoHeight} />
-    <span class="brand-name">Jom</span>
+    <svg class="wordmark" viewBox="0 0 3790 1470" aria-hidden="true" focusable="false">
+      <path
+        class="wordmark-ink"
+        d="M442 1470Q270 1470 158 1382Q47 1294 0 1144L268 1080Q277 1135 326 1176Q375 1216 430 1216Q468 1216 512 1195Q555 1174 574 1128Q586 1099 588 1057Q590 1015 590 960V0H866V960Q866 1029 866 1080Q865 1131 856 1176Q846 1220 818 1268Q757 1374 659 1422Q561 1470 442 1470ZM3518 1440V802Q3518 695 3468 636Q3417 576 3328 576Q3271 576 3229 602Q3187 629 3164 676Q3140 724 3140 786L3026 710Q3026 599 3078 514Q3131 429 3220 382Q3308 334 3416 334Q3601 334 3696 444Q3790 553 3790 730V1440ZM2216 1440V360H2456V718H2490V1440ZM2868 1440V802Q2868 695 2818 636Q2767 576 2678 576Q2593 576 2542 634Q2490 693 2490 786L2376 706Q2376 600 2429 516Q2482 432 2572 383Q2661 334 2772 334Q2899 334 2980 388Q3062 442 3101 532Q3140 622 3140 730V1440Z"
+      />
+      <circle class="wordmark-node" cx="1536" cy="900" r="560" />
+    </svg>
   </a>
   <nav aria-label="Main">
     {links.map(([label, href]) => (

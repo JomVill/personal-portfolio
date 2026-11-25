@@ -66,8 +66,8 @@ test('workflow copy keys match workflow ids', async () => {
 test('site shell: header logo, Let’s talk key, footer links', async () => {
   const html = await readPage('');
   const header = html.match(/<header[\s\S]*?<\/header>/)[0];
-  assert.match(header, /<img[^>]+j-logo/);
-  assert.match(header, /class="brand-name">Jom</);
+  assert.match(header, /<svg[^>]*class="wordmark"/);
+  assert.match(header, /aria-label="Jom, home"/);
   assert.match(header, new RegExp(`<a[^>]+href="${base}#contact"[^>]*>\\s*Let’s talk\\s*</a>`));
   assert.doesNotMatch(header, /mailto:/);
   const footer = html.match(/<footer[\s\S]*?<\/footer>/)[0];

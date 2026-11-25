@@ -48,7 +48,7 @@ BROWSER_CHANNEL=chrome PREVIEW_URL=http://localhost:4321/personal-portfolio/ npm
   `tests/site.test.mjs` fails if credentials, IDs, emails, or parameters leak into the file.
 - `src/data/workflow-copy.ts`: titles, summaries, steps, labels, and tools for each workflow (plain, CEO-readable).
 - `src/data/profile.ts`, `src/data/publications.ts`: contact, roles, academic content.
-- `src/assets/brand/`: the owner-designed JOM logo and favicons. Use as supplied; do not redraw or recolor.
+- `src/assets/brand/`: the Jom wordmark (Manrope 800, the o as an orange node) and node favicons, chosen by the owner. Earlier logos are kept as source files. Do not redraw or recolor.
 - `src/styles/site.css`: tokens and shared components; page styles live beside it.
 
 ## Deploy
