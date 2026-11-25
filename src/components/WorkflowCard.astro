@@ -10,11 +10,9 @@ interface Props {
 }
 
 const { workflow: w } = Astro.props;
-const tag = `WF-${String(w.order).padStart(2, '0')}`;
 ---
 
 <article class="card panel">
-  <span class="tag">{tag}</span>
   <div class="pic">
     <WorkflowDiagram workflow={w} variant="card" decorative />
   </div>

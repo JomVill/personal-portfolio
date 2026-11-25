@@ -6,3 +6,16 @@ dist/
 .sites-runtime/
 test-results/
 .hallmark/
+
+# Env files and keys (never commit)
+.env.*
+!.env.example
+*.pem
+*.key
+*credentials*.json
+*service-account*.json
+
+# Local tooling
+.superpowers/
+.vercel
+npm-debug.log*

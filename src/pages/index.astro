@@ -17,7 +17,6 @@ const all = getWorkflows();
 const feat = featured();
 const more = homeCards();
 const mailto = `mailto:${profile.email}?subject=${encodeURIComponent('Automation inquiry from your portfolio')}`;
-const tag = (order: number) => `WF-${String(order).padStart(2, '0')}`;
 ---
 
 <Layout>
@@ -41,8 +40,6 @@ const tag = (order: number) => `WF-${String(order).padStart(2, '0')}`;
     <Terminal />
   </div>
 
-  <LogoMarquee />
-
   <section id="work" class="wrap featured" aria-labelledby="feat-title">
     <h2 id="feat-title" class="feature-title">
       {feat.title}
@@ -50,7 +47,7 @@ const tag = (order: number) => `WF-${String(order).padStart(2, '0')}`;
     <div class="device">
       <div class="screen flow-screen">
         <div class="screen-top">
-          <span>{tag(feat.order)} · Main path</span>
+          <span>Main path</span>
           <ul class="legend" aria-label="Legend">
             <li>
               <span class="sw sw-ai" aria-hidden="true"></span>AI step
@@ -88,7 +85,7 @@ const tag = (order: number) => `WF-${String(order).padStart(2, '0')}`;
   </section>
 
   <section class="wrap" aria-labelledby="lab-title">
-    <div class="panel lab">
+    <div class="lab">
       <div class="lab-main">
         <h2 id="lab-title">Head of Technology &amp; Research, Future AI Lab / BrandNat</h2>
         <p class="lab-meta">2022 to 2026</p>
@@ -142,25 +139,37 @@ const tag = (order: number) => `WF-${String(order).padStart(2, '0')}`;
     <div class="sec-head">
       <h2 id="projects-title">What I’m building now</h2>
     </div>
-    <div class="cards">
+    <ul class="project-rows">
       {projects.map((p) => (
-        <article class="card panel project">
-          <div class="project-head">
-            <Image class="app-icon" src={p.logo} alt="" width={56} height={56} densities={[1, 2]} />
-            <div>
-              <h3>{p.shortName ?? p.name}</h3>
-              <span class="tag">{p.status}</span>
+        <li>
+          <div class="project-copy">
+            <div class="project-head">
+              <Image class="app-icon" src={p.logo} alt="" width={56} height={56} densities={[1, 2]} />
+              <div>
+                <h3>{p.shortName ?? p.name}</h3>
+                <span class="tag">{p.status}</span>
+              </div>
             </div>
+            <p>{p.summary}</p>
+            <StackList items={p.stack} />
+            <a class="textlink" href={path(`projects/${p.slug}/`)}>
+              See how it works<span class="sr">: {p.name}</span>
+            </a>
           </div>
-          <p>{p.summary}</p>
-          <StackList items={p.stack} />
-          <a class="textlink" href={path(`projects/${p.slug}/`)}>
-            See how it works<span class="sr">: {p.name}</span>
-          </a>
-        </article>
+          <div class:list={['project-cover', `cover-${p.coverKind}`]}>
+            <Image
+              src={p.cover}
+              alt={p.coverAlt}
+              widths={p.coverKind === 'phone' ? [300, 590] : [640, 1280]}
+              sizes={p.coverKind === 'phone' ? '280px' : '(max-width: 900px) 92vw, 640px'}
+            />
+          </div>
+        </li>
       ))}
-    </div>
+    </ul>
   </section>
+
+  <LogoMarquee />
 
   <section id="contact" class="wrap contact" aria-labelledby="contact-title">
     <div class="contact-intro">

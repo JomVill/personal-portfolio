@@ -15,8 +15,39 @@
   font-size: clamp(17px, 1.5vw, 19px);
   color: var(--muted);
 }
-.work-grid {
-  padding-block: 32px clamp(48px, 6vw, 88px);
+/* one section per job: the heading holds the left column, its workflows the right */
+.work-group {
+  display: grid;
+  gap: 24px;
+  padding-block: 40px;
+  border-top: 1px solid var(--line);
+}
+.work-group:last-of-type {
+  padding-bottom: clamp(48px, 6vw, 88px);
+}
+.work-group-head p {
+  margin-top: 8px;
+  max-width: 26rem;
+  color: var(--muted);
+}
+.work-group .cards {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+@media (min-width: 960px) {
+  .work-group {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    gap: clamp(32px, 5vw, 64px);
+    align-items: start;
+  }
+  .work-group-head {
+    position: sticky;
+    top: 24px;
+  }
+}
+@media (max-width: 640px) {
+  .work-group .cards {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 .detail {
