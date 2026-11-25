@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="src/assets/brand/j-logo.png" alt="Jomari Villanueva logo" width="96" />
+  <img src="src/assets/brand/jom-wordmark.svg" alt="Jom" width="160" />
 </p>
 
 <h1 align="center">Hi, I’m Jom 👋</h1>
